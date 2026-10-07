@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Infoblatt: Additive und subtraktive Farbmischung</title>
+<style>
+:root{
+  --paper:#F7F8FA; --sheet:#FFFFFF; --ink:#1A1D26; --muted:#5B6173; --line:#D9DCE3;
+  --accent:#2C3E7A; --soft:#EEF1F8; --ok:#1F7A3D; --bad:#B3261E; --note:#FFF8DC;
+  --R:#FF0000; --G:#00FF00; --B:#0000FF; --C:#00FFFF; --M:#FF00FF; --Y:#FFFF00;
+  box-sizing:border-box; color-scheme:light;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--paper);color:var(--ink);
+  font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+.sheet{max-width:880px;margin:0 auto;background:var(--sheet);padding:0 0 3rem}
+.pixels{height:28px;background:
+  repeating-linear-gradient(90deg,#ff2a2a 0 6px,#000 6px 8px,#2aff2a 8px 14px,#000 14px 16px,#2a5bff 16px 22px,#000 22px 24px)}
+header{padding:1.6rem 1.6rem 1rem;border-bottom:1px solid var(--line)}
+header .kurs{color:var(--muted);font-size:.9rem;margin:0}
+h1{font-size:clamp(1.7rem,4.5vw,2.4rem);line-height:1.15;margin:.3rem 0 .6rem;letter-spacing:-.01em}
+h2{font-size:1.35rem;margin:0 0 .6rem;color:var(--accent)}
+h3{font-size:1.05rem;margin:1.2rem 0 .4rem}
+.meta{display:flex;gap:1rem;flex-wrap:wrap}
+.meta label{flex:1 1 200px;font-size:.9rem;color:var(--muted)}
+input[type=text],textarea,select{font:inherit;color:var(--ink);background:var(--sheet);
+  border:1px solid var(--line);border-radius:6px;padding:.35rem .5rem;width:100%}
+textarea{min-height:4.5rem;resize:vertical}
+select{width:auto;min-width:8.5rem}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+section{padding:1.6rem;border-bottom:1px solid var(--line)}
+p{max-width:72ch}
+.merk{background:var(--soft);border-left:5px solid var(--accent);padding:.8rem 1rem;margin:1rem 0;border-radius:0 6px 6px 0}
+.merk p{margin:.2rem 0}
+.hinweis{background:var(--note);padding:.7rem 1rem;border-radius:6px;font-size:.95rem;margin:1rem 0}
+ol.steps{padding-left:1.3rem}
+ol.steps li{margin:.35rem 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;align-items:start}
+@media (max-width:680px){.two{grid-template-columns:1fr}}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.95rem}
+th,td{border:1px solid var(--line);padding:.4rem .5rem;text-align:left;vertical-align:middle}
+th{background:var(--soft)}
+td.c{text-align:center}
+.sw{display:inline-block;width:1.1em;height:1.1em;border-radius:3px;border:1px solid #888;vertical-align:-.2em;margin-right:.35em}
+button{font:inherit;cursor:pointer;border:1px solid var(--accent);background:var(--sheet);color:var(--accent);
+  border-radius:6px;padding:.3rem .7rem}
+button:hover{background:var(--soft)}
+button.solid{background:var(--accent);color:var(--sheet)}
+.colbtn{padding:.2rem .5rem;font-size:.85rem}
+.fig{background:var(--soft);border-radius:8px;padding:.8rem;text-align:center}
+.fig svg{max-width:100%;height:auto}
+.fig figcaption{font-size:.85rem;color:var(--muted);margin-top:.4rem}
+figure{margin:0}
+.slider{display:grid;grid-template-columns:4.5rem 1fr 2.8rem;gap:.5rem;align-items:center;margin:.3rem 0}
+.slider input{width:100%}
+.result{height:90px;border-radius:8px;border:1px solid var(--line);display:flex;align-items:flex-end;justify-content:center;
+  font-size:.85rem;padding:.3rem;font-weight:600}
+.check-row{display:flex;gap:.8rem;flex-wrap:wrap;margin:.4rem 0}
+.check-row label{display:flex;gap:.3rem;align-items:center}
+.fill{display:grid;grid-template-columns:auto auto;gap:.45rem .8rem;align-items:center;justify-content:start}
+select.ok{border-color:var(--ok);box-shadow:0 0 0 2px var(--ok) inset}
+select.bad{border-color:var(--bad);box-shadow:0 0 0 2px var(--bad) inset}
+details{margin:.6rem 0;border:1px dashed var(--line);border-radius:6px;padding:.4rem .7rem}
+summary{cursor:pointer;color:var(--accent);font-weight:600}
+.task{margin:1.1rem 0}
+.task > p:first-child{margin-bottom:.4rem}
+.task b.nr{color:var(--accent)}
+#wheelInfo{min-height:4.5rem}
+.dot{width:70px;height:70px;border-radius:50%;background:#f00;margin:1rem auto}
+.after{width:100%;height:110px;background:#fff;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.after span{width:4px;height:4px;background:#000;border-radius:50%}
+#overlay{position:fixed;inset:0;z-index:50;display:none;align-items:flex-end;justify-content:center;
+  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 1rem);cursor:pointer}
+#overlay span{background:rgba(0,0,0,.55);color:#fff;padding:.3rem .7rem;border-radius:20px;font-size:.85rem}
+#printBtn{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  z-index:40;font-size:.8rem;opacity:.75;background:var(--sheet);box-shadow:0 1px 4px rgba(0,0,0,.2)}
+#printBtn:hover{opacity:1}
+.small{font-size:.88rem;color:var(--muted)}
+@media print{
+  @page{size:A4;margin:14mm 13mm}
+  :root{--paper:#fff;--sheet:#fff;--ink:#000;--muted:#444;--line:#999;--accent:#1f2f66;--soft:#f1f3f8;--note:#fff8dc}
+  body{font-size:10.5pt;background:#fff}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .sheet{max-width:none;padding:0}
+  .no-print,#printBtn,#overlay{display:none!important}
+  section{padding:.7rem 0;break-inside:auto}
+  header{padding:.4rem 0 .6rem}
+  .merk,.fig,table,.task,.hinweis{break-inside:avoid}
+  h2,h3{break-after:avoid}
+  details:not([open]){display:none}
+  select{border:1px solid #999}
+  .result{height:50px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="sheet">
+<div class="pixels" aria-hidden="true"></div>
+<header>
+  <p class="kurs">Chemie Leistungsfach · Licht und Farbe</p>
+  <h1>Wie entsteht Farbe? Additive und subtraktive Farbmischung</h1>
+  <div class="meta">
+    <label>Name<input type="text" id="name"></label>
+    <label>Datum<input type="text" id="datum"></label>
+  </div>
+</header>
+
+<section>
+  <h2>Was wir als Farbe sehen</h2>
+  <p>Unser Auge nimmt elektromagnetische Strahlung im Bereich von etwa <b>380 nm bis 780 nm</b> wahr – das sichtbare Licht. Weißes Sonnenlicht enthält alle Wellenlängen dieses Bereichs; ein Prisma zerlegt es in die Spektralfarben (Newton, 1671).</p>
+  <p>In der Netzhaut gibt es drei Zapfentypen, die vor allem auf <b>rotes, grünes und blaues</b> Licht ansprechen. Jeder Farbeindruck entsteht daraus, wie stark diese drei Zapfentypen gleichzeitig gereizt werden. Genau das nutzen Bildschirme aus – und genau das untersuchst du im Experiment.</p>
+</section>
+
+<section>
+  <h2>Experiment: Pixel sichtbar machen mit einem Wassertropfen</h2>
+  <div class="two">
+    <div>
+      <h3>Material</h3>
+      <p style="margin-top:0">Smartphone oder Tablet, Wasser, Pipette (oder Trinkhalm / Zahnstocher), Papiertuch; optional ein zweites Handy für ein Foto.</p>
+      <h3>Durchführung</h3>
+      <ol class="steps">
+        <li>Displayhelligkeit auf Maximum stellen und diese Seite auf dem Smartphone öffnen.</li>
+        <li>Die Testfarbe <b>Weiß</b> unten im Vollbild anzeigen.</li>
+        <li>Einen <b>sehr kleinen</b> Wassertropfen (2–3 mm) mitten auf das Display setzen. Der gewölbte Tropfen wirkt wie eine Sammellinse (Lupe).</li>
+        <li>Mit dem Auge nah heran gehen und durch den Tropfen schauen. Tipp: mit einem zweiten Handy durch den Tropfen fotografieren.</li>
+        <li>Nacheinander alle Testfarben anzeigen und notieren, welche Subpixel leuchten.</li>
+        <li>Den Tropfen anschließend vorsichtig mit dem Tuch abtupfen.</li>
+      </ol>
+    </div>
+    <div>
+      <div class="hinweis"><b>Achtung:</b> Nur einen winzigen Tropfen verwenden und nicht in die Nähe von Lautsprecher, Kamera, Tasten oder Displayrand bringen. Nicht wischen, sondern abtupfen.</div>
+      <p class="small">Tippe auf eine Farbe, um sie bildschirmfüllend anzuzeigen. Erneutes Tippen schließt die Anzeige.</p>
+      <div class="check-row no-print" id="testColors"></div>
+      <p class="small">Hinweis: Viele OLED-Displays haben mehr grüne als rote und blaue Subpixel und ordnen sie nicht in Streifen, sondern in Rauten- oder Dreiecksmustern an.</p>
+    </div>
+  </div>
+
+  <h3>Beobachtungen</h3>
+  <div class="tablewrap">
+  <table id="obsTable">
+    <thead><tr><th>Angezeigte Farbe</th><th class="c">R leuchtet</th><th class="c">G leuchtet</th><th class="c">B leuchtet</th><th>Bemerkung (Helligkeit, Muster …)</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  </div>
+  <h3>Skizze / Foto-Beschreibung der Pixelanordnung</h3>
+  <textarea id="skizze" placeholder="Beschreibe die Anordnung der Subpixel auf deinem Display …"></textarea>
+</section>
+
+<section>
+  <h2>Auswertung: additive Farbmischung</h2>
+  <p>Ein Bildschirm ist ein <b>selbstleuchtender Körper</b>: Er sendet Licht aus (<b>Emission</b>). Die Farben der leuchtenden Subpixel liegen so dicht nebeneinander, dass unser Auge sie nicht mehr trennt – ihre Lichtanteile <b>addieren</b> sich auf der Netzhaut.</p>
+
+  <div class="task">
+    <p><b class="nr">A1</b> Leite aus deinen Beobachtungen die Mischregeln her.</p>
+    <div class="fill" data-group="add">
+      <span><span class="sw" style="background:#f00"></span>Rot + <span class="sw" style="background:#0f0"></span>Grün →</span>
+      <select id="a_rg" data-answer="Gelb"></select>
+      <span><span class="sw" style="background:#f00"></span>Rot + <span class="sw" style="background:#00f"></span>Blau →</span>
+      <select id="a_rb" data-answer="Magenta"></select>
+      <span><span class="sw" style="background:#0f0"></span>Grün + <span class="sw" style="background:#00f"></span>Blau →</span>
+      <select id="a_gb" data-answer="Cyan"></select>
+      <span>Rot + Grün + Blau →</span>
+      <select id="a_rgb" data-answer="Weiß"></select>
+      <span>kein Subpixel leuchtet →</span>
+      <select id="a_none" data-answer="Schwarz"></select>
+    </div>
+    <p class="no-print"><button data-check="add">Antworten prüfen</button> <span class="small" id="res_add"></span></p>
+  </div>
+
+  <div class="two">
+    <figure class="fig">
+      <svg viewBox="0 0 300 270" role="img" aria-label="Additive Farbmischung: drei überlappende Lichtkreise Rot, Grün, Blau auf schwarzem Grund">
+        <rect width="300" height="270" fill="#000" rx="8"/>
+        <g style="isolation:isolate">
+          <circle cx="150" cy="100" r="72" fill="#f00" style="mix-blend-mode:screen"/>
+          <circle cx="108" cy="170" r="72" fill="#0f0" style="mix-blend-mode:screen"/>
+          <circle cx="192" cy="170" r="72" fill="#00f" style="mix-blend-mode:screen"/>
+        </g>
+      </svg>
+      <figcaption>Additive Mischung: Licht + Licht → heller. Alle drei zusammen ergeben Weiß.</figcaption>
+    </figure>
+    <div>
+      <h3 style="margin-top:0">Selbst mischen: ein Pixel</h3>
+      <p class="small">Stelle die Helligkeit der drei Subpixel ein (0 = aus, 255 = volle Helligkeit).</p>
+      <div class="slider"><label for="sR">Rot</label><input type="range" id="sR" min="0" max="255" value="255"><output id="oR">255</output></div>
+      <div class="slider"><label for="sG">Grün</label><input type="range" id="sG" min="0" max="255" value="180"><output id="oG">180</output></div>
+      <div class="slider"><label for="sB">Blau</label><input type="range" id="sB" min="0" max="255" value="0"><output id="oB">0</output></div>
+      <div class="result" id="mixResult"></div>
+      <p class="small">So entstehen am Bildschirm über 16 Millionen Farbtöne (256 × 256 × 256) aus nur drei Grundfarben.</p>
+    </div>
+  </div>
+
+  <div class="merk">
+    <p><b>Merke:</b> Bei der <b>additiven Farbmischung</b> werden Lichtfarben überlagert. Grundfarben sind <b>Rot, Grün und Blau (RGB)</b>. Je mehr Licht dazukommt, desto heller wird die Mischfarbe; alle drei ergeben <b>Weiß</b>. Anwendung: Bildschirme, Beamer, Bühnenlicht – überall dort, wo Körper selbst leuchten.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Subtraktive Farbmischung: Malkasten und Druckerpatrone</h2>
+  <p>Mischst du im <b>Wasserfarbmalkasten</b> alle Farben, entsteht kein Weiß, sondern ein dunkles Braun bis Schwarz. Farbstoffe und Pigmente leuchten nicht selbst – sie werden <b>beleuchtet</b>. Ein Teil des weißen Lichts wird <b>absorbiert</b> (verschluckt), nur der Rest wird reflektiert und gelangt ins Auge. Jede weitere Farbe nimmt weiteres Licht weg: Die Farben werden <b>subtrahiert</b>.</p>
+
+  <div class="two">
+    <div>
+      <h3 style="margin-top:0">Was ein Farbstoff „wegnimmt“</h3>
+      <div class="tablewrap"><table>
+        <tr><th>Farbstoff</th><th>absorbiert</th><th>reflektiert</th></tr>
+        <tr><td><span class="sw" style="background:#0ff"></span>Cyan</td><td>Rot</td><td>Grün + Blau</td></tr>
+        <tr><td><span class="sw" style="background:#f0f"></span>Magenta</td><td>Grün</td><td>Rot + Blau</td></tr>
+        <tr><td><span class="sw" style="background:#ff0"></span>Gelb</td><td>Blau</td><td>Rot + Grün</td></tr>
+      </table></div>
+      <p class="small">Kurz: Cyan = Weiß − Rot, Magenta = Weiß − Grün, Gelb = Weiß − Blau.</p>
+    </div>
+    <figure class="fig">
+      <svg viewBox="0 0 300 270" role="img" aria-label="Subtraktive Farbmischung: drei überlappende Farbkreise Cyan, Magenta, Gelb auf weißem Grund">
+        <rect width="300" height="270" fill="#fff" rx="8"/>
+        <g style="isolation:isolate">
+          <circle cx="150" cy="100" r="72" fill="#ff0" style="mix-blend-mode:multiply"/>
+          <circle cx="108" cy="170" r="72" fill="#0ff" style="mix-blend-mode:multiply"/>
+          <circle cx="192" cy="170" r="72" fill="#f0f" style="mix-blend-mode:multiply"/>
+        </g>
+      </svg>
+      <figcaption>Subtraktive Mischung: Farbe + Farbe → dunkler. Alle drei zusammen ergeben Schwarz.</figcaption>
+    </figure>
+  </div>
+
+  <div class="task">
+    <p><b class="nr">A2</b> Ergänze die subtraktiven Mischregeln. Überlege jeweils, welches Licht übrig bleibt.</p>
+    <div class="fill" data-group="sub">
+      <span>Cyan + Gelb →</span><select id="s_cy" data-answer="Grün"></select>
+      <span>Cyan + Magenta →</span><select id="s_cm" data-answer="Blau"></select>
+      <span>Magenta + Gelb →</span><select id="s_my" data-answer="Rot"></select>
+      <span>Cyan + Magenta + Gelb →</span><select id="s_cmy" data-answer="Schwarz"></select>
+    </div>
+    <p class="no-print"><button data-check="sub">Antworten prüfen</button> <span class="small" id="res_sub"></span></p>
+  </div>
+
+  <h3>Farbfilter-Simulator</h3>
+  <p class="small">Weißes Licht (Rot + Grün + Blau) fällt nacheinander durch die gewählten Filter.</p>
+  <div class="check-row">
+    <label><input type="checkbox" id="fC"> Cyan-Filter</label>
+    <label><input type="checkbox" id="fM"> Magenta-Filter</label>
+    <label><input type="checkbox" id="fY"> Gelb-Filter</label>
+  </div>
+  <div class="result" id="filterResult" style="max-width:420px"></div>
+
+  <div class="task">
+    <p><b class="nr">A3</b> Wasserfarbmalkasten: Mische Gelb mit Blau sowie Gelb mit Rot. Beschreibe das Ergebnis und erkläre, warum die Mischfarben oft trüber ausfallen als erwartet. <span class="small">(Tipp: Das „Blau“ und „Rot“ im Schulmalkasten sind kein reines Cyan und Magenta.)</span></p>
+    <textarea id="a3"></textarea>
+  </div>
+  <div class="task">
+    <p><b class="nr">A4</b> Druckerpatronen enthalten Cyan, Magenta und Gelb (Yellow) – und zusätzlich Schwarz (Key): das <b>CMYK</b>-System. Begründe, warum man eine eigene schwarze Patrone verwendet, obwohl C + M + Y theoretisch Schwarz ergeben.</p>
+    <textarea id="a4"></textarea>
+    <details><summary>Lösungshinweis</summary>
+      <p>Reale Farbstoffe absorbieren nicht perfekt; C + M + Y ergeben meist ein dunkles Braungrau. Schwarze Tinte ist günstiger als drei Farbtinten, liefert tiefes Schwarz und scharfe Textkanten, und das Papier wird weniger durchnässt.</p>
+    </details>
+  </div>
+
+  <div class="merk">
+    <p><b>Merke:</b> Bei der <b>subtraktiven Farbmischung</b> werden durch Farbstoffe oder Filter Anteile aus weißem Licht <b>absorbiert</b>. Grundfarben sind <b>Cyan, Magenta und Gelb (CMY)</b>. Jede zusätzliche Farbe macht die Mischung dunkler; alle drei ergeben <b>Schwarz</b>. Anwendung: Malen, Drucken, Farbfilter – bei allen nicht selbstleuchtenden, beleuchteten Körpern.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Der Farbkreis verbindet beide Mischungen</h2>
+  <div class="two">
+    <figure class="fig">
+      <svg id="wheel" viewBox="0 0 320 320" role="img" aria-label="Sechsteiliger Farbkreis: Rot, Gelb, Grün, Cyan, Blau, Magenta. Tippe eine Farbe an."></svg>
+      <figcaption>Tippe ein Farbfeld an.</figcaption>
+    </figure>
+    <div>
+      <p style="margin-top:0">Im Farbkreis liegt jede Mischfarbe <b>zwischen</b> den beiden Farben, aus denen sie additiv entsteht (z. B. Gelb zwischen Rot und Grün). Die additiven Grundfarben R, G, B und die subtraktiven Grundfarben C, M, Y wechseln sich ab.</p>
+      <p>Farben, die sich <b>direkt gegenüberliegen</b>, heißen <b>Komplementärfarben</b>. Additiv gemischt ergeben sie Weiß, subtraktiv gemischt Schwarz.</p>
+      <div class="merk" id="wheelInfo" aria-live="polite"><p>Wähle eine Farbe im Farbkreis.</p></div>
+    </div>
+  </div>
+
+  <div class="merk">
+    <p><b>Schlüsselidee für die Chemie:</b> Absorbiert ein Stoff Licht einer bestimmten Farbe, sehen wir die <b>Komplementärfarbe</b> der absorbierten Farbe. Der Farbkreis sagt also voraus, welche Farbe eine Lösung hat, wenn man weiß, welches Licht sie absorbiert – und umgekehrt.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Anwendungen</h2>
+
+  <div class="task">
+    <p><b class="nr">A5</b> Laubblätter erscheinen grün. Chlorophyll absorbiert vor allem rotes und blaues Licht. Erkläre den Farbeindruck mithilfe der subtraktiven Farbmischung.</p>
+    <textarea id="a5"></textarea>
+    <details><summary>Lösungshinweis</summary><p>Aus weißem Licht werden Rot und Blau absorbiert. Übrig bleibt vor allem grünes Licht, das reflektiert wird und ins Auge gelangt.</p></details>
+  </div>
+
+  <div class="task">
+    <p><b class="nr">A6</b> Ordne mithilfe des Farbkreises zu, welches Licht die Lösungen hauptsächlich absorbieren.</p>
+    <div class="tablewrap"><table>
+      <tr><th>Stoff (Lösung)</th><th>beobachtete Farbe</th><th>absorbiertes Licht</th></tr>
+      <tr><td>Kaliumpermanganat</td><td><span class="sw" style="background:#a0269a"></span>violett / magenta</td><td><select id="c_kmno4" data-answer="Grün" data-group-item="chem"></select></td></tr>
+      <tr><td>Kupfer(II)-sulfat</td><td><span class="sw" style="background:#2aa7d8"></span>hellblau / cyan</td><td><select id="c_cuso4" data-answer="Rot" data-group-item="chem"></select></td></tr>
+      <tr><td>β-Carotin (in Öl)</td><td><span class="sw" style="background:#f0a400"></span>gelb-orange</td><td><select id="c_carotin" data-answer="Blau" data-group-item="chem"></select></td></tr>
+    </table></div>
+    <p class="no-print"><button data-check="chem">Antworten prüfen</button> <span class="small" id="res_chem"></span></p>
+  </div>
+
+  <div class="task">
+    <p><b class="nr">A7</b> Weißes Licht wird durch einen Cyan-Filter und anschließend durch einen Gelb-Filter gestrahlt. Sage den Farbeindruck voraus und überprüfe mit dem Filter-Simulator.</p>
+    <textarea id="a7"></textarea>
+  </div>
+
+  <div class="task">
+    <p><b class="nr">A8</b> Eine reife Tomate wird auf einer Bühne nur mit grünem Scheinwerferlicht angestrahlt. Wie erscheint sie? Begründe.</p>
+    <textarea id="a8"></textarea>
+    <details><summary>Lösungshinweis</summary><p>Die Tomate reflektiert rotes Licht und absorbiert Grün und Blau. Es fällt nur grünes Licht ein, das absorbiert wird – die Tomate erscheint (fast) schwarz.</p></details>
+  </div>
+
+  <div class="task">
+    <p><b class="nr">A9</b> Nachbild-Versuch: Schaue 30 Sekunden lang ohne zu blinzeln auf die Mitte des roten Kreises, dann sofort auf den Punkt im weißen Feld. Beschreibe die Farbe des Nachbilds und deute sie mit dem Farbkreis.</p>
+    <div class="two">
+      <div class="dot" aria-hidden="true"></div>
+      <div class="after" aria-hidden="true"><span></span></div>
+    </div>
+    <textarea id="a9"></textarea>
+    <details><summary>Lösungshinweis</summary><p>Man sieht ein cyanfarbenes Nachbild. Die rotempfindlichen Zapfen sind „ermüdet“; beim Blick auf Weiß melden vor allem die grün- und blauempfindlichen Zapfen – Grün + Blau = Cyan, die Komplementärfarbe von Rot.</p></details>
+  </div>
+
+  <div class="task">
+    <p><b class="nr">A10</b> Ein Foto sieht auf dem Bildschirm leuchtender aus als ausgedruckt. Erkläre den Unterschied mit den Begriffen RGB, CMYK, Emission und Absorption.</p>
+    <textarea id="a10"></textarea>
+  </div>
+
+  <h3>Eigene Notizen</h3>
+  <textarea id="notizen" style="min-height:6rem"></textarea>
+  <p class="no-print small" style="margin-top:1rem"><button id="resetBtn">Alle Eingaben löschen</button></p>
+</section>
+</div>
+
+<div id="overlay" role="dialog" aria-label="Vollbild-Testfarbe"><span>Tippen zum Schließen</span></div>
+<button id="printBtn" class="no-print" onclick="window.print()">PDF/Drucken (A4)</button>
+
+<script>
+(function(){
+  const KEY = 'infoblatt-farbmischung-v1';
+  let store = {};
+  try { store = JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ store = {}; }
+  function persist(){ try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e){} }
+
+  const FARBEN = ['—','Rot','Grün','Blau','Gelb','Cyan','Magenta','Weiß','Schwarz'];
+  document.querySelectorAll('select').forEach(s => {
+    FARBEN.forEach(f => { const o = document.createElement('option'); o.value = f === '—' ? '' : f; o.textContent = f; s.appendChild(o); });
+  });
+
+  // Testfarben & Beobachtungstabelle
+  const TEST = [['Weiß','#ffffff'],['Rot','#ff0000'],['Grün','#00ff00'],['Blau','#0000ff'],
+                ['Gelb','#ffff00'],['Cyan','#00ffff'],['Magenta','#ff00ff'],['Schwarz','#000000']];
+  const tc = document.getElementById('testColors');
+  const tb = document.querySelector('#obsTable tbody');
+  const ov = document.getElementById('overlay');
+  TEST.forEach(([n,c],i) => {
+    const b = document.createElement('button');
+    b.className = 'colbtn'; b.innerHTML = '<span class="sw" style="background:'+c+'"></span>'+n;
+    b.addEventListener('click', () => {
+      ov.style.background = c; ov.style.display = 'flex';
+      ov.querySelector('span').style.display = 'inline';
+      setTimeout(()=>{ ov.querySelector('span').style.display='none'; }, 1500);
+      if (ov.requestFullscreen) ov.requestFullscreen().catch(()=>{});
+    });
+    tc.appendChild(b);
+    const tr = document.createElement('tr');
+    tr.innerHTML = '<td><span class="sw" style="background:'+c+'"></span>'+n+'</td>' +
+      ['r','g','b'].map(k => '<td class="c"><input type="checkbox" id="obs_'+i+'_'+k+'" aria-label="'+n+': '+k.toUpperCase()+' leuchtet"></td>').join('') +
+      '<td><input type="text" id="obs_'+i+'_note" aria-label="Bemerkung zu '+n+'"></td>';
+    tb.appendChild(tr);
+  });
+  ov.addEventListener('click', () => {
+    ov.style.display = 'none';
+    if (document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+  });
+
+  // Speichern & Wiederherstellen aller Eingaben
+  const fields = document.querySelectorAll('input[id], select[id], textarea[id]');
+  fields.forEach(el => {
+    if (el.id in store) {
+      if (el.type === 'checkbox' || el.type === 'radio') el.checked = !!store[el.id];
+      else el.value = store[el.id];
+    }
+    const ev = (el.type === 'checkbox' || el.tagName === 'SELECT') ? 'change' : 'input';
+    el.addEventListener(ev, () => {
+      store[el.id] = (el.type === 'checkbox' || el.type === 'radio') ? el.checked : el.value;
+      persist();
+    });
+  });
+  document.querySelectorAll('details').forEach((d,i) => {
+    const k = 'det_'+i; if (store[k]) d.open = true;
+    d.addEventListener('toggle', () => { store[k] = d.open; persist(); });
+  });
+
+  // RGB-Mischer
+  function contrast(r,g,b){ return (0.299*r + 0.587*g + 0.114*b) > 140 ? '#000' : '#fff'; }
+  function nameOf(r,g,b){
+    const on = v => v > 170, off = v => v < 60;
+    const t = [on(r),on(g),on(b)], z=[off(r),off(g),off(b)];
+    if (t[0]&&t[1]&&t[2]) return 'Weiß';
+    if (z[0]&&z[1]&&z[2]) return 'Schwarz';
+    if (t[0]&&t[1]&&z[2]) return 'Gelb';
+    if (t[0]&&z[1]&&t[2]) return 'Magenta';
+    if (z[0]&&t[1]&&t[2]) return 'Cyan';
+    if (t[0]&&z[1]&&z[2]) return 'Rot';
+    if (z[0]&&t[1]&&z[2]) return 'Grün';
+    if (z[0]&&z[1]&&t[2]) return 'Blau';
+    return 'Mischton';
+  }
+  function mix(){
+    const r=+sR.value,g=+sG.value,b=+sB.value;
+    oR.textContent=r; oG.textContent=g; oB.textContent=b;
+    const m=document.getElementById('mixResult');
+    m.style.background='rgb('+r+','+g+','+b+')'; m.style.color=contrast(r,g,b);
+    m.textContent=nameOf(r,g,b)+' · rgb('+r+', '+g+', '+b+')';
+  }
+  const sR=document.getElementById('sR'),sG=document.getElementById('sG'),sB=document.getElementById('sB');
+  const oR=document.getElementById('oR'),oG=document.getElementById('oG'),oB=document.getElementById('oB');
+  [sR,sG,sB].forEach(s=>s.addEventListener('input',mix)); mix();
+
+  // Filter-Simulator
+  const fC=document.getElementById('fC'),fM=document.getElementById('fM'),fY=document.getElementById('fY');
+  function filt(){
+    const R=!fC.checked, G=!fM.checked, B=!fY.checked;
+    const r=R?255:0,g=G?255:0,b=B?255:0;
+    const pass=[R&&'Rot',G&&'Grün',B&&'Blau'].filter(Boolean);
+    const el=document.getElementById('filterResult');
+    el.style.background='rgb('+r+','+g+','+b+')'; el.style.color=contrast(r,g,b);
+    el.textContent = 'Durchgelassen: '+(pass.length?pass.join(' + '):'nichts')+'  →  Eindruck: '+nameOf(r,g,b);
+  }
+  [fC,fM,fY].forEach(f=>f.addEventListener('change',filt)); filt();
+
+  // Antworten prüfen
+  document.querySelectorAll('button[data-check]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const g = btn.dataset.check;
+      const sel = g === 'chem'
+        ? document.querySelectorAll('select[data-group-item="chem"]')
+        : document.querySelectorAll('[data-group="'+g+'"] select');
+      let ok = 0;
+      sel.forEach(s => {
+        const r = s.value === s.dataset.answer;
+        s.classList.toggle('ok', r); s.classList.toggle('bad', !r); if (r) ok++;
+      });
+      document.getElementById('res_'+g).textContent = ok+' von '+sel.length+' richtig';
+    });
+  });
+
+  // Farbkreis
+  const W = [
+    ['Rot','#ff0000','additiven Farbmischung (RGB)'],['Gelb','#ffff00','subtraktiven Farbmischung (CMY)'],['Grün','#00ff00','additiven Farbmischung (RGB)'],
+    ['Cyan','#00ffff','subtraktiven Farbmischung (CMY)'],['Blau','#0000ff','additiven Farbmischung (RGB)'],['Magenta','#ff00ff','subtraktiven Farbmischung (CMY)']
+  ];
+  const svg=document.getElementById('wheel'), NS='http://www.w3.org/2000/svg', cx=160, cy=160, R1=62, R2=150;
+  const pt=(r,a)=>[cx+r*Math.cos(a), cy+r*Math.sin(a)];
+  const segs=[];
+  W.forEach(([n,c],i)=>{
+    const a0=(i*60-120)*Math.PI/180, a1=((i+1)*60-120)*Math.PI/180;
+    const [x0,y0]=pt(R2,a0),[x1,y1]=pt(R2,a1),[x2,y2]=pt(R1,a1),[x3,y3]=pt(R1,a0);
+    const p=document.createElementNS(NS,'path');
+    p.setAttribute('d',`M${x0},${y0} A${R2},${R2} 0 0 1 ${x1},${y1} L${x2},${y2} A${R1},${R1} 0 0 0 ${x3},${y3} Z`);
+    p.setAttribute('fill',c); p.setAttribute('stroke','#fff'); p.setAttribute('stroke-width','3');
+    p.setAttribute('tabindex','0'); p.setAttribute('role','button'); p.setAttribute('aria-label',n);
+    p.style.cursor='pointer';
+    const am=(a0+a1)/2, [tx,ty]=pt((R1+R2)/2,am);
+    const t=document.createElementNS(NS,'text');
+    t.setAttribute('x',tx); t.setAttribute('y',ty+5); t.setAttribute('text-anchor','middle');
+    t.setAttribute('font-size','15'); t.setAttribute('font-weight','700'); t.setAttribute('pointer-events','none');
+    t.setAttribute('fill', (n==='Blau')?'#fff':'#000'); t.textContent=n;
+    svg.appendChild(p); svg.appendChild(t); segs.push(p);
+    const pick=()=>select(i); p.addEventListener('click',pick);
+    p.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pick(); }});
+  });
+  const center=document.createElementNS(NS,'circle');
+  center.setAttribute('cx',cx); center.setAttribute('cy',cy); center.setAttribute('r',R1-4); center.setAttribute('fill','#fff');
+  svg.appendChild(center);
+  const ct=document.createElementNS(NS,'text');
+  ct.setAttribute('x',cx); ct.setAttribute('y',cy+5); ct.setAttribute('text-anchor','middle'); ct.setAttribute('font-size','13');
+  ct.setAttribute('fill','#333'); ct.textContent='Farbkreis'; svg.appendChild(ct);
+  function select(i){
+    const k=(i+3)%6, [n,,typ]=W[i], [kn]=W[k];
+    const nb=[W[(i+5)%6][0], W[(i+1)%6][0]];
+    segs.forEach((s,j)=>{ s.setAttribute('stroke', (j===i||j===k)?'#000':'#fff'); s.setAttribute('stroke-width',(j===i||j===k)?'5':'3'); s.style.opacity=(j===i||j===k)?1:.45; });
+    center.setAttribute('fill','#fff');
+    ct.textContent=n+' ↔ '+kn;
+    const addMix = typ.startsWith('sub') ? `${n} entsteht additiv aus ${nb[0]} + ${nb[1]}.` : `${n} entsteht subtraktiv aus ${nb[0]} + ${nb[1]}.`;
+    document.getElementById('wheelInfo').innerHTML =
+      `<p><b>${n}</b> ist eine Grundfarbe der ${typ}. ${addMix}</p>`+
+      `<p>Komplementärfarbe: <b>${kn}</b>. ${n} + ${kn} ergibt additiv Weiß, subtraktiv Schwarz.</p>`+
+      `<p>Ein Stoff, der ${kn} absorbiert, erscheint ${n}.</p>`;
+  }
+
+  // Zurücksetzen
+  document.getElementById('resetBtn').addEventListener('click',()=>{
+    if(!confirm('Wirklich alle Eingaben auf diesem Blatt löschen?')) return;
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  });
+})();
+</script>
+</body>
+</html>
