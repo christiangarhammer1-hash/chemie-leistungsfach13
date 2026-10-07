@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chemie 13 (eA) – Absorptionsverhalten verschiedener Farbstoff-Moleküle</title>
+<style>
+:root{
+  --bg:#f4f6f9; --card:#fff; --ink:#1d2733; --muted:#5a6878; --accent:#0b5cab; --accent-l:#e5f0fb;
+  --ok:#1b7a3a; --ok-bg:#e6f5ea; --warn:#8a5a00; --warn-bg:#fff4dc; --err:#a12626; --err-bg:#fdeaea; --line:#d5dce5;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+.wrap{max-width:980px;margin:0 auto;padding:16px 14px 90px}
+header{background:var(--accent);color:#fff;border-radius:12px;padding:16px 20px;margin-bottom:14px}
+header h1{margin:0;font-size:1.35rem}
+header p{margin:4px 0 0;opacity:.92;font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+h2{font-size:1.1rem;margin:0 0 8px;color:var(--accent)}
+h3{font-size:1rem;margin:0 0 6px}
+.meta{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.meta label{font-size:.88rem;color:var(--muted)}
+input[type=text],input[type=number],select,textarea{font:inherit;padding:6px 8px;border:1px solid #b9c4d1;border-radius:7px;background:#fff;color:var(--ink);max-width:100%}
+textarea{width:100%;min-height:90px;resize:vertical}
+select{width:100%}
+input[type=number]{width:90px}
+.progress{height:10px;background:#e3e8ee;border-radius:6px;overflow:hidden;margin-top:6px}
+.progress>div{height:100%;width:0;background:var(--ok);transition:width .3s}
+.info{background:var(--accent-l);border-left:4px solid var(--accent);padding:8px 12px;border-radius:6px;font-size:.93rem}
+svg{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:8px;touch-action:pan-y}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem;margin-top:6px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:34px;border-top:3px solid #000}
+.tool{display:grid;grid-template-columns:1fr;gap:10px}
+.tool input[type=range]{width:100%}
+.sw{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.sw div{display:flex;align-items:center;gap:8px;font-size:.92rem}
+.sw b.chip{display:inline-block;width:44px;height:30px;border-radius:6px;border:1px solid #0003}
+.dye{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:10px 0;background:#fcfdff}
+.dye .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:700px){.dye .grid{grid-template-columns:1fr}}
+.dye label.l{font-size:.85rem;color:var(--muted);display:block;margin-bottom:3px}
+.radios label{display:block;font-size:.9rem;padding:5px 8px;border:1px solid var(--line);border-radius:7px;margin:4px 0;cursor:pointer;background:#fff}
+.radios label:hover{background:var(--accent-l)}
+.radios input{margin-right:6px}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--accent);background:var(--accent);color:#fff;padding:6px 14px}
+button.sec{background:#fff;color:var(--accent)}
+button.small{padding:3px 10px;font-size:.85rem}
+.fb{margin-top:8px;padding:8px 12px;border-radius:8px;font-size:.92rem;display:none}
+.fb.ok{display:block;background:var(--ok-bg);color:var(--ok);border:1px solid #9fd3ad}
+.fb.warn{display:block;background:var(--warn-bg);color:var(--warn);border:1px solid #ecce8c}
+.fb.err{display:block;background:var(--err-bg);color:var(--err);border:1px solid #e8aaaa}
+.fb ul{margin:4px 0 0 18px;padding:0}
+table{border-collapse:collapse;width:100%;font-size:.92rem}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#eef3f9}
+.tblwrap{overflow-x:auto}
+details{margin-top:8px}
+summary{cursor:pointer;color:var(--accent)}
+.sol{background:#f3f7fb;border:1px dashed #9db4cc;padding:8px 12px;border-radius:8px;margin-top:6px;font-size:.92rem}
+footer{font-size:.8rem;color:var(--muted);margin-top:10px}
+#printBtn{position:fixed;right:14px;bottom:14px;z-index:20;background:#ffffffee;color:#4a5a6b;border:1px solid #b9c4d1;font-size:.82rem;padding:5px 11px;opacity:.85}
+#printBtn:hover{opacity:1}
+@page{size:A4;margin:12mm}
+@media print{
+  body{background:#fff;font-size:10.5pt}
+  .wrap{max-width:none;padding:0}
+  .noprint,#printBtn,button,.progress{display:none!important}
+  .card,.dye{break-inside:avoid;border-color:#999}
+  header{background:#fff;color:#000;border:1px solid #000}
+  textarea{border:1px solid #999;min-height:70px}
+  details{display:block}
+  details>summary{display:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Absorptionsverhalten verschiedener Farbstoff-Moleküle</h1>
+  <p>Chemie 13 (erhöhtes Anforderungsniveau) · Lernbereich 2: Farbigkeit und Farbstoffe · Bearbeitungszeit ca. 20 Minuten</p>
+</header>
+
+<div class="card">
+  <div class="meta">
+    <label>Kennwort / Pseudonym: <input type="text" id="kennwort" data-save placeholder="z. B. Kennwort"></label>
+    <label>Datum: <input type="text" id="datum" data-save placeholder="TT.MM.JJJJ" style="width:120px"></label>
+  </div>
+  <div style="margin-top:10px;font-size:.88rem;color:var(--muted)">Fortschritt (richtig gelöste Teilaufgaben): <b id="progTxt">0 / 9</b></div>
+  <div class="progress"><div id="progBar"></div></div>
+</div>
+
+<div class="card">
+  <h2>Ausgangsfrage</h2>
+  <p>Die Moleküle oder Ionen von Farbstoffen absorbieren Licht aus dem sichtbaren Bereich, daher erscheinen die Stoffe farbig. <b>Wird diese Eigenschaft von der Struktur der Teilchen bestimmt?</b></p>
+  <div class="info"><b>M4:</b> Ein Spektrometer misst über das gesamte sichtbare Spektrum, wie stark ein Farbstoff bei verschiedenen Wellenlängen absorbiert. So entsteht eine charakteristische Absorptionskurve (B3). In B4 sind die Valenzstrichformeln der Ionen von <b>Methylenblau, Methylorange, 4-Nitrophenolat</b> und <b>Thymolblau</b> abgebildet (siehe Buch/Heft).</div>
+</div>
+
+<div class="card">
+  <h2>B3 – Absorptionskurven (interaktiv)</h2>
+  <svg id="chart" viewBox="0 0 640 360" role="img" aria-label="Absorptionskurven von vier Farbstoffen"></svg>
+  <div class="legend" id="legend"></div>
+  <p style="font-size:.82rem;color:var(--muted);margin:6px 0 0">Tipp: Fahre mit der Maus (bzw. dem Finger) über das Diagramm, um die Wellenlänge abzulesen. Wählst du unten eine Kurve aus, wird sie hervorgehoben.</p>
+</div>
+
+<div class="card noprint">
+  <h2>Hilfsmittel: Farbrechner (Absorption ↔ Komplementärfarbe)</h2>
+  <div class="tool">
+    <label for="lam_slider">Absorbierte Wellenlänge: <b id="lamVal">500</b> nm</label>
+    <input type="range" id="lam_slider" data-save min="380" max="700" step="1" value="500">
+    <div class="sw">
+      <div><b class="chip" id="swAbs"></b><span>absorbiert: <b id="nmAbs"></b></span></div>
+      <div>→</div>
+      <div><b class="chip" id="swObs"></b><span>Farbeindruck (Komplementärfarbe): <b id="nmObs"></b></span></div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Aufgabe a) Zuordnung der Absorptionskurven</h2>
+  <p>Ordne die vier Farbstoffe aus B4 den Absorptionskurven in B3 zu und <b>begründe</b> mithilfe des Molekülbaus (Größe des mesomeren Systems, Donor- und Akzeptorgruppen, HOMO-LUMO-Abstand).</p>
+  <div id="dyesA"></div>
+</div>
+
+<div class="card">
+  <h2>Aufgabe b) Absorptionsmaxima und Farbe</h2>
+  <p>Gib für jeden Stoff das Absorptionsmaximum λ<sub>max</sub> an, nenne die absorbierte Farbe des Lichts und leite daraus die Farbe des Stoffes ab.</p>
+  <div class="tblwrap"><table>
+    <thead><tr><th>Farbstoff</th><th>λ<sub>max</sub> in nm</th><th>absorbierte Farbe</th><th>Farbe des Stoffes</th><th></th></tr></thead>
+    <tbody id="rowsB"></tbody>
+  </table></div>
+  <div id="fbBwrap"></div>
+</div>
+
+<div class="card">
+  <h2>Aufgabe c) Energielücke berechnen (eA)</h2>
+  <p>Die Absorption eines Photons regt ein Elektron vom HOMO ins LUMO an: ΔE = h·c / λ. Berechne die Energielücke (in eV) für das kürzestwellige (400 nm) und das längstwellige Maximum (665 nm). <span style="color:var(--muted)">(h·c ≈ 1240 eV·nm)</span></p>
+  <div class="meta">
+    <label>λ = 400 nm: ΔE = <input type="number" step="0.01" id="c_400" data-save> eV</label>
+    <label>λ = 665 nm: ΔE = <input type="number" step="0.01" id="c_665" data-save> eV</label>
+    <button id="btnC" type="button">Prüfen</button>
+  </div>
+  <div class="fb" id="fbC"></div>
+</div>
+
+<div class="card">
+  <h2>Aufgabe d) Fazit: Struktur und Farbe</h2>
+  <p>Beantworte die Ausgangsfrage: Formuliere in 3–5 Sätzen einen <b>Je-desto-Zusammenhang</b> zwischen Molekülbau, Energielücke, Absorptionsmaximum und Farbe. Beziehe die Begriffe <i>Chromophor</i>, <i>Donor/Akzeptor</i> und <i>Komplementärfarbe</i> ein.</p>
+  <textarea id="fazit" data-save placeholder="Deine Antwort …"></textarea>
+  <details class="noprint">
+    <summary>Selbstcheck: Erwartungshorizont anzeigen</summary>
+    <div class="sol">
+      <p style="margin:0 0 4px">Prüfe, ob du diese Punkte genannt hast:</p>
+      <label style="display:block"><input type="checkbox" id="sc1" data-save> Absorption = Anregung delokalisierter Elektronen (HOMO → LUMO); ΔE = h·c/λ</label>
+      <label style="display:block"><input type="checkbox" id="sc2" data-save> Je größer das mesomere System / je besser die Delokalisierung, desto kleiner die Energielücke, desto größer λ<sub>max</sub></label>
+      <label style="display:block"><input type="checkbox" id="sc3" data-save> Donor- und Akzeptorgruppen am Chromophor (auxochrom/antiauxochrom) verringern die Lücke zusätzlich</label>
+      <label style="display:block"><input type="checkbox" id="sc4" data-save> Farbeindruck = Komplementärfarbe zum absorbierten Licht (subtraktive Farbmischung)</label>
+      <label style="display:block"><input type="checkbox" id="sc5" data-save> Ergebnis: Die Farbigkeit wird von der Teilchenstruktur bestimmt (Zusammenhang Stoff- ↔ Teilchenebene)</label>
+    </div>
+  </details>
+</div>
+
+<div class="card noprint">
+  <button type="button" class="sec small" id="btnReset">Alles zurücksetzen</button>
+  <footer>Lehrplanbezug (LehrplanPLUS Gymnasium Bayern, Chemie 13 eA, Lernbereich 2): Absorption als Anregung delokalisierter Elektronen, Energiestufenschema (HOMO/LUMO), Auswertung von Absorptionsspektren, Donor-Akzeptor-Konzept auf Farbstoff-Moleküle, Komplementärfarben. Eingaben werden automatisch lokal in diesem Browser gespeichert.</footer>
+</div>
+
+</div>
+<button id="printBtn" type="button" title="Als PDF speichern oder auf A4 drucken">PDF/Drucken (A4)</button>
+
+<script>
+(function(){
+'use strict';
+const KEY='c13_lb2_absorption_v1';
+let S={};
+try{S=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){S={};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+const $=id=>document.getElementById(id);
+
+/* ---------- Daten ---------- */
+const DYES=[
+ {id:'nitro',name:'4-Nitrophenolat',lam:400,abs:'Violett',obs:['Gelb'],
+  feat:'ein einzelner Benzolring; Donor: O⁻, Akzeptor: –NO₂ (kleinstes mesomeres System der vier Teilchen)'},
+ {id:'orange',name:'Methylorange',lam:510,abs:'Grün',obs:['Purpur (Rotviolett)'],
+  feat:'zwei Benzolringe, verbunden über die Azogruppe –N=N– (Chromophor); Donor: –N(CH₃)₂, Gegenstück: –SO₃⁻'},
+ {id:'thymol',name:'Thymolblau',lam:593,abs:'Gelb–Orange',obs:['Blau'],
+  feat:'Triphenylmethan-Gerüst mit zwei Phenolat-Ringen (Donor O⁻) über das zentrale C-Atom mesomer verbunden; der dritte Ring (mit –SO₃⁻) ist verdrillt und trägt kaum zur Delokalisierung bei'},
+ {id:'blau',name:'Methylenblau',lam:665,abs:'Rot',obs:['Blaugrün (Cyan)','Blau'],
+  feat:'drei annellierte, planare Ringe; Donor: –N(CH₃)₂, kationisches Zentrum =N⁺(CH₃)₂ (größtes, am besten delokalisiertes System)'}
+];
+const REASONS={
+ nitro:'Nur ein Benzolring als Chromophor mit Donor (O⁻) und Akzeptor (–NO₂): kleinstes mesomeres System → größte Energielücke → kurzwelligste Absorption.',
+ orange:'Die Azogruppe –N=N– verknüpft zwei Benzolringe zu einem ausgedehnten mesomeren System, Donor –N(CH₃)₂ → mittlere Energielücke.',
+ thymol:'Triphenylmethan-Gerüst mit zwei Phenolat-Donoren; der dritte Ring ist verdrillt und trägt kaum zur Delokalisierung bei → mittelgroßes bis großes System.',
+ blau:'Drei annellierte, planare Ringe mit Donor (–N(CH₃)₂) und kationischem Zentrum: größtes, am besten delokalisiertes System → kleinste Energielücke → langwelligste Absorption.'
+};
+const ORDER={nitro:['orange','nitro','blau','thymol'],orange:['thymol','blau','orange','nitro'],thymol:['blau','thymol','nitro','orange'],blau:['nitro','blau','thymol','orange']};
+const CURVES=[
+ {lam:400,txt:'schwarz, durchgezogen (λ = 400 nm)',col:'#000',dash:'',w:2.6,h:.95,sl:22,sr:28},
+ {lam:510,txt:'grau, durchgezogen (λ = 510 nm)',col:'#8a8a8a',dash:'',w:2.6,h:.88,sl:30,sr:30},
+ {lam:593,txt:'grau, gestrichelt (λ = 593 nm)',col:'#8a8a8a',dash:'7 5',w:2.6,h:.8,sl:22,sr:24},
+ {lam:665,txt:'schwarz, gestrichelt (λ = 665 nm)',col:'#000',dash:'7 5',w:2.6,h:.95,sl:80,sr:22}
+];
+const ABS_OPT=['Violett','Blau','Blaugrün','Grün','Gelbgrün','Gelb–Orange','Rot'];
+const OBS_OPT=['Gelb','Orange','Rot','Purpur (Rotviolett)','Violett','Blau','Blaugrün (Cyan)','Grün'];
+const HEX={'Violett':'#7b2fbe','Blau':'#2255d6','Blaugrün':'#00a37a','Grün':'#3aa83a','Gelbgrün':'#a9c92a','Gelb–Orange':'#f2b01a','Rot':'#d62b2b',
+ 'Gelb':'#f2d21b','Orange':'#f28a1a','Purpur (Rotviolett)':'#a8318f','Blaugrün (Cyan)':'#00a7a7'};
+const WHEEL=[ // [von, bis, absorbiert, Komplementär]
+ [380,435,'Violett','Gelbgrün–Gelb','#7b2fbe','#d4d824'],
+ [435,480,'Blau','Gelb–Orange','#2255d6','#f2c200'],
+ [480,490,'Grünblau','Orange','#0092a8','#f28a1a'],
+ [490,500,'Blaugrün','Rot','#00a37a','#d62b2b'],
+ [500,560,'Grün','Purpur (Rotviolett)','#3aa83a','#a8318f'],
+ [560,580,'Gelbgrün','Violett','#a9c92a','#6b34a8'],
+ [580,605,'Gelb–Orange','Blau','#f2b01a','#2a4fc0'],
+ [605,701,'Rot','Blaugrün (Cyan)','#d62b2b','#00a58f']
+];
+
+/* ---------- Diagramm ---------- */
+const NS='http://www.w3.org/2000/svg';
+const X=l=>60+(l-350)*(550/350), Y=a=>280-a*230;
+function el(n,a,p){const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;}
+function gauss(l,c,h,sl,sr){const s=l<c?sl:sr;return h*Math.exp(-Math.pow(l-c,2)/(2*s*s));}
+const svg=$('chart');
+(function drawChart(){
+  const defs=el('defs',{},svg);
+  const g=el('linearGradient',{id:'spec',x1:'0',x2:'1',y1:'0',y2:'0'},defs);
+  [[0,'#5b0b8a'],[.17,'#3b2bd6'],[.35,'#1ca3d6'],[.45,'#1fb55a'],[.62,'#b5d62a'],[.72,'#f5c21a'],[.82,'#f0731a'],[1,'#b01818']].forEach(s=>el('stop',{offset:s[0],'stop-color':s[1]},g));
+  // Gitter + Achsen
+  for(let l=350;l<=700;l+=50){
+    el('line',{x1:X(l),x2:X(l),y1:Y(1)-10,y2:280,stroke:'#e6ebf1'},svg);
+    const t=el('text',{x:X(l),y:300,'text-anchor':'middle','font-size':13,fill:'#333'},svg);t.textContent=l;
+  }
+  el('line',{x1:60,x2:610,y1:280,y2:280,stroke:'#222','stroke-width':1.6},svg);
+  el('line',{x1:60,x2:60,y1:30,y2:280,stroke:'#222','stroke-width':1.6},svg);
+  const ya=el('text',{x:12,y:24,'font-size':13,fill:'#333'},svg);ya.textContent='Absorption';
+  const xa=el('text',{x:610,y:336,'text-anchor':'end','font-size':13,fill:'#333'},svg);xa.textContent='Wellenlänge λ in nm';
+  el('rect',{x:X(380),y:306,width:X(700)-X(380),height:10,fill:'url(#spec)',rx:2},svg);
+  // Kurven
+  CURVES.forEach(c=>{
+    let d='';
+    for(let l=350;l<=700;l+=2){
+      const a=Math.min(1,gauss(l,c.lam,c.h,c.sl,c.sr)+0.015);
+      d+=(l===350?'M':'L')+X(l).toFixed(1)+' '+Y(a).toFixed(1)+' ';
+    }
+    const p=el('path',{d:d,fill:'none',stroke:c.col,'stroke-width':c.w,'stroke-linecap':'round','data-lam':c.lam,class:'curve'},svg);
+    if(c.dash)p.setAttribute('stroke-dasharray',c.dash);
+    const t=el('text',{x:X(c.lam),y:Y(c.h+.015)-8,'text-anchor':'middle','font-size':12.5,fill:'#222','data-lamt':c.lam},svg);
+    t.textContent='λ = '+c.lam+' nm';
+    el('line',{x1:X(c.lam),x2:X(c.lam),y1:Y(c.h+.015)-4,y2:Y(c.h+.015),stroke:'#222'},svg);
+  });
+  // Fadenkreuz
+  const cl=el('line',{id:'cross',x1:0,x2:0,y1:30,y2:280,stroke:'#0b5cab','stroke-width':1.2,'stroke-dasharray':'3 3',visibility:'hidden'},svg);
+  const ct=el('text',{id:'crossT',x:0,y:44,'font-size':13,fill:'#0b5cab','font-weight':'bold',visibility:'hidden'},svg);
+  svg.addEventListener('pointermove',ev=>{
+    const r=svg.getBoundingClientRect();
+    const vx=(ev.clientX-r.left)/r.width*640;
+    const l=350+(vx-60)*350/550;
+    if(l<350||l>700){cl.setAttribute('visibility','hidden');ct.setAttribute('visibility','hidden');return;}
+    cl.setAttribute('x1',vx);cl.setAttribute('x2',vx);
+    ct.setAttribute('x',Math.min(vx+6,540));ct.textContent='λ ≈ '+Math.round(l)+' nm';
+    cl.setAttribute('visibility','visible');ct.setAttribute('visibility','visible');
+  });
+  svg.addEventListener('pointerleave',()=>{cl.setAttribute('visibility','hidden');ct.setAttribute('visibility','hidden');});
+  // Legende
+  const lg=$('legend');
+  CURVES.forEach(c=>{
+    const s=document.createElement('span');
+    const i=document.createElement('i');
+    i.style.borderTopColor=c.col;i.style.borderTopStyle=c.dash?'dashed':'solid';
+    s.appendChild(i);s.appendChild(document.createTextNode(c.txt));lg.appendChild(s);
+  });
+})();
+
+function highlight(){
+  const chosen=DYES.map(d=>($('a_'+d.id)||{}).value).filter(Boolean);
+  svg.querySelectorAll('.curve').forEach(p=>{
+    const on=chosen.includes(p.getAttribute('data-lam'));
+    p.setAttribute('stroke-width',on?4.2:2.6);
+    p.style.filter=on?'drop-shadow(0 0 3px #0b5cab88)':'none';
+  });
+}
+
+/* ---------- Farbrechner ---------- */
+function updWheel(){
+  const l=+$('lam_slider').value;
+  $('lamVal').textContent=l;
+  const w=WHEEL.find(r=>l>=r[0]&&l<r[1])||WHEEL[WHEEL.length-1];
+  $('swAbs').style.background=w[4];$('swObs').style.background=w[5];
+  $('nmAbs').textContent=w[2];$('nmObs').textContent=w[3];
+}
+
+/* ---------- Aufgabe a) aufbauen ---------- */
+function buildA(){
+  const host=$('dyesA');
+  DYES.forEach(d=>{
+    const box=document.createElement('div');box.className='dye';
+    let opts='<option value="">– Kurve wählen –</option>'+CURVES.map(c=>'<option value="'+c.lam+'">'+c.txt+'</option>').join('');
+    let rad=ORDER[d.id].map(k=>'<label><input type="radio" name="r_'+d.id+'" value="'+k+'" data-save> '+REASONS[k]+'</label>').join('');
+    box.innerHTML='<h3>'+d.name+'</h3>'+
+     '<div class="grid"><div><label class="l" for="a_'+d.id+'">Zugeordnete Absorptionskurve</label><select id="a_'+d.id+'" data-save>'+opts+'</select>'+
+     '<label class="l" for="t_'+d.id+'" style="margin-top:8px">Eigene Begründung (Stichpunkte)</label><textarea id="t_'+d.id+'" data-save style="min-height:70px" placeholder="Strukturmerkmale von '+d.name+' (B4) → Energielücke → λmax"></textarea></div>'+
+     '<div class="radios"><label class="l">Welche Begründung passt zu '+d.name+'?</label>'+rad+'</div></div>'+
+     '<div style="margin-top:8px"><button type="button" data-chkA="'+d.id+'">Prüfen</button> <span id="solA_'+d.id+'"></span></div>'+
+     '<div class="fb" id="fa_'+d.id+'"></div>';
+    host.appendChild(box);
+  });
+}
+
+/* ---------- Aufgabe b) aufbauen ---------- */
+function buildB(){
+  const tb=$('rowsB');
+  DYES.forEach(d=>{
+    const tr=document.createElement('tr');
+    const ao='<option value="">–</option>'+ABS_OPT.map(o=>'<option>'+o+'</option>').join('');
+    const oo='<option value="">–</option>'+OBS_OPT.map(o=>'<option>'+o+'</option>').join('');
+    tr.innerHTML='<td><b>'+d.name+'</b></td>'+
+     '<td><input type="number" id="bn_'+d.id+'" data-save min="350" max="750"> nm</td>'+
+     '<td><select id="ba_'+d.id+'" data-save>'+ao+'</select><div style="margin-top:4px"><b class="chip" id="sa_'+d.id+'" style="display:inline-block;width:40px;height:14px;border-radius:4px;border:1px solid #0003;background:#fff"></b></div></td>'+
+     '<td><select id="bo_'+d.id+'" data-save>'+oo+'</select><div style="margin-top:4px"><b class="chip" id="so_'+d.id+'" style="display:inline-block;width:40px;height:14px;border-radius:4px;border:1px solid #0003;background:#fff"></b></div></td>'+
+     '<td><button type="button" data-chkB="'+d.id+'">Prüfen</button></td>';
+    tb.appendChild(tr);
+  });
+  const w=$('fbBwrap');
+  DYES.forEach(d=>{const f=document.createElement('div');f.className='fb';f.id='fb_'+d.id;w.appendChild(f);});
+}
+
+/* ---------- Prüf-Logik ---------- */
+function setFb(id,cls,html){const f=$(id);f.className='fb '+cls;f.innerHTML=html;}
+function curveInfo(l){return CURVES.find(c=>c.lam===l);}
+
+function checkA(d,count){
+  const sel=$('a_'+d.id).value, rs=S['r_'+d.id];
+  const fbId='fa_'+d.id;
+  S['ca_'+d.id]=1;
+  const msgs=[];let wrong=false;
+  if(!sel){msgs.push('Wähle zuerst eine Absorptionskurve aus.');}
+  else{
+    if(+sel!==d.lam){
+      wrong=true;
+      const att=(S['att_'+d.id]||0)+(count?1:0);
+      msgs.push('Die gewählte Kurve passt noch nicht zu <b>'+d.name+'</b>.');
+      msgs.push('<b>Hinweis 1:</b> Je größer das mesomere System (je besser die Delokalisierung), desto kleiner der HOMO-LUMO-Abstand und desto <i>größer</i> die Wellenlänge des Absorptionsmaximums.');
+      if(att>=2){
+        msgs.push('<b>Hinweis 2:</b> '+(+sel>d.lam?'Deine Kurve liegt bei zu großer Wellenlänge – ':'Deine Kurve liegt bei zu kleiner Wellenlänge – ')+
+          'das mesomere System von '+d.name+' ist '+(+sel>d.lam?'kleiner bzw. weniger gut delokalisiert':'größer bzw. besser delokalisiert')+', als du angenommen hast. Strukturmerkmale: '+d.feat+'.');
+      }
+      if(att>=3){msgs.push('<b>Hinweis 3:</b> Ordne die vier Stoffe zuerst nach der Größe ihres mesomeren Systems (klein → groß) und die Kurven nach λ<sub>max</sub> (klein → groß). Beide Reihen entsprechen sich.');}
+    }
+    const dup=DYES.some(o=>o.id!==d.id&&$('a_'+o.id).value===sel);
+    if(dup){wrong=true;msgs.push('Diese Kurve hast du bereits einem anderen Farbstoff zugeordnet – jede Kurve gehört zu genau einem Farbstoff.');}
+  }
+  if(!rs){msgs.push('Wähle außerdem eine Begründung aus.');}
+  else if(rs!==d.id){
+    wrong=true;
+    msgs.push('Die gewählte Begründung beschreibt ein anderes Teilchen. Prüfe in B4 für '+d.name+': Wie viele Ringe? Welche verbindende Gruppe? Welche Donor-/Akzeptorgruppen?');
+  }
+  if(wrong&&count){S['att_'+d.id]=(S['att_'+d.id]||0)+1;}
+  const att=S['att_'+d.id]||0;
+  const ok=sel&&+sel===d.lam&&rs===d.id&&!(DYES.some(o=>o.id!==d.id&&$('a_'+o.id).value===sel));
+  const sb=$('solA_'+d.id);sb.innerHTML='';
+  if(ok){
+    S['okA_'+d.id]=true;
+    setFb(fbId,'ok','✔ Richtig: <b>'+d.name+'</b> gehört zur Kurve mit λ<sub>max</sub> = '+d.lam+' nm. '+d.feat.charAt(0).toUpperCase()+d.feat.slice(1)+'.');
+  }else{
+    delete S['okA_'+d.id];
+    setFb(fbId,wrong?'err':'warn','<ul>'+msgs.map(m=>'<li>'+m+'</li>').join('')+'</ul>');
+    if(att>=3){
+      const b=document.createElement('button');b.type='button';b.className='sec small';b.textContent='Lösung anzeigen';
+      b.onclick=()=>{
+        $('a_'+d.id).value=d.lam;S['a_'+d.id]=String(d.lam);
+        const r=document.querySelector('input[name="r_'+d.id+'"][value="'+d.id+'"]');r.checked=true;S['r_'+d.id]=d.id;
+        save();checkA(d,false);highlight();progress();
+      };
+      sb.appendChild(b);
+    }
+  }
+  save();progress();
+}
+
+function checkB(d){
+  const n=$('bn_'+d.id).value, a=$('ba_'+d.id).value, o=$('bo_'+d.id).value;
+  S['cb_'+d.id]=1;
+  const msgs=[];let ok=true;
+  if(n===''||!a||!o){
+    setFb('fb_'+d.id,'warn','<b>'+d.name+':</b> Fülle zuerst alle drei Felder aus.');save();return;
+  }
+  if(Math.abs(+n-d.lam)>10){
+    ok=false;
+    msgs.push('λ<sub>max</sub>: Lies den Wert am <i>Maximum</i> der zugeordneten Kurve auf der x-Achse ab (Fadenkreuz im Diagramm nutzen). Gefragt ist ein Wert in nm zwischen 350 und 700.');
+    if(S['okA_'+d.id]!==true)msgs.push('Prüfe außerdem zuerst deine Zuordnung in Aufgabe a).');
+  }
+  if(a!==d.abs){
+    ok=false;
+    msgs.push('Absorbierte Farbe: Ordne die Wellenlänge im Farbrechner dem Farbbereich des Spektrums zu (Spektrumband unter dem Diagramm). Gefragt ist die Farbe des <i>absorbierten</i> Lichts.');
+  }
+  if(!d.obs.includes(o)){
+    ok=false;
+    if(o===d.abs||(a&&o.indexOf(a)===0)) msgs.push('Du hast die absorbierte Farbe als Stofffarbe eingetragen. Gesehen wird aber das <i>übrige</i> Licht: Der Farbeindruck ist die <b>Komplementärfarbe</b> zum absorbierten Licht.');
+    else msgs.push('Farbe des Stoffes: Der Stoff erscheint in der Komplementärfarbe zum absorbierten Licht (subtraktive Farbmischung). Nutze den Farbrechner.');
+  }
+  if(ok){
+    S['okB_'+d.id]=true;
+    const extra=d.id==='blau'?' (Methylenblau erscheint im Alltag als tiefes Blau, die Absorption im roten Spektralbereich ergibt Blau bis Blaugrün).':'.';
+    setFb('fb_'+d.id,'ok','✔ <b>'+d.name+':</b> λ<sub>max</sub> ≈ '+d.lam+' nm → absorbiert wird '+d.abs+' → Farbe des Stoffes: '+d.obs[0]+extra);
+  }else{
+    delete S['okB_'+d.id];
+    setFb('fb_'+d.id,'err','<b>'+d.name+':</b><ul>'+msgs.map(m=>'<li>'+m+'</li>').join('')+'</ul>');
+  }
+  save();progress();
+}
+
+function checkC(){
+  const a=$('c_400').value,b=$('c_665').value;
+  S.cc=1;
+  if(a===''||b===''){setFb('fbC','warn','Trage beide Werte ein.');save();return;}
+  const ea=1239.84/400, eb=1239.84/665;
+  const oa=Math.abs(+a-ea)<=0.06, ob=Math.abs(+b-eb)<=0.06;
+  if(oa&&ob){
+    S.okC=true;
+    setFb('fbC','ok','✔ ΔE(400 nm) ≈ '+ea.toFixed(2)+' eV, ΔE(665 nm) ≈ '+eb.toFixed(2)+' eV. Je kleiner die Energielücke, desto größer die Wellenlänge des absorbierten Lichts (ΔE ∝ 1/λ).');
+  }else{
+    delete S.okC;
+    const m=[];
+    if(!oa||!ob)m.push('Verwende ΔE = h·c/λ mit h·c ≈ 1240 eV·nm; die Wellenlänge steht im Nenner (in nm einsetzen).');
+    if((+a<+b)&&true)m.push('Kontrolle: Die Energielücke muss bei 400 nm <i>größer</i> sein als bei 665 nm, weil kurzwelliges Licht energiereicher ist.');
+    if(!oa)m.push('Der Wert für 400 nm stimmt noch nicht.');
+    if(!ob)m.push('Der Wert für 665 nm stimmt noch nicht.');
+    setFb('fbC','err','<ul>'+m.map(x=>'<li>'+x+'</li>').join('')+'</ul>');
+  }
+  save();progress();
+}
+
+function progress(){
+  let n=0;
+  DYES.forEach(d=>{if(S['okA_'+d.id])n++;if(S['okB_'+d.id])n++;});
+  if(S.okC)n++;
+  $('progTxt').textContent=n+' / 9';
+  $('progBar').style.width=(n/9*100)+'%';
+}
+
+function swatches(){
+  DYES.forEach(d=>{
+    const a=$('ba_'+d.id).value,o=$('bo_'+d.id).value;
+    $('sa_'+d.id).style.background=HEX[a]||'#fff';
+    $('so_'+d.id).style.background=HEX[o]||'#fff';
+  });
+}
+
+/* ---------- Init ---------- */
+buildA();buildB();
+
+// Wiederherstellen
+document.querySelectorAll('[data-save]').forEach(e=>{
+  if(e.type==='radio'){if(S[e.name]===e.value)e.checked=true;}
+  else if(e.type==='checkbox'){if(S[e.id])e.checked=true;}
+  else if(S[e.id]!==undefined){e.value=S[e.id];}
+});
+
+document.addEventListener('input',handler);
+document.addEventListener('change',handler);
+function handler(ev){
+  const t=ev.target;
+  if(!t.matches||!t.matches('[data-save]'))return;
+  if(t.type==='radio')S[t.name]=t.value;
+  else if(t.type==='checkbox')S[t.id]=t.checked;
+  else S[t.id]=t.value;
+  save();
+  if(t.id==='lam_slider')updWheel();
+  if(t.id&&t.id.indexOf('a_')===0)highlight();
+  if(t.id&&(t.id.indexOf('ba_')===0||t.id.indexOf('bo_')===0))swatches();
+}
+document.addEventListener('click',ev=>{
+  const t=ev.target;
+  if(t.dataset&&t.dataset.chkA){checkA(DYES.find(d=>d.id===t.dataset.chkA),true);}
+  if(t.dataset&&t.dataset.chkB){checkB(DYES.find(d=>d.id===t.dataset.chkB));}
+});
+$('btnC').addEventListener('click',checkC);
+$('printBtn').addEventListener('click',()=>window.print());
+$('btnReset').addEventListener('click',()=>{
+  if(confirm('Wirklich alle Eingaben dieses Arbeitsblatts löschen?')){
+    try{localStorage.removeItem(KEY);}catch(e){}
+    S={};location.reload();
+  }
+});
+
+// gespeicherte Rückmeldungen wiederherstellen (ohne Versuche zu zählen)
+DYES.forEach(d=>{
+  if(S['ca_'+d.id])checkA(d,false);
+  if(S['cb_'+d.id])checkB(d);
+});
+if(S.cc)checkC();
+updWheel();highlight();swatches();progress();
+})();
+</script>
+</body>
+</html>
