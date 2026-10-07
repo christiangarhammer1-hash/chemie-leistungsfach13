@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chemie 13 (eA) – Synthese von Fluorescein als Kondensationsreaktion</title>
+<style>
+:root{
+  --bg:#f5f7f4; --card:#ffffff; --ink:#1d2a2a; --muted:#5b6b6b; --line:#d5dcd8;
+  --accent:#0e6b66; --accent2:#c7e000; --ok:#1b7a3a; --okbg:#e6f4ea; --bad:#b3261e; --badbg:#fdeceb;
+  --hint:#8a5a00; --hintbg:#fff4d6; --info:#0b4f8a; --infobg:#e8f1fb;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+header.top{background:linear-gradient(120deg,#0b3d3a,#0e6b66 60%,#2f8f5b);color:#fff;padding:22px 20px 18px}
+header.top .wrap{max-width:900px;margin:auto}
+header.top h1{margin:0 0 4px;font-size:1.55rem;line-height:1.25}
+header.top .sub{opacity:.9;font-size:.95rem}
+.glow{display:inline-block;background:var(--accent2);color:#14320f;border-radius:99px;padding:1px 10px;font-size:.78rem;font-weight:700;margin-bottom:8px;letter-spacing:.03em}
+main{max-width:900px;margin:0 auto;padding:16px 14px 90px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0}
+.meta label{display:block;font-size:.8rem;color:var(--muted);margin-bottom:2px}
+input[type=text],input[type=number],textarea,select{width:100%;font:inherit;padding:7px 9px;border:1.5px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}
+input[type=number]{max-width:130px}
+textarea{min-height:84px;resize:vertical}
+input:focus,textarea:focus,select:focus,button:focus-visible{outline:3px solid #8fd3cf;outline-offset:1px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:16px 0;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.card h2{margin:0 0 4px;font-size:1.2rem;color:var(--accent);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.card h2 .nr{background:var(--accent);color:#fff;border-radius:8px;padding:0 9px;font-size:.95rem}
+.tag{font-size:.72rem;font-weight:700;border-radius:99px;padding:1px 9px;background:#e9efec;color:var(--muted)}
+.tag.kern{background:var(--accent2);color:#14320f}
+.lp{font-size:.82rem;color:var(--muted);margin:0 0 10px}
+.box{border-radius:10px;padding:10px 12px;margin:10px 0;font-size:.95rem}
+.info{background:var(--infobg);border-left:5px solid var(--info)}
+.warn{background:var(--hintbg);border-left:5px solid #e0a100}
+.fb{display:none;border-radius:10px;padding:9px 12px;margin-top:10px;font-size:.95rem}
+.fb.show{display:block}
+.fb.ok{background:var(--okbg);border-left:5px solid var(--ok);color:#0f4d25}
+.fb.bad{background:var(--badbg);border-left:5px solid var(--bad);color:#6d150f}
+.fb.hint{background:var(--hintbg);border-left:5px solid #e0a100;color:#5a3b00}
+.fb ul{margin:.3em 0 0 1.1em;padding:0}
+button{font:inherit;cursor:pointer;border:0;border-radius:9px;padding:8px 14px;background:var(--accent);color:#fff;font-weight:600}
+button.sec{background:#e7eeec;color:var(--ink)}
+button:hover{filter:brightness(1.08)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0}
+.mol{display:flex;flex-wrap:wrap;gap:6px 16px;justify-content:center;align-items:center;margin:8px 0}
+.mol figure{margin:0;text-align:center;font-size:.85rem;color:var(--muted)}
+svg.struct{width:200px;height:auto;background:#fff}
+svg.struct.big{width:250px}
+.plus,.arrow{font-size:1.6rem;color:var(--muted)}
+table.t{border-collapse:collapse;width:100%;font-size:.95rem}
+table.t td,table.t th{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:middle}
+table.t th{background:#eef3f1}
+.opt{display:block;padding:6px 10px;border:1.5px solid var(--line);border-radius:9px;margin:6px 0;cursor:pointer}
+.opt:hover{background:#f1f7f5}
+.opt input{margin-right:8px}
+ol.steps{list-style:none;margin:10px 0;padding:0;counter-reset:s}
+ol.steps li{border:1.5px solid var(--line);border-radius:11px;padding:9px 11px;margin:8px 0;background:#fff;display:grid;grid-template-columns:auto 1fr;gap:4px 10px}
+ol.steps li.ok{border-color:var(--ok);background:var(--okbg)}
+ol.steps li.bad{border-color:var(--bad);background:var(--badbg)}
+.ctl{display:flex;flex-direction:column;gap:4px}
+.ctl button{padding:2px 9px;background:#dfe9e6;color:var(--ink)}
+.st-title{font-weight:700}
+.st-txt{font-size:.93rem;color:#2d3d3d}
+.st-type{display:flex;gap:8px;align-items:center;margin-top:5px;font-size:.88rem;flex-wrap:wrap}
+.st-type select{width:auto;padding:3px 6px}
+.why{grid-column:2;font-size:.88rem;color:#6d150f;display:none}
+li.bad .why{display:block}
+.eq{margin:10px 0;line-height:2.4}.eq input{display:inline-block;vertical-align:middle;margin:0 3px}
+.cloze select{width:auto;display:inline-block;padding:2px 6px}
+.slider{width:100%}
+.spec{width:100%;height:auto;background:#fff;border:1px solid var(--line);border-radius:10px}
+.swatch{display:inline-block;width:46px;height:30px;border-radius:7px;border:1px solid #0003;vertical-align:middle}
+.bars{display:grid;grid-template-columns:130px 1fr 48px;gap:4px 8px;align-items:center;font-size:.88rem}
+.bar{height:14px;border-radius:7px;background:#e8eeec;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent)}
+details.sol{margin-top:10px;border:1.5px dashed var(--line);border-radius:10px;padding:6px 12px;background:#fafcfb}
+details.sol summary{cursor:pointer;font-weight:600;color:var(--accent)}
+.prog{position:sticky;top:0;z-index:5;background:#ffffffee;backdrop-filter:blur(4px);border-bottom:1px solid var(--line);padding:6px 14px}
+.prog .in{max-width:900px;margin:auto;display:flex;align-items:center;gap:12px;font-size:.85rem;color:var(--muted)}
+.prog .track{flex:1;height:10px;background:#e3eae7;border-radius:9px;overflow:hidden}
+.prog .track i{display:block;height:100%;width:0;background:linear-gradient(90deg,#2f8f5b,var(--accent2));transition:width .3s}
+#printbtn{position:fixed;right:14px;bottom:14px;background:#ffffffee;color:var(--muted);border:1px solid var(--line);font-size:.8rem;font-weight:500;padding:6px 11px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+#printbtn:hover{color:var(--ink)}
+.chk label{display:block;margin:5px 0}
+.small{font-size:.85rem;color:var(--muted)}
+sub,sup{line-height:0}
+@media print{
+  @page{size:A4;margin:13mm}
+  body{background:#fff;font-size:10.5pt}
+  header.top{background:#fff!important;color:#000;border-bottom:2px solid #000;padding:0 0 6px}
+  .glow{border:1px solid #000;background:#fff}
+  .prog,#printbtn,.noprint,button{display:none!important}
+  main{padding:0;max-width:none}
+  .card{box-shadow:none;break-inside:avoid-page;border-color:#999;padding:10px 12px;margin:10px 0}
+  ol.steps li{break-inside:avoid}
+  textarea{border:1px solid #999;min-height:0;resize:none;overflow:visible}
+  details.sol:not([open]){display:none}
+  details.sol summary{list-style:none}
+  svg.struct{width:150px}
+  .spec{width:100%}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <span class="glow">Chemie 13 · erhöhtes Anforderungsniveau</span>
+  <h1>Fluorescein – vom Phthalsäureanhydrid zum Farbstoff</h1>
+  <div class="sub">Lernbereich 2: Farbigkeit und Farbstoffe · Triphenylmethanfarbstoffe: Synthese als Kondensationsreaktion</div>
+</div></header>
+<div class="prog noprint"><div class="in"><span id="progtxt">Fortschritt</span><div class="track"><i id="progbar"></i></div><span id="progpct">0 %</span></div></div>
+
+<main>
+<div class="meta">
+  <div><label for="m_name">Name / Kürzel</label><input type="text" id="m_name" autocomplete="off"></div>
+  <div><label for="m_datum">Datum</label><input type="text" id="m_datum" placeholder="TT.MM.JJJJ"></div>
+  <div><label for="m_kurs">Kurs</label><input type="text" id="m_kurs" autocomplete="off"></div>
+</div>
+
+<div class="box info">
+  <b>Bearbeitungszeit:</b> ca. 90 Minuten. Der <span class="tag kern">Kern</span> (Aufgaben 1–5) braucht etwa 45 Minuten, die übrigen Aufgaben vertiefen.<br>
+  <b>Lehrplanbezug (LehrplanPLUS Gymnasium, Chemie 13 eA, LB 2):</b> Du stellst die Synthese eines Triphenylmethanfarbstoffs auf der Teilchenebene mechanistisch dar, begründest die Farbigkeit mit delokalisierten Elektronen und dem Energiestufenschema (HOMO/LUMO) und erklärst die Funktionsweise von Indikatoren.<br>
+  <span class="small">Deine Eingaben werden automatisch in diesem Browser gespeichert. Hilfe bekommst du bei jeder „Prüfen“-Rückmeldung – lies sie genau.</span>
+</div>
+
+<!-- ============ AUFGABE 1 ============ -->
+<section class="card" id="t1" data-task="1">
+  <h2><span class="nr">1</span> Einstieg: Ein Farbstoff, den man „leuchten“ sieht <span class="tag kern">Kern</span></h2>
+  <p class="lp">Kompetenz: Fragestellungen und Hypothesen bilden</p>
+  <p>Das Natriumsalz des Fluoresceins heißt <b>Uranin</b>. Schon wenige Gramm färben Millionen Liter Wasser sichtbar gelbgrün. Man setzt es u. a. ein, um unterirdische Wasserwege nachzuweisen (z. B. im Karst), bei der Untersuchung von Netzhautgefäßen und zur Prüfung von Rohrleitungen auf Dichtigkeit.</p>
+  <p><b>a)</b> Formuliere zwei Fragen, die du zu diesem Stoff aus chemischer Sicht beantworten willst (z. B. zu Bau, Herstellung, Farbigkeit).</p>
+  <textarea id="a1a" placeholder="Meine Fragen …"></textarea>
+  <p><b>b)</b> Stelle eine begründete Hypothese auf, welche Teilchen-Eigenschaft einen Stoff schon in so geringer Konzentration sichtbar färben kann.</p>
+  <textarea id="a1b" placeholder="Meine Hypothese …"></textarea>
+  <details class="sol" data-need="a1a,a1b"><summary>Musterlösung (wird nach deinem eigenen Versuch freigeschaltet)</summary>
+    <p>a) z. B.: Aus welchen Edukten und in welchen Schritten entsteht Fluorescein? Warum ist es farbig, die Vorstufe aber nicht? Warum leuchtet es (Fluoreszenz)?<br>
+    b) z. B.: Ein großes delokalisiertes π-Elektronensystem (Chromophor) besitzt einen großen Absorptionskoeffizienten: Es absorbiert Licht einer Wellenlänge sehr effektiv, sodass schon wenige Teilchen die Farbe bestimmen.</p>
+  </details>
+</section>
+
+<!-- ============ AUFGABE 2 ============ -->
+<section class="card" id="t2" data-task="2">
+  <h2><span class="nr">2</span> Edukte, Produkt und Reaktionstyp <span class="tag kern">Kern</span></h2>
+  <p class="lp">Kompetenz: Reaktionstypen bestimmen; Kondensationsreaktion; Donator-Akzeptor-Prinzip</p>
+  <div class="mol">
+    <figure><svg class="struct" viewBox="0 0 140 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Resorcin"><line x1="70.0" y1="50.0" x2="87.3" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="71.0" y1="54.7" x2="82.7" y2="61.5" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="87.3" y1="60.0" x2="87.3" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="87.3" y1="80.0" x2="70.0" y2="90.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="82.7" y1="78.5" x2="71.0" y2="85.3" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="70.0" y1="90.0" x2="52.7" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="52.7" y1="80.0" x2="52.7" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="56.3" y1="76.8" x2="56.3" y2="63.2" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="52.7" y1="60.0" x2="70.0" y2="50.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="70.0" y1="50.0" x2="70.0" y2="30.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="87.3" y1="80.0" x2="99.4" y2="87.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="70.0" cy="30.0" r="8.1" fill="#fff"/><text x="70.0" y="34.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">OH</text><circle cx="112.4" cy="93.0" r="8.1" fill="#fff"/><text x="112.4" y="97.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">OH</text></svg><figcaption>Resorcin (1,3-Dihydroxybenzol)</figcaption></figure>
+    <div class="plus">+</div>
+    <figure><svg class="struct" viewBox="0 0 150 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Phthalsäureanhydrid"><line x1="55.0" y1="40.0" x2="72.3" y2="50.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="56.0" y1="44.7" x2="67.7" y2="51.5" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="72.3" y1="50.0" x2="72.3" y2="70.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="72.3" y1="70.0" x2="55.0" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="67.7" y1="68.5" x2="56.0" y2="75.3" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="55.0" y1="80.0" x2="37.7" y2="70.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="37.7" y1="70.0" x2="37.7" y2="50.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="41.3" y1="66.8" x2="41.3" y2="53.2" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="37.7" y1="50.0" x2="55.0" y2="40.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="72.3" y1="50.0" x2="91.3" y2="43.8" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="72.3" y1="70.0" x2="91.3" y2="76.2" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="91.3" y1="43.8" x2="103.1" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="91.3" y1="76.2" x2="103.1" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="93.2" y1="44.4" x2="98.2" y2="29.2" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="89.4" y1="43.2" x2="94.4" y2="28.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="97.8" cy="23.8" r="8.1" fill="#fff"/><text x="97.8" y="28.4" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">O</text><line x1="89.4" y1="76.8" x2="94.4" y2="92.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="93.2" y1="75.6" x2="98.2" y2="90.8" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="97.8" cy="96.2" r="8.1" fill="#fff"/><text x="97.8" y="100.7" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">O</text><circle cx="103.1" cy="60.0" r="8.1" fill="#fff"/><text x="103.1" y="64.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">O</text></svg><figcaption>Phthalsäureanhydrid</figcaption></figure>
+    <div class="arrow">→</div>
+    <figure><svg class="struct big" viewBox="0 0 250 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fluorescein, farbige Form"><line x1="68.0" y1="60.0" x2="85.4" y2="50.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="72.6" y1="61.5" x2="84.4" y2="54.7" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="85.4" y1="50.0" x2="102.7" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="60.0" x2="102.7" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="80.0" x2="85.4" y2="90.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="85.4" y1="90.0" x2="68.0" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="84.4" y1="85.3" x2="72.6" y2="78.5" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="68.0" y1="80.0" x2="68.0" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="60.0" x2="102.7" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="106.3" y1="63.2" x2="106.3" y2="76.8" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="50.0" x2="102.7" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="90.0" x2="102.7" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="50.0" x2="137.3" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="60.0" x2="137.3" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="80.0" x2="120.0" y2="90.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="132.7" y1="78.5" x2="121.0" y2="85.3" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="60.0" x2="154.6" y2="50.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="141.9" y1="61.5" x2="153.7" y2="54.7" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="154.6" y1="50.0" x2="172.0" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="172.0" y1="60.0" x2="172.0" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="172.0" y1="80.0" x2="154.6" y2="90.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="167.4" y1="78.5" x2="155.6" y2="85.3" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="154.6" y1="90.0" x2="137.3" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="173.0" y1="61.7" x2="190.3" y2="51.7" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="171.0" y1="58.3" x2="188.3" y2="48.3" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="189.3" cy="50.0" r="8.1" fill="#fff"/><text x="189.3" y="54.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">O</text><line x1="68.0" y1="60.0" x2="52.5" y2="51.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="52.5" cy="51.0" r="8.1" fill="#fff"/><text x="52.5" y="55.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">OH</text><circle cx="120.0" cy="50.0" r="8.1" fill="#fff"/><text x="120.0" y="54.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">O</text><line x1="120.0" y1="90.0" x2="120.0" y2="122.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="122.0" x2="137.3" y2="132.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="132.0" x2="137.3" y2="152.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="133.7" y1="135.2" x2="133.7" y2="148.8" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="152.0" x2="120.0" y2="162.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="162.0" x2="102.7" y2="152.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="119.0" y1="157.3" x2="107.3" y2="150.5" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="152.0" x2="102.7" y2="132.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="132.0" x2="120.0" y2="122.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="107.3" y1="133.5" x2="119.0" y2="126.7" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="132.0" x2="152.9" y2="123.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="152.9" y1="123.0" x2="152.9" y2="105.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="154.9" y1="123.0" x2="154.9" y2="105.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="150.9" y1="123.0" x2="150.9" y2="105.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="152.9" cy="97.0" r="8.1" fill="#fff"/><text x="152.9" y="101.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">O</text><line x1="152.9" y1="123.0" x2="170.9" y2="123.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="182.9" cy="123.0" r="8.1" fill="#fff"/><text x="182.9" y="127.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">OH</text></svg><figcaption>Fluorescein (farbige Form)</figcaption></figure>
+  </div>
+  <p><b>a) Stoffbilanz.</b> Fluorescein bildet sich bei Zugabe von Säure (H<sup>+</sup>) und Wärme aus Phthalsäureanhydrid (C<sub>8</sub>H<sub>4</sub>O<sub>3</sub>) und Resorcin (C<sub>6</sub>H<sub>6</sub>O<sub>2</sub>). Vervollständige die Reaktionsgleichung:</p>
+  <div class="eq">C<sub>8</sub>H<sub>4</sub>O<sub>3</sub> + <input type="number" id="b_nres" min="0" max="9" aria-label="Anzahl Resorcin" style="width:70px"> C<sub>6</sub>H<sub>6</sub>O<sub>2</sub> → <input type="text" id="b_formula" aria-label="Summenformel Fluorescein" placeholder="Summenformel Fluorescein" style="max-width:190px"> + <input type="number" id="b_nh2o" min="0" max="9" aria-label="Anzahl Wasser" style="width:70px"> H<sub>2</sub>O</div>
+  <p><b>b) Rollen der Teilchen.</b> Ordne zu:</p>
+  <table class="t">
+    <tr><th>Teilchen</th><th>Rolle</th></tr>
+    <tr><td>Phthalsäureanhydrid (nach Protonierung)</td><td><select id="r_psa"><option value="">–</option><option value="E">Elektrophil (Akzeptor von Elektronenpaaren)</option><option value="N">Nukleophil (Donator von Elektronenpaaren)</option><option value="K">Katalysator</option><option value="A">abgespaltenes Kleinmolekül</option></select></td></tr>
+    <tr><td>Resorcin</td><td><select id="r_res"><option value="">–</option><option value="E">Elektrophil (Akzeptor von Elektronenpaaren)</option><option value="N">Nukleophil (Donator von Elektronenpaaren)</option><option value="K">Katalysator</option><option value="A">abgespaltenes Kleinmolekül</option></select></td></tr>
+    <tr><td>H<sup>+</sup></td><td><select id="r_h"><option value="">–</option><option value="E">Elektrophil (Akzeptor von Elektronenpaaren)</option><option value="N">Nukleophil (Donator von Elektronenpaaren)</option><option value="K">Katalysator</option><option value="A">abgespaltenes Kleinmolekül</option></select></td></tr>
+    <tr><td>H<sub>2</sub>O</td><td><select id="r_h2o"><option value="">–</option><option value="E">Elektrophil (Akzeptor von Elektronenpaaren)</option><option value="N">Nukleophil (Donator von Elektronenpaaren)</option><option value="K">Katalysator</option><option value="A">abgespaltenes Kleinmolekül</option></select></td></tr>
+  </table>
+  <p><b>c)</b> Warum bezeichnet man die Gesamtreaktion als <b>Kondensationsreaktion</b>?</p>
+  <div id="c_opts">
+    <label class="opt"><input type="radio" name="c_kond" value="a">Zwei Moleküle lagern sich ohne Nebenprodukt zu einem größeren Molekül zusammen.</label>
+    <label class="opt"><input type="radio" name="c_kond" value="b">Moleküle werden unter Abspaltung kleiner Moleküle (hier Wasser) miteinander verknüpft.</label>
+    <label class="opt"><input type="radio" name="c_kond" value="c">Ein großes Molekül wird durch Wasser in kleinere Moleküle gespalten.</label>
+    <label class="opt"><input type="radio" name="c_kond" value="d">Es werden Elektronen zwischen den Edukten übertragen (Oxidation und Reduktion).</label>
+  </div>
+  <div class="row noprint"><button data-check="2">Prüfen</button></div>
+  <div class="fb" id="fb2"></div>
+</section>
+
+<!-- ============ AUFGABE 3 ============ -->
+<section class="card" id="t3" data-task="3">
+  <h2><span class="nr">3</span> Der Mechanismus in neun Schritten <span class="tag kern">Kern</span></h2>
+  <p class="lp">Kompetenz: Die Synthese von Triphenylmethanfarbstoffen auf der Teilchenebene mechanistisch darstellen</p>
+  <div class="box info">Das zentrale C-Atom der Zwischenstufen trägt am Ende <b>drei aromatische Reste</b> (zwei Resorcin-Reste und den Benzoyl-Rest des Phthalsäureanhydrids). Deshalb zählt Fluorescein zu den Farbstoffen vom Triphenylmethan-Typ. Welche Stelle des Resorcins angreift (Position 4), ist hier vorgegeben; dirigierende Effekte musst du nicht begründen.</div>
+  <p><b>a)</b> Die neun Teilschritte stehen in <b>falscher Reihenfolge</b>. Bringe sie mit ▲ ▼ in die richtige Reihenfolge.<br>
+  <b>b)</b> Wähle bei jedem Schritt den passenden <b>Reaktionstyp</b>.<br>
+  <b>c)</b> Vergleiche anschließend mit Abbildung B8 im Schulbuch und zeichne dort die Pfeile der Elektronenpaar-Verschiebungen nach.</p>
+  <ol class="steps" id="steps"><li data-id="s1"><div class="ctl noprint"><button type="button" data-mv="up" aria-label="nach oben">▲</button><button type="button" data-mv="down" aria-label="nach unten">▼</button></div><div><div><span class="pos st-title"></span> <span class="st-title">Protonierung der Carbonylgruppe</span></div><div class="st-txt">Das Carbonyl-O-Atom des Phthalsäureanhydrids nimmt ein H⁺ auf. Durch Mesomerie trägt nun das C-Atom die positive Ladung: Es ist stärker elektrophil.</div><div class="st-type"><label for="type_s1">Reaktionstyp:</label><select id="type_s1"><option value="">–</option><option value="P">Protonenübergang (Säure-Base-Reaktion)</option><option value="A">Angriff Nukleophil → Elektrophil (elektrophile Substitution)</option><option value="W">Wasserabspaltung (Kondensation)</option><option value="U">Umlagerung / Protonenwanderung</option></select></div></div><div class="why"></div></li><li data-id="s2"><div class="ctl noprint"><button type="button" data-mv="up" aria-label="nach oben">▲</button><button type="button" data-mv="down" aria-label="nach unten">▼</button></div><div><div><span class="pos st-title"></span> <span class="st-title">Angriff des ersten Resorcin-Moleküls</span></div><div class="st-txt">Ein Elektronenpaar des π-Systems im Resorcin (Position 4) bildet eine C–C-Bindung zum positivierten C-Atom. Es entsteht ein kationischer Zwischenzustand (σ-Komplex).</div><div class="st-type"><label for="type_s2">Reaktionstyp:</label><select id="type_s2"><option value="">–</option><option value="P">Protonenübergang (Säure-Base-Reaktion)</option><option value="A">Angriff Nukleophil → Elektrophil (elektrophile Substitution)</option><option value="W">Wasserabspaltung (Kondensation)</option><option value="U">Umlagerung / Protonenwanderung</option></select></div></div><div class="why"></div></li><li data-id="s3"><div class="ctl noprint"><button type="button" data-mv="up" aria-label="nach oben">▲</button><button type="button" data-mv="down" aria-label="nach unten">▼</button></div><div><div><span class="pos st-title"></span> <span class="st-title">Rearomatisierung durch H⁺-Abgabe</span></div><div class="st-txt">Der σ-Komplex gibt ein H⁺ ab, der Aromat ist wieder hergestellt. Am zentralen C-Atom sitzt jetzt eine OH-Gruppe.</div><div class="st-type"><label for="type_s3">Reaktionstyp:</label><select id="type_s3"><option value="">–</option><option value="P">Protonenübergang (Säure-Base-Reaktion)</option><option value="A">Angriff Nukleophil → Elektrophil (elektrophile Substitution)</option><option value="W">Wasserabspaltung (Kondensation)</option><option value="U">Umlagerung / Protonenwanderung</option></select></div></div><div class="why"></div></li><li data-id="s4"><div class="ctl noprint"><button type="button" data-mv="up" aria-label="nach oben">▲</button><button type="button" data-mv="down" aria-label="nach unten">▼</button></div><div><div><span class="pos st-title"></span> <span class="st-title">Protonierung der OH-Gruppe am zentralen C-Atom</span></div><div class="st-txt">Die OH-Gruppe nimmt ein H⁺ auf und wird zur Oxonium-Gruppe –OH₂⁺.</div><div class="st-type"><label for="type_s4">Reaktionstyp:</label><select id="type_s4"><option value="">–</option><option value="P">Protonenübergang (Säure-Base-Reaktion)</option><option value="A">Angriff Nukleophil → Elektrophil (elektrophile Substitution)</option><option value="W">Wasserabspaltung (Kondensation)</option><option value="U">Umlagerung / Protonenwanderung</option></select></div></div><div class="why"></div></li><li data-id="s5"><div class="ctl noprint"><button type="button" data-mv="up" aria-label="nach oben">▲</button><button type="button" data-mv="down" aria-label="nach unten">▼</button></div><div><div><span class="pos st-title"></span> <span class="st-title">Abspaltung von Wasser</span></div><div class="st-txt">Das Wasser-Molekül verlässt das Teilchen. Es entsteht ein neues Carbenium-Ion, das durch die OH-Gruppen des Rings mesomeriestabilisiert ist (1. Kondensationsschritt).</div><div class="st-type"><label for="type_s5">Reaktionstyp:</label><select id="type_s5"><option value="">–</option><option value="P">Protonenübergang (Säure-Base-Reaktion)</option><option value="A">Angriff Nukleophil → Elektrophil (elektrophile Substitution)</option><option value="W">Wasserabspaltung (Kondensation)</option><option value="U">Umlagerung / Protonenwanderung</option></select></div></div><div class="why"></div></li><li data-id="s6"><div class="ctl noprint"><button type="button" data-mv="up" aria-label="nach oben">▲</button><button type="button" data-mv="down" aria-label="nach unten">▼</button></div><div><div><span class="pos st-title"></span> <span class="st-title">Angriff des zweiten Resorcin-Moleküls</span></div><div class="st-txt">Das zweite Resorcin-Molekül greift als Nukleophil am Carbenium-C-Atom an; wieder entsteht ein σ-Komplex.</div><div class="st-type"><label for="type_s6">Reaktionstyp:</label><select id="type_s6"><option value="">–</option><option value="P">Protonenübergang (Säure-Base-Reaktion)</option><option value="A">Angriff Nukleophil → Elektrophil (elektrophile Substitution)</option><option value="W">Wasserabspaltung (Kondensation)</option><option value="U">Umlagerung / Protonenwanderung</option></select></div></div><div class="why"></div></li><li data-id="s7"><div class="ctl noprint"><button type="button" data-mv="up" aria-label="nach oben">▲</button><button type="button" data-mv="down" aria-label="nach unten">▼</button></div><div><div><span class="pos st-title"></span> <span class="st-title">Zweite Rearomatisierung durch H⁺-Abgabe</span></div><div class="st-txt">H⁺ wird abgespalten. Das zentrale C-Atom trägt nun zwei Resorcin-Reste und den Benzoyl-Rest: Triphenylmethan-Typ.</div><div class="st-type"><label for="type_s7">Reaktionstyp:</label><select id="type_s7"><option value="">–</option><option value="P">Protonenübergang (Säure-Base-Reaktion)</option><option value="A">Angriff Nukleophil → Elektrophil (elektrophile Substitution)</option><option value="W">Wasserabspaltung (Kondensation)</option><option value="U">Umlagerung / Protonenwanderung</option></select></div></div><div class="why"></div></li><li data-id="s8"><div class="ctl noprint"><button type="button" data-mv="up" aria-label="nach oben">▲</button><button type="button" data-mv="down" aria-label="nach unten">▼</button></div><div><div><span class="pos st-title"></span> <span class="st-title">Ringschluss unter Wasserabspaltung</span></div><div class="st-txt">Zwei benachbarte OH-Gruppen (je ortho zum zentralen C) bilden unter Abspaltung von H₂O einen Ether. Der Pyran-Ring (Xanthen-Gerüst) schließt sich: Lacton-Form (2. Kondensationsschritt).</div><div class="st-type"><label for="type_s8">Reaktionstyp:</label><select id="type_s8"><option value="">–</option><option value="P">Protonenübergang (Säure-Base-Reaktion)</option><option value="A">Angriff Nukleophil → Elektrophil (elektrophile Substitution)</option><option value="W">Wasserabspaltung (Kondensation)</option><option value="U">Umlagerung / Protonenwanderung</option></select></div></div><div class="why"></div></li><li data-id="s9"><div class="ctl noprint"><button type="button" data-mv="up" aria-label="nach oben">▲</button><button type="button" data-mv="down" aria-label="nach unten">▼</button></div><div><div><span class="pos st-title"></span> <span class="st-title">Öffnung des Lactons und Protonenwanderung</span></div><div class="st-txt">Ein Proton einer phenolischen OH-Gruppe wandert, der Lactonring öffnet sich: Es entsteht die Carbonsäure und das chinoide, über das Xanthen delokalisierte System (farbige Form).</div><div class="st-type"><label for="type_s9">Reaktionstyp:</label><select id="type_s9"><option value="">–</option><option value="P">Protonenübergang (Säure-Base-Reaktion)</option><option value="A">Angriff Nukleophil → Elektrophil (elektrophile Substitution)</option><option value="W">Wasserabspaltung (Kondensation)</option><option value="U">Umlagerung / Protonenwanderung</option></select></div></div><div class="why"></div></li></ol>
+  <div class="row noprint"><button data-check="3">Reihenfolge und Typen prüfen</button><button class="sec" id="shuffle">Neu mischen</button></div>
+  <div class="fb" id="fb3"></div>
+</section>
+
+<!-- ============ AUFGABE 4 ============ -->
+<section class="card" id="t4" data-task="4">
+  <h2><span class="nr">4</span> Warum ist nur die offene Form farbig? <span class="tag kern">Kern</span></h2>
+  <p class="lp">Kompetenz: Absorption als Anregung delokalisierter Elektronen; Energiestufenschema (HOMO, LUMO); Chromophor</p>
+  <div class="mol">
+    <figure><svg class="struct big" viewBox="0 0 250 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fluorescein, Lacton-Form"><line x1="68.0" y1="60.0" x2="85.4" y2="50.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="72.6" y1="61.5" x2="84.4" y2="54.7" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="85.4" y1="50.0" x2="102.7" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="60.0" x2="102.7" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="80.0" x2="85.4" y2="90.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="85.4" y1="90.0" x2="68.0" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="84.4" y1="85.3" x2="72.6" y2="78.5" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="68.0" y1="80.0" x2="68.0" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="60.0" x2="102.7" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="106.3" y1="63.2" x2="106.3" y2="76.8" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="50.0" x2="102.7" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="90.0" x2="102.7" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="50.0" x2="137.3" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="60.0" x2="137.3" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="80.0" x2="120.0" y2="90.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="60.0" x2="154.6" y2="50.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="141.9" y1="61.5" x2="153.7" y2="54.7" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="154.6" y1="50.0" x2="172.0" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="172.0" y1="60.0" x2="172.0" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="168.4" y1="63.2" x2="168.4" y2="76.8" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="172.0" y1="80.0" x2="154.6" y2="90.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="154.6" y1="90.0" x2="137.3" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="153.7" y1="85.3" x2="141.9" y2="78.5" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="80.0" x2="137.3" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="172.0" y1="60.0" x2="187.5" y2="51.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="187.5" cy="51.0" r="8.1" fill="#fff"/><text x="187.5" y="55.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">OH</text><line x1="68.0" y1="60.0" x2="52.5" y2="51.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="52.5" cy="51.0" r="8.1" fill="#fff"/><text x="52.5" y="55.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">OH</text><circle cx="120.0" cy="50.0" r="8.1" fill="#fff"/><text x="120.0" y="54.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">O</text><line x1="120.0" y1="116.0" x2="137.3" y2="126.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="126.0" x2="137.3" y2="146.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="133.7" y1="129.2" x2="133.7" y2="142.8" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="146.0" x2="120.0" y2="156.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="156.0" x2="102.7" y2="146.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="119.0" y1="151.3" x2="107.3" y2="144.5" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="146.0" x2="102.7" y2="126.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="126.0" x2="120.0" y2="116.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="107.3" y1="127.5" x2="119.0" y2="120.7" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="90.0" x2="120.0" y2="116.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="90.0" x2="137.0" y2="101.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.0" y1="101.0" x2="149.0" y2="114.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="149.0" y1="114.0" x2="137.3" y2="126.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="148.2" y1="115.8" x2="164.8" y2="122.9" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="149.8" y1="112.2" x2="166.3" y2="119.3" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="165.5" cy="121.1" r="8.1" fill="#fff"/><text x="165.5" y="125.6" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">O</text><circle cx="137.0" cy="101.0" r="8.1" fill="#fff"/><text x="137.0" y="105.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">O</text></svg><figcaption>Lacton-Form (Spiro-Verbindung)</figcaption></figure>
+    <div class="arrow">⇌</div>
+    <figure><svg class="struct big" viewBox="0 0 250 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fluorescein, farbige Form"><line x1="68.0" y1="60.0" x2="85.4" y2="50.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="72.6" y1="61.5" x2="84.4" y2="54.7" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="85.4" y1="50.0" x2="102.7" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="60.0" x2="102.7" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="80.0" x2="85.4" y2="90.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="85.4" y1="90.0" x2="68.0" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="84.4" y1="85.3" x2="72.6" y2="78.5" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="68.0" y1="80.0" x2="68.0" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="60.0" x2="102.7" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="106.3" y1="63.2" x2="106.3" y2="76.8" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="50.0" x2="102.7" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="90.0" x2="102.7" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="50.0" x2="137.3" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="60.0" x2="137.3" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="80.0" x2="120.0" y2="90.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="132.7" y1="78.5" x2="121.0" y2="85.3" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="60.0" x2="154.6" y2="50.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="141.9" y1="61.5" x2="153.7" y2="54.7" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="154.6" y1="50.0" x2="172.0" y2="60.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="172.0" y1="60.0" x2="172.0" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="172.0" y1="80.0" x2="154.6" y2="90.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="167.4" y1="78.5" x2="155.6" y2="85.3" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="154.6" y1="90.0" x2="137.3" y2="80.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="173.0" y1="61.7" x2="190.3" y2="51.7" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="171.0" y1="58.3" x2="188.3" y2="48.3" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="189.3" cy="50.0" r="8.1" fill="#fff"/><text x="189.3" y="54.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">O</text><line x1="68.0" y1="60.0" x2="52.5" y2="51.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="52.5" cy="51.0" r="8.1" fill="#fff"/><text x="52.5" y="55.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">OH</text><circle cx="120.0" cy="50.0" r="8.1" fill="#fff"/><text x="120.0" y="54.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">O</text><line x1="120.0" y1="90.0" x2="120.0" y2="122.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="122.0" x2="137.3" y2="132.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="132.0" x2="137.3" y2="152.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="133.7" y1="135.2" x2="133.7" y2="148.8" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="152.0" x2="120.0" y2="162.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="120.0" y1="162.0" x2="102.7" y2="152.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="119.0" y1="157.3" x2="107.3" y2="150.5" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="152.0" x2="102.7" y2="132.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="102.7" y1="132.0" x2="120.0" y2="122.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="107.3" y1="133.5" x2="119.0" y2="126.7" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="137.3" y1="132.0" x2="152.9" y2="123.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="152.9" y1="123.0" x2="152.9" y2="105.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="154.9" y1="123.0" x2="154.9" y2="105.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><line x1="150.9" y1="123.0" x2="150.9" y2="105.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="152.9" cy="97.0" r="8.1" fill="#fff"/><text x="152.9" y="101.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">O</text><line x1="152.9" y1="123.0" x2="170.9" y2="123.0" stroke="#222" stroke-width="1.6" stroke-linecap="round"/><circle cx="182.9" cy="123.0" r="8.1" fill="#fff"/><text x="182.9" y="127.5" font-size="13" fill="#222" text-anchor="middle" font-family="Arial,Helvetica,sans-serif">OH</text></svg><figcaption>offene, farbige Form (Carbonsäure, chinoid)</figcaption></figure>
+  </div>
+  <p><b>a)</b> Wähle die zutreffende Begründung, warum die Lacton-Form (fast) farblos ist.</p>
+  <div>
+    <label class="opt"><input type="radio" name="d_lac" value="a">Die Lacton-Form enthält keine Doppelbindungen.</label>
+    <label class="opt"><input type="radio" name="d_lac" value="b">Das zentrale C-Atom ist sp<sup>3</sup>-hybridisiert und unterbricht die Konjugation. Es gibt nur kleine, getrennte π-Systeme mit großer Energielücke; sie absorbieren im UV-Bereich.</label>
+    <label class="opt"><input type="radio" name="d_lac" value="c">Die Lacton-Form absorbiert alle Wellenlängen des sichtbaren Lichts gleichmäßig und erscheint deshalb durchsichtig.</label>
+    <label class="opt"><input type="radio" name="d_lac" value="d">Die Lacton-Form enthält kein Resorcin mehr.</label>
+  </div>
+  <p><b>b)</b> Vervollständige den Lückentext zur offenen Form:</p>
+  <p class="cloze">Im offenen Molekül ist das zentrale C-Atom
+    <select id="cz1"><option value="">–</option><option value="1">sp³-hybridisiert</option><option value="2">sp²-hybridisiert</option></select>.
+    Dadurch erstreckt sich ein
+    <select id="cz2"><option value="">–</option><option value="1">kleineres</option><option value="2">größeres</option></select>
+    delokalisiertes π-Elektronensystem (mesomeres System) über die Xanthen-Einheit. Die Energielücke zwischen HOMO und LUMO wird
+    <select id="cz3"><option value="">–</option><option value="1">kleiner</option><option value="2">größer</option></select>,
+    das Molekül absorbiert Licht
+    <select id="cz4"><option value="">–</option><option value="1">kürzerer</option><option value="2">längerer</option></select>
+    Wellenlänge, nämlich sichtbares Licht. Das delokalisierte System, das für die Farbe verantwortlich ist, nennt man
+    <select id="cz5"><option value="">–</option><option value="1">Chromophor</option><option value="2">Auxochrom</option><option value="3">Katalysator</option></select>.
+  </p>
+  <div class="row noprint"><button data-check="4">Prüfen</button></div>
+  <div class="fb" id="fb4"></div>
+
+  <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+  <p><b>c) Experiment am Modell: Je größer das konjugierte System, desto …</b> Bewege den Regler. Er zeigt die Energielücke ΔE = h·c/λ für lineare Polyene H–(CH=CH)<sub>k</sub>–H (Messwerte, gerundet).</p>
+  <div class="row"><label for="polyk" style="min-width:210px">Konjugierte C=C-Bindungen k: <b id="polyklbl">1</b></label>
+  <input class="slider" type="range" id="polyk" min="0" max="6" step="1" value="0"></div>
+  <svg id="polysvg" class="spec" viewBox="0 0 560 200" role="img" aria-label="Energiestufenschema HOMO LUMO"></svg>
+  <p id="polytxt" class="small"></p>
+  <p class="cloze"><b>d)</b> Mit zunehmender Zahl konjugierter Doppelbindungen wird die Energielücke
+    <select id="pz1"><option value="">–</option><option value="1">kleiner</option><option value="2">größer</option></select>
+    und die absorbierte Wellenlänge
+    <select id="pz2"><option value="">–</option><option value="1">kleiner</option><option value="2">größer</option></select>.
+    Farbig (sichtbar absorbierend) wird ein Polyen im Modell erst ab etwa
+    <select id="pz3"><option value="">–</option><option value="1">k = 2</option><option value="2">k = 6</option><option value="3">mehr als 6 (z. B. β-Carotin mit k = 11)</option></select>.</p>
+  <div class="row noprint"><button data-check="4b">Prüfen</button></div>
+  <div class="fb" id="fb4b"></div>
+</section>
+
+<!-- ============ AUFGABE 5 ============ -->
+<section class="card" id="t5" data-task="5">
+  <h2><span class="nr">5</span> Absorptionsspektrum und Komplementärfarbe <span class="tag kern">Kern</span></h2>
+  <p class="lp">Kompetenz: Absorptionsspektren auswerten; Zusammenhang absorbiertes und reflektiertes/transmittiertes Licht; Komplementärfarben</p>
+  <p>Das Spektrum zeigt schematisch (nach Literaturwerten, vereinfacht) die Absorption des Fluorescein-Dianions in wässrig-alkalischer Lösung (durchgezogen) und seine Fluoreszenz-Emission (gestrichelt). Verschiebe den Regler und beobachte Absorptionswert und Farben.</p>
+  <div class="row"><label for="lam" style="min-width:180px">Wellenlänge λ: <b id="lamlbl">550</b> nm</label>
+  <input class="slider" type="range" id="lam" min="400" max="650" step="1" value="550"></div>
+  <svg id="specsvg" class="spec" viewBox="0 0 600 262" role="img" aria-label="Absorptions- und Emissionsspektrum von Fluorescein"></svg>
+  <div class="row small">Farbe des Lichts bei λ: <span class="swatch" id="sw1"></span> absorbiert → Komplementärfarbe: <span class="swatch" id="sw2"></span> <b id="compname"></b> · relative Absorption: <b id="absval">0</b></div>
+  <p><b>a)</b> Stelle den Regler auf das Absorptionsmaximum ein. Trage λ<sub>max</sub> ein: <input type="number" id="s_lmax" min="400" max="650" style="width:100px"> nm</p>
+  <p><b>b)</b> Welche Farbe hat die Lösung im durchfallenden Licht (bei Betrachtung ohne UV-Lampe)?
+    <select id="s_col" style="width:auto"><option value="">–</option><option value="1">violett</option><option value="2">blau</option><option value="3">gelbgrün</option><option value="4">orange bis rot</option></select></p>
+  <p><b>c)</b> Das Maximum der Emission (Fluoreszenz) liegt bei größerer Wellenlänge als das der Absorption. Welche Erklärung trifft zu?</p>
+  <div>
+    <label class="opt"><input type="radio" name="s_fl" value="a">Das Molekül gibt vor der Emission einen Teil der Anregungsenergie durch Schwingungsrelaxation an die Umgebung ab. Das emittierte Photon ist energieärmer.</label>
+    <label class="opt"><input type="radio" name="s_fl" value="b">Das emittierte Photon ist energiereicher, weil das Molekül zusätzlich Wärme aufnimmt.</label>
+    <label class="opt"><input type="radio" name="s_fl" value="c">Absorption und Emission müssen immer bei exakt derselben Wellenlänge liegen; die Verschiebung ist ein Messfehler.</label>
+  </div>
+  <div class="row noprint"><button data-check="5">Prüfen</button></div>
+  <div class="fb" id="fb5"></div>
+</section>
+
+<!-- ============ AUFGABE 6 ============ -->
+<section class="card" id="t6" data-task="6">
+  <h2><span class="nr">6</span> Fluorescein als Indikator: Wirkung des pH-Werts <span class="tag">Vertiefung</span></h2>
+  <p class="lp">Kompetenz: Veränderung eines delokalisierten Elektronensystems durch Säure-Base-Reaktion; Henderson-Hasselbalch-Gleichung (LB 3)</p>
+  <p>Fluorescein ist eine mehrprotonige Säure (Literaturwerte, gerundet: pK<sub>S</sub> ≈ 2,1; 4,3 und 6,4). Bewege den Regler.</p>
+  <div class="row"><label for="phs" style="min-width:150px">pH-Wert: <b id="phlbl">7,0</b></label><input class="slider" type="range" id="phs" min="0" max="12" step="0.1" value="7"></div>
+  <div class="bars" id="phbars"></div>
+  <p class="small" id="phtxt"></p>
+  <p><b>a)</b> Bei welchem pH-Wert liegen Monoanion und Dianion im Verhältnis 1 : 1 vor? pH = <input type="number" id="p_ph" step="0.1" style="width:100px"></p>
+  <p><b>b)</b> Beim Übergang vom neutralen Molekül zum Dianion wird die OH-Gruppe zur O<sup>–</sup>-Gruppe. O<sup>–</sup> ist der
+    <select id="p_don" style="width:auto"><option value="">–</option><option value="1">schwächere</option><option value="2">stärkere</option></select>
+    Elektronendonator. Die Absorption verschiebt sich daher zu
+    <select id="p_shift" style="width:auto"><option value="">–</option><option value="1">kürzeren</option><option value="2">längeren</option></select>
+    Wellenlängen (λ<sub>max</sub> ≈ 434 nm → 490 nm). Gruppen mit dieser Wirkung heißen
+    <select id="p_aux" style="width:auto"><option value="">–</option><option value="1">auxochrom</option><option value="2">antiauxochrom</option></select>.</p>
+  <div class="row noprint"><button data-check="6">Prüfen</button></div>
+  <div class="fb" id="fb6"></div>
+</section>
+
+<!-- ============ AUFGABE 7 ============ -->
+<section class="card" id="t7" data-task="7">
+  <h2><span class="nr">7</span> Stöchiometrie und Ausbeute <span class="tag">Vertiefung</span></h2>
+  <p class="lp">Kompetenz: Daten quantitativ auswerten; mathematische Verfahren nutzen</p>
+  <p>Ansatz: <b>0,50 g</b> Phthalsäureanhydrid. Molare Massen: M(C<sub>8</sub>H<sub>4</sub>O<sub>3</sub>) = 148,12 g/mol; M(C<sub>6</sub>H<sub>6</sub>O<sub>2</sub>) = 110,11 g/mol; M(C<sub>20</sub>H<sub>12</sub>O<sub>5</sub>) = 332,31 g/mol.</p>
+  <table class="t">
+    <tr><td>a) Stoffmenge n(Phthalsäureanhydrid)</td><td><input type="number" id="q_a" step="0.01" style="width:110px"> mmol</td></tr>
+    <tr><td>b) Benötigte Masse Resorcin für vollständige Umsetzung</td><td><input type="number" id="q_b" step="0.01" style="width:110px"> g</td></tr>
+    <tr><td>c) Theoretisch erhaltbare Masse Fluorescein</td><td><input type="number" id="q_c" step="0.01" style="width:110px"> g</td></tr>
+    <tr><td>d) Es werden 0,62 g Rohprodukt isoliert. Ausbeute η</td><td><input type="number" id="q_d" step="1" style="width:110px"> %</td></tr>
+  </table>
+  <div class="row noprint"><button data-check="7">Prüfen</button></div>
+  <div class="fb" id="fb7"></div>
+</section>
+
+<!-- ============ AUFGABE 8 ============ -->
+<section class="card" id="t8" data-task="8">
+  <h2><span class="nr">8</span> Versuch, Sicherheit und Protokoll <span class="tag">Vertiefung</span></h2>
+  <p class="lp">Kompetenz: Untersuchungen planen und gemäß Sicherheitsbestimmungen durchführen; Gefahren beurteilen</p>
+  <div class="box warn"><b>Hinweis zur Durchführung:</b> Der Versuch wird <b>nur nach Anweisung und Freigabe durch die Lehrkraft</b> sowie nach Gefährdungsbeurteilung (Sicherheitsdatenblätter, RiSU) durchgeführt – mit Schutzbrille, Schutzhandschuhen und im Abzug bzw. mit guter Absaugung. Die Mengen und das Katalysatorsystem legt die Lehrkraft fest.</div>
+  <p><b>Prinzip des Versuchs:</b> Phthalsäureanhydrid und Resorcin werden mit einem sauren Katalysator vorsichtig erhitzt. Die Schmelze wird danach in verdünnter Natronlauge gelöst und unter Tageslicht sowie – falls vorhanden – unter UV-Licht betrachtet.</p>
+  <p><b>a)</b> Warum ist beim Erhitzen der Abzug nötig? Wähle die beste Begründung.</p>
+  <div>
+    <label class="opt"><input type="radio" name="v_s" value="a">Phthalsäureanhydrid kann sublimieren; der Staub und die Dämpfe reizen Atemwege und Augen und können sensibilisieren.</label>
+    <label class="opt"><input type="radio" name="v_s" value="b">Fluorescein ist hochexplosiv und muss deshalb abgesaugt werden.</label>
+    <label class="opt"><input type="radio" name="v_s" value="c">Der Abzug beschleunigt die Reaktion, weil er Sauerstoff zuführt.</label>
+  </div>
+  <p><b>b)</b> Protokolliere (oder plane) deine Beobachtungen und deute sie.</p>
+  <label for="v_beo1" class="small">Beobachtung beim Erhitzen (Aussehen der Schmelze, Farbänderung, Beschlag am Glas):</label>
+  <textarea id="v_beo1"></textarea>
+  <label for="v_beo2" class="small">Beobachtung nach Lösen in verdünnter Natronlauge (Tageslicht / UV):</label>
+  <textarea id="v_beo2"></textarea>
+  <label for="v_deu" class="small">Deutung (Teilchenebene; Verbindung zu Aufgaben 3–6):</label>
+  <textarea id="v_deu"></textarea>
+  <div class="row noprint"><button data-check="8">Aufgabe a prüfen</button></div>
+  <div class="fb" id="fb8"></div>
+  <details class="sol" data-need="v_beo1,v_beo2,v_deu"><summary>Musterlösung zum Protokoll (nach eigener Bearbeitung)</summary>
+    <p><b>Beobachtung:</b> Das Gemisch schmilzt, färbt sich gelb über orange bis dunkelrot; am kälteren Glasrand schlägt sich Wasser nieder. In verdünnter Natronlauge entsteht eine intensiv gelb-orange gefärbte Lösung, die stark gelbgrün fluoresziert.<br>
+    <b>Deutung:</b> Unter H<sup>+</sup>-Katalyse reagiert Resorcin als Nukleophil mit dem protonierten Anhydrid (elektrophile Substitution am Aromaten); nach zweiter Substitution und Ringschluss unter Wasserabspaltung (Kondensation) entsteht das Xanthen-Gerüst. In alkalischer Lösung liegt das Dianion mit ausgedehntem, delokalisiertem π-System vor (λ<sub>max</sub> ≈ 490 nm, Absorption von blaugrünem Licht), Emission bei etwa 515 nm.</p>
+  </details>
+</section>
+
+<!-- ============ AUFGABE 9 ============ -->
+<section class="card" id="t9" data-task="9">
+  <h2><span class="nr">9</span> Transfer und Bewertung <span class="tag">Vertiefung</span></h2>
+  <p class="lp">Kompetenz: Wissen auf neue Beispiele anwenden; Chancen und Risiken von Farbstoffen beurteilen</p>
+  <p><b>a)</b> Phenolphthalein entsteht ebenfalls aus Phthalsäureanhydrid unter Säurekatalyse, nach demselben Grundprinzip. Welchen Stoff setzt man statt Resorcin ein?
+    <select id="x_edukt" style="width:auto"><option value="">–</option><option value="1">Benzol</option><option value="2">Phenol</option><option value="3">Benzoesäure</option><option value="4">Cyclohexanol</option></select></p>
+  <p><b>b)</b> Beim Phenolphthalein entsteht kein Xanthen-Ring wie beim Fluorescein. Begründe mit der Struktur der Edukte.</p>
+  <textarea id="x_b" placeholder="Meine Begründung …"></textarea>
+  <div class="row noprint"><button data-check="9">Teil a prüfen</button></div>
+  <div class="fb" id="fb9"></div>
+  <details class="sol" data-need="x_b"><summary>Musterlösung zu b</summary>
+    <p>Phenol besitzt nur eine OH-Gruppe. Der Angriff erfolgt in para-Stellung zu ihr, sodass nach der Substitution keine OH-Gruppe in ortho-Stellung zum zentralen C-Atom steht. Für die Ether-Bildung (Ringschluss unter H<sub>2</sub>O-Abspaltung) fehlen deshalb die beiden benachbarten OH-Gruppen. Beim Resorcin trägt der angreifende Ring dagegen eine OH-Gruppe ortho zur neuen C–C-Bindung, mit der sich der Pyran-Ring schließen lässt. Phenolphthalein bleibt in der Lacton-Form (farblos) bzw. wird in alkalischer Lösung zum farbigen Dianion geöffnet.</p>
+  </details>
+  <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+  <p><b>c) Bewertung:</b> Fluorescein/Uranin wird als Tracer in Gewässern eingesetzt. Beurteile den Einsatz anhand von zwei Vorteilen und zwei Nachteilen bzw. Risiken (Nachweisempfindlichkeit, Umweltverhalten, Stabilität, pH-Abhängigkeit, Alternativen).</p>
+  <textarea id="x_c" style="min-height:120px"></textarea>
+  <details class="sol" data-need="x_c"><summary>Erwartungshorizont zu c</summary>
+    <p><b>Vorteile:</b> extrem geringe Nachweisgrenze durch Fluoreszenz (sichtbar/messbar bei sehr geringen Konzentrationen), gute Wasserlöslichkeit als Natriumsalz, in üblichen Einsatzmengen geringe akute Toxizität.<br>
+    <b>Nachteile/Risiken:</b> Photochemischer Abbau (Ausbleichen) bei Sonnenlicht, pH-abhängige Fluoreszenz (unter etwa pH 5–6 deutlich schwächer), Adsorption an Sedimente und organisches Material, sichtbare Verfärbung des Gewässers (Akzeptanz, Genehmigung).<br>
+    <b>Gesamturteil (begründet):</b> geeignet bei sinnvoller Dosierung und Genehmigung; bei sehr langen Fließstrecken oder saurem Milieu sind Alternativen (andere Tracer, Salz- oder Isotopentracer) zu prüfen.</p>
+  </details>
+</section>
+
+<!-- ============ AUFGABE 10 ============ -->
+<section class="card" id="t10">
+  <h2><span class="nr">10</span> Selbsteinschätzung</h2>
+  <p class="lp">Hake an, was du jetzt sicher kannst.</p>
+  <div class="chk">
+    <label><input type="checkbox" id="k1"> Ich kann die Bildung von Fluorescein als Kondensationsreaktion erklären und die Reaktionsgleichung aufstellen.</label>
+    <label><input type="checkbox" id="k2"> Ich kann die neun Teilschritte mit Elektronenpaar-Verschiebungen mechanistisch darstellen.</label>
+    <label><input type="checkbox" id="k3"> Ich kann die Farbigkeit mit Konjugation, Energielücke (HOMO/LUMO) und Chromophor begründen.</label>
+    <label><input type="checkbox" id="k4"> Ich kann ein Absorptionsspektrum auswerten und die Komplementärfarbe bestimmen.</label>
+    <label><input type="checkbox" id="k5"> Ich kann die Wirkung von pH-Änderungen auf ein delokalisiertes System (Indikator) erklären.</label>
+    <label><input type="checkbox" id="k6"> Ich kann Stoffmengen, Massen und Ausbeute berechnen.</label>
+  </div>
+  <label for="k_note" class="small">Das war mir noch unklar / das möchte ich nachfragen:</label>
+  <textarea id="k_note"></textarea>
+</section>
+<p class="small">Quellen/Hinweise: Lehrplanvorgaben (ISB, LehrplanPLUS Gymnasium Bayern, Chemie 13 eA); Mechanismus in Anlehnung an Abbildung B8 des eingeführten Schulbuchs. Spektren und pK<sub>S</sub>-Werte sind schematisch bzw. gerundete Literaturwerte.</p>
+</main>
+
+<button id="printbtn" class="noprint" type="button" title="Als PDF speichern oder drucken (DIN A4)">PDF / Drucken (A4)</button>
+
+<script>
+(function(){
+'use strict';
+var KEY='chem13_fluorescein_arbeitsblatt_v1';
+var state={f:{},order:null,flags:{}};
+try{var raw=localStorage.getItem(KEY); if(raw){state=Object.assign(state,JSON.parse(raw));}}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function $(id){return document.getElementById(id);}
+function num(id){var v=$(id).value.replace(',','.').trim(); return v===''?NaN:parseFloat(v);}
+function setFb(id,kind,html){var e=$(id);e.className='fb show '+kind;e.innerHTML=html;}
+function radio(name){var r=document.querySelector('input[name="'+name+'"]:checked');return r?r.value:'';}
+
+/* ---------- Felder speichern / wiederherstellen ---------- */
+var fields=[].slice.call(document.querySelectorAll('main input[id],main textarea[id],main select[id]'));
+var radios=[].slice.call(document.querySelectorAll('main input[type=radio]'));
+function grow(t){t.style.height='auto';t.style.height=Math.max(t.scrollHeight+2,84)+'px';}
+fields.forEach(function(el){
+  var k=el.id;
+  if(k in state.f){ if(el.type==='checkbox')el.checked=!!state.f[k]; else el.value=state.f[k]; }
+  var ev=(el.tagName==='SELECT'||el.type==='checkbox'||el.type==='range')?'change':'input';
+  el.addEventListener(ev,function(){state.f[k]=(el.type==='checkbox')?el.checked:el.value;save();if(el.tagName==='TEXTAREA')grow(el);unlock();progress();});
+  if(el.type==='range')el.addEventListener('input',function(){state.f[k]=el.value;save();});
+  if(el.tagName==='TEXTAREA'&&el.value)grow(el);
+});
+radios.forEach(function(r){
+  var k='radio:'+r.name; if(state.f[k]===r.value)r.checked=true;
+  r.addEventListener('change',function(){state.f[k]=r.value;save();progress();});
+});
+
+/* ---------- Musterlösungen freischalten ---------- */
+function unlock(){
+  [].slice.call(document.querySelectorAll('details.sol')).forEach(function(d){
+    var need=d.getAttribute('data-need').split(',');
+    var ok=need.every(function(id){return $(id).value.trim().length>=20;});
+    if(!d.dataset.init){d.dataset.init=1;d.addEventListener('toggle',function(){if(d.open&&!d.dataset.ok){d.open=false;}});}
+    d.dataset.ok=ok?'1':'';
+    var s=d.querySelector('summary');
+    if(!s.dataset.t)s.dataset.t=s.textContent;
+    s.textContent=ok?s.dataset.t.replace(/\s*\(.*\)$/,''):'🔒 '+s.dataset.t.replace(/\s*\(.*\)$/,'')+' – erst nach eigener Bearbeitung (mind. 20 Zeichen je Feld)';
+  });
+}
+
+/* ---------- Mechanismus: Reihenfolge ---------- */
+var CORRECT=['s1','s2','s3','s4','s5','s6','s7','s8','s9'];
+var TYPES={s1:'P',s2:'A',s3:'P',s4:'P',s5:'W',s6:'A',s7:'P',s8:'W',s9:'U'};
+var PRE={
+ s1:'Ohne Aktivierung ist das Carbonyl-C-Atom nicht elektrophil genug. Das ist der Startschritt.',
+ s2:'Ein Nukleophil kann nur angreifen, wenn bereits ein elektrophiles (positiviertes) C-Atom vorliegt: Es muss zuerst protoniert worden sein.',
+ s3:'Zuerst muss das Resorcin am C-Atom gebunden haben (σ-Komplex); erst dann kann dieser durch H⁺-Abgabe rearomatisieren.',
+ s4:'Es gibt nur dann eine OH-Gruppe am zentralen C-Atom, die protoniert werden kann, wenn der σ-Komplex bereits rearomatisiert wurde.',
+ s5:'Wasser ist nur nach Protonierung der OH-Gruppe (Oxonium-Ion, gute Abgangsgruppe) abspaltbar.',
+ s6:'Der zweite Angriff braucht das neue Carbenium-Ion, das durch die Wasserabspaltung entstanden ist.',
+ s7:'Wie bei Schritt 3: Zuerst der Angriff (σ-Komplex), dann die Rearomatisierung durch H⁺-Abgabe.',
+ s8:'Der Ringschluss gelingt erst, wenn beide Resorcin-Reste am zentralen C-Atom sitzen.',
+ s9:'Die farbige, offene Form kann sich erst aus der fertigen Lacton-Form (mit Xanthen-Gerüst) bilden: Das ist der letzte Schritt.'
+};
+var TYPENAME={P:'Protonenübergang (Säure-Base-Reaktion)',A:'Angriff des Nukleophils auf das Elektrophil (elektrophile Substitution am Aromaten)',W:'Wasserabspaltung (Kondensation)',U:'Umlagerung / intramolekulare Protonenwanderung'};
+var SHUF=['s5','s2','s8','s1','s7','s4','s9','s3','s6'];
+var stepsEl=$('steps');
+function applyOrder(arr){arr.forEach(function(id){stepsEl.appendChild(stepsEl.querySelector('[data-id="'+id+'"]'));});}
+applyOrder(state.order&&state.order.length===9?state.order:SHUF);
+function curOrder(){return [].slice.call(stepsEl.children).map(function(li){return li.getAttribute('data-id');});}
+function renumber(){[].slice.call(stepsEl.children).forEach(function(li,i){li.querySelector('.pos').textContent=(i+1)+'.';});}
+renumber();
+stepsEl.addEventListener('click',function(e){
+  var b=e.target.closest('button[data-mv]'); if(!b)return;
+  var li=b.closest('li'); var d=b.getAttribute('data-mv');
+  if(d==='up'&&li.previousElementSibling)stepsEl.insertBefore(li,li.previousElementSibling);
+  if(d==='down'&&li.nextElementSibling)stepsEl.insertBefore(li.nextElementSibling,li);
+  state.order=curOrder();save();renumber();clearOrderMarks();b.focus();
+});
+function clearOrderMarks(){[].slice.call(stepsEl.children).forEach(function(li){li.classList.remove('ok','bad');});}
+$('shuffle').addEventListener('click',function(){
+  var a=SHUF.slice().reverse(); applyOrder(a);state.order=curOrder();state.flags['3']=false;save();renumber();clearOrderMarks();$('fb3').className='fb';});
+
+/* ---------- Prüfen ---------- */
+var CHECK={};
+CHECK['2']=function(){
+  var msgs=[],good=0,total=3;
+  var nres=num('b_nres'),nh=num('b_nh2o'),f=$('b_formula').value.replace(/[\s_]/g,'').replace(/[₀-₉]/g,function(c){return String(c.charCodeAt(0)-8320);}).toUpperCase();
+  var ok1=(nres===2&&nh===2&&f==='C20H12O5');
+  if(ok1){good++;}
+  else{
+    var m=['<b>a) Stoffbilanz noch nicht stimmig.</b> Gehe atomweise vor:<ul>'];
+    if(isNaN(nres))m.push('<li>Trage die Anzahl der Resorcin-Moleküle ein. Tipp: Das Produkt hat 20 C-Atome, das Anhydrid liefert 8, ein Resorcin 6.</li>');
+    else if(nres!==2)m.push('<li>C-Bilanz: 20 − 8 = 12 C-Atome müssen aus Resorcin stammen, das sind 12 : 6 = <b>2</b> Moleküle (du hast '+nres+').</li>');
+    if(f!=='C20H12O5')m.push('<li>Summenformel des Produkts: C: 8 + 2·6 = 20; H: 4 + 2·6 = 16, abzüglich der H-Atome des abgespaltenen Wassers; O: 3 + 2·2 = 7, abzüglich der O-Atome des Wassers. Mit 2 H<sub>2</sub>O ergibt sich C<sub>20</sub>H<sub>12</sub>O<sub>5</sub>.</li>');
+    if(nh!==2)m.push('<li>Wie viele H<sub>2</sub>O entstehen? Es werden zwei Kondensationsschritte durchlaufen (Aufgabe 3, Schritte 5 und 8).</li>');
+    m.push('</ul>'); msgs.push(m.join(''));
+  }
+  var R={r_psa:'E',r_res:'N',r_h:'K',r_h2o:'A'};
+  var rh={r_psa:'Das protonierte Anhydrid hat ein positiviertes C-Atom, das Elektronenpaare aufnimmt (Elektrophil/Akzeptor).',r_res:'Der Aromat mit OH-Gruppen stellt ein Elektronenpaar seines π-Systems bereit (Nukleophil/Donator).',r_h:'H⁺ wird in einem Schritt aufgenommen und in einem späteren wieder abgegeben, es wird also nicht verbraucht (Katalysator).',r_h2o:'Wasser wird bei der Verknüpfung der Moleküle frei (Kondensation).'};
+  var bad=[],all=true;
+  Object.keys(R).forEach(function(k){var v=$(k).value; if(v!==R[k]){all=false;bad.push('<li>'+rh[k]+'</li>');}});
+  if(all)good++; else msgs.push('<b>b) Rollen:</b><ul>'+bad.join('')+'</ul>');
+  var c=radio('c_kond');
+  var ch={a:'Das wäre eine <b>Addition</b>: Dabei entsteht kein Nebenprodukt. Hier entsteht aber Wasser.',c:'Das beschreibt eine <b>Hydrolyse</b>, also die Umkehrung.',d:'Das beschreibt eine <b>Redoxreaktion</b>. Hier wechselt aber keine Oxidationszahl.',b:''};
+  if(c==='b')good++; else msgs.push('<b>c)</b> '+(c?ch[c]:'Wähle eine Antwort aus.'));
+  if(good===total)setFb('fb2','ok','Richtig! Bilanz: C<sub>8</sub>H<sub>4</sub>O<sub>3</sub> + 2 C<sub>6</sub>H<sub>6</sub>O<sub>2</sub> → C<sub>20</sub>H<sub>12</sub>O<sub>5</sub> + 2 H<sub>2</sub>O. Zwei Moleküle Wasser werden abgespalten: Das ist das Kennzeichen einer Kondensation.');
+  else setFb('fb2','bad','<b>'+good+' von '+total+' Teilaufgaben richtig.</b><br>'+msgs.join('<br>'));
+  return good===total;
+};
+CHECK['3']=function(){
+  var ord=curOrder(),good=0,typeOk=0,bad=[];
+  [].slice.call(stepsEl.children).forEach(function(li,i){
+    var id=li.getAttribute('data-id'); li.classList.remove('ok','bad');
+    var posOk=(id===CORRECT[i]);
+    var sel=li.querySelector('select'); var tOk=(sel.value===TYPES[id]);
+    if(posOk){good++;} if(tOk)typeOk++;
+    li.classList.add(posOk?'ok':'bad');
+    li.querySelector('.why').textContent=posOk?'':'Hinweis: '+PRE[id];
+    if(!tOk){ if(!posOk) {} bad.push('Schritt „'+li.querySelector('.st-title').textContent+'“: '+(sel.value?'Der gewählte Reaktionstyp passt nicht. ':'Reaktionstyp fehlt. ')+'Überlege: Was passiert mit den Teilchen? '+hintType(id)); }
+  });
+  function hintType(id){return {P:'Es wird nur ein H⁺ übertragen.',A:'Ein Elektronenpaar des Aromaten bildet eine neue C–C-Bindung.',W:'Ein H₂O-Molekül verlässt die Verbindung.',U:'Ein Proton wandert innerhalb desselben Moleküls, Bindungen werden umgebaut.'}[TYPES[id]];}
+  var all=(good===9&&typeOk===9);
+  var h='<b>Reihenfolge: '+good+' von 9 Schritten an der richtigen Stelle · Reaktionstypen: '+typeOk+' von 9 richtig.</b>';
+  if(good<9)h+='<br>Rot markierte Schritte stehen noch nicht richtig. Lies den Hinweis in der Karte: Er nennt, was vorher geschehen sein muss.';
+  if(bad.length)h+='<ul><li>'+bad.slice(0,4).join('</li><li>')+(bad.length>4?'</li><li>… und '+(bad.length-4)+' weitere':'')+'</li></ul>';
+  if(all)h='<b>Sehr gut!</b> Reihenfolge und Reaktionstypen stimmen. Es sind insgesamt <b>zwei Kondensationen (Schritt 5 und 8)</b> mit zwei abgespaltenen H<sub>2</sub>O. Nun zu c): Vergleiche mit Abbildung B8 und ergänze die Pfeile.';
+  setFb('fb3',all?'ok':'bad',h);
+  return all;
+};
+CHECK['4']=function(){
+  var msgs=[],good=0,total=2;
+  var a=radio('d_lac'); var ah={a:'Die Lacton-Form besitzt sehr wohl Doppelbindungen (drei aromatische Ringe, C=O). Entscheidend ist, ob sie <b>miteinander konjugiert</b> sind.',c:'Ein Stoff, der kaum sichtbares Licht absorbiert, erscheint farblos. Alles-Absorbieren hieße schwarz.',d:'Die Atome des Resorcins sind im Lacton enthalten. Der Unterschied liegt in der Verknüpfung am zentralen C-Atom.'};
+  if(a==='b')good++; else msgs.push('<b>a)</b> '+(a?ah[a]:'Wähle eine Antwort aus.'));
+  var ans={cz1:'2',cz2:'2',cz3:'1',cz4:'2',cz5:'1'},cm={cz1:'Im offenen Molekül ist das zentrale C-Atom Teil einer C=C-Bindung (chinoid), also sp²-hybridisiert: Seine p-Orbitale können sich am π-System beteiligen.',cz2:'Konjugation verbindet beide Ringe über das zentrale C-Atom: ein größeres System.',cz3:'Je größer das System, desto kleiner die Lücke zwischen HOMO und LUMO.',cz4:'ΔE = h·c/λ: kleine Energielücke bedeutet große Wellenlänge.',cz5:'Der Teil des Moleküls, dessen delokalisiertes System das Licht absorbiert, heißt Chromophor. Auxochrome sind Substituenten, die ihn verändern.'};
+  var bad=[];Object.keys(ans).forEach(function(k){if($(k).value!==ans[k])bad.push('<li>'+cm[k]+'</li>');});
+  if(!bad.length)good++; else msgs.push('<b>b)</b> Prüfe diese Stellen:<ul>'+bad.join('')+'</ul>');
+  if(good===total)setFb('fb4','ok','Richtig! Der Lactonring öffnet sich, das zentrale C-Atom wird sp²-hybridisiert, und das Elektronensystem der Xanthen-Einheit wird delokalisiert: Chromophor, kleine Energielücke, Absorption im sichtbaren Bereich.');
+  else setFb('fb4','bad',msgs.join('<br>'));
+  return good===total;
+};
+CHECK['4b']=function(){
+  var ans={pz1:'1',pz2:'2',pz3:'3'},cm={pz1:'Beim Verlängern des konjugierten Systems rücken HOMO und LUMO näher zusammen. Schau auf den Abstand der beiden Linien im Schema.',pz2:'ΔE = h·c/λ: Kleineres ΔE bedeutet größeres λ.',pz3:'Die Wellenlängen bis k = 6 liegen alle unter 400 nm (UV). Sichtbar (ab etwa 400 nm) wird die Absorption erst bei noch längeren Systemen.'};
+  var bad=[];Object.keys(ans).forEach(function(k){if($(k).value!==ans[k])bad.push('<li>'+cm[k]+'</li>');});
+  if(!bad.length){setFb('fb4b','ok','Richtig. Dieselbe Regel gilt für Fluorescein: Das große konjugierte System der offenen Form verschiebt die Absorption in den sichtbaren Bereich.');return true;}
+  setFb('fb4b','bad','<ul>'+bad.join('')+'</ul>');return false;
+};
+CHECK['5']=function(){
+  var msgs=[],good=0;
+  var l=num('s_lmax'); if(l>=486&&l<=494)good++; else msgs.push('<b>a)</b> '+(isNaN(l)?'Trage einen Wert ein.':'Verschiebe den Regler und beobachte die „relative Absorption“. Der größte Wert liegt im blaugrünen Bereich.'));
+  var c=$('s_col').value; if(c==='4')good++; else msgs.push('<b>b)</b> Absorbiert wird blaugrünes Licht (≈ 490 nm). Gesehen wird im durchfallenden Licht die <b>Komplementärfarbe</b> – schau auf das zweite Farbfeld beim Regler. (Die gelbgrüne Farbe, die man sieht, stammt aus der <i>Fluoreszenz</i>, nicht aus der Absorption.)');
+  var r=radio('s_fl'); var rh={b:'Ein emittiertes Photon kann nicht mehr Energie haben als die absorbierte; Energieerhaltung! Es hat eher weniger.',c:'Die Verschiebung (Stokes-Verschiebung) ist ein reales Phänomen, kein Messfehler.'};
+  if(r==='a')good++; else msgs.push('<b>c)</b> '+(r?rh[r]:'Wähle eine Antwort aus.'));
+  if(good===3)setFb('fb5','ok','Richtig! λ<sub>max</sub> ≈ 490 nm: Blaugrünes Licht wird absorbiert, die Lösung wirkt im durchfallenden Licht gelb-orange; die grüne Fluoreszenz bei ≈ 515 nm ist energieärmer als das absorbierte Licht (Stokes-Verschiebung).');
+  else setFb('fb5','bad','<b>'+good+' von 3 richtig.</b><br>'+msgs.join('<br>'));
+  return good===3;
+};
+CHECK['6']=function(){
+  var msgs=[],good=0;
+  var p=num('p_ph'); if(p>=6.2&&p<=6.6)good++; else msgs.push('<b>a)</b> Nach Henderson-Hasselbalch gilt pH = pK<sub>S</sub> + lg([A<sup>–</sup>]/[HA]). Bei [A<sup>–</sup>] = [HA] ist lg 1 = 0, also pH = pK<sub>S</sub> der betreffenden Stufe (Mono- → Dianion). Siehe die Balken.');
+  var d=$('p_don').value,s=$('p_shift').value,a=$('p_aux').value;
+  var bad=[];
+  if(d!=='2')bad.push('<li>O<sup>–</sup> trägt eine volle negative Ladung und stellt Elektronendichte leichter bereit als OH: stärkerer Donator.</li>');
+  if(s!=='2')bad.push('<li>Stärkerer Donator → kleinere Energielücke → größere Wellenlänge (434 nm → 490 nm).</li>');
+  if(a!=='1')bad.push('<li>Elektronenschiebende Gruppen, die die Absorption zu längeren Wellenlängen verschieben, heißen auxochrom (antiauxochrom: elektronenziehend, Verschiebung zu kürzeren Wellenlängen).</li>');
+  if(!bad.length)good++; else msgs.push('<b>b)</b><ul>'+bad.join('')+'</ul>');
+  if(good===2)setFb('fb6','ok','Richtig! Die Deprotonierung verändert das delokalisierte System (stärkerer Donator, bathochrome Verschiebung): das Prinzip der Säure-Base-Indikatoren.');
+  else setFb('fb6','bad',msgs.join('<br>'));
+  return good===2;
+};
+CHECK['7']=function(){
+  var Mp=148.12,Mr=110.11,Mf=332.31,m0=0.50;
+  var n=m0/Mp*1000, mr=2*n/1000*Mr, mf=n/1000*Mf, eta=0.62/mf*100;
+  var a=num('q_a'),b=num('q_b'),c=num('q_c'),d=num('q_d'),good=0,m=[];
+  if(Math.abs(a-n)<=0.05)good++; else m.push('<li><b>a)</b> n = m/M = 0,50 g : 148,12 g/mol. Achte auf die Einheit mmol (1 mol = 1000 mmol).</li>');
+  if(Math.abs(b-mr)<=0.02)good++; else m.push('<li><b>b)</b> '+(Math.abs(b-mr/2)<=0.02?'Du hast nur 1 mol Resorcin pro mol Anhydrid gerechnet. Laut Gleichung gilt n(Resorcin) = <b>2</b>·n(Anhydrid).':'Rechne n(Resorcin) = 2·n(Anhydrid) und dann m = n·M.')+'</li>');
+  if(Math.abs(c-mf)<=0.03)good++; else m.push('<li><b>c)</b> '+(Math.abs(c-(mf*2))<=0.05?'Das Verhältnis Anhydrid : Fluorescein ist 1 : 1, nicht 1 : 2.':'n(Fluorescein) = n(Anhydrid) (1 : 1), dann m = n·M(Fluorescein).')+'</li>');
+  if(Math.abs(d-eta)<=2)good++; else m.push('<li><b>d)</b> η = m(experimentell) / m(theoretisch) · 100 %. Verwende dein Ergebnis aus c).</li>');
+  if(good===4)setFb('fb7','ok','Alles richtig. n(PSA) ≈ '+n.toFixed(2)+' mmol; m(Resorcin) ≈ '+mr.toFixed(2)+' g; m(Fluorescein) theoretisch ≈ '+mf.toFixed(2)+' g; η ≈ '+eta.toFixed(0)+' %.');
+  else setFb('fb7','bad','<b>'+good+' von 4 richtig.</b><ul>'+m.join('')+'</ul>');
+  return good===4;
+};
+CHECK['8']=function(){
+  var r=radio('v_s');
+  if(r==='a'){setFb('fb8','ok','Richtig: Es geht um Reizwirkung auf Atemwege und Augen sowie Sensibilisierung. Ergänze im Protokoll die weiteren Schutzmaßnahmen (Schutzbrille, Handschuhe, Entsorgung nach Vorgabe der Lehrkraft).');return true;}
+  var h={b:'Fluorescein ist nicht explosiv. Überlege, welche Gefahr beim Erhitzen von Phthalsäureanhydrid tatsächlich besteht (Sublimation).',c:'Ein Abzug führt Dämpfe ab; er hat keinen Einfluss auf die Reaktionsgeschwindigkeit.'};
+  setFb('fb8','bad',r?h[r]:'Wähle eine Antwort aus.');return false;
+};
+CHECK['9']=function(){
+  if($('x_edukt').value==='2'){setFb('fb9','ok','Richtig: Phenol (2 Moleküle pro Phthalsäureanhydrid). Bearbeite nun Teil b.');return true;}
+  var h={'1':'Benzol besitzt keine OH-Gruppe und ist als Aromat zu wenig nukleophil für diese Reaktion.','3':'Benzoesäure ist durch die COOH-Gruppe elektronenarm und reagiert nicht als Nukleophil.','4':'Cyclohexanol ist kein Aromat: Es hat kein π-System, das als Nukleophil angreifen kann.'};
+  setFb('fb9','bad',$('x_edukt').value?h[$('x_edukt').value]:'Wähle einen Stoff aus.');return false;
+};
+document.addEventListener('click',function(e){
+  var b=e.target.closest('button[data-check]'); if(!b)return;
+  var k=b.getAttribute('data-check'); var ok=CHECK[k](); state.flags[k]=ok?'ok':'tried'; save(); progress();
+});
+
+/* ---------- Fortschritt ---------- */
+var TASKS=['2','3','4','4b','5','6','7','8','9'];
+function progress(){
+  var done=TASKS.filter(function(k){return state.flags[k]==='ok';}).length;
+  var pct=Math.round(done/TASKS.length*100);
+  $('progbar').style.width=pct+'%'; $('progpct').textContent=pct+' %';
+  $('progtxt').textContent='Richtig bearbeitet: '+done+' von '+TASKS.length+' prüfbaren Teilen';
+}
+
+/* ---------- Polyen-Modell ---------- */
+var POLY=[[1,165],[2,217],[3,258],[4,290],[5,334],[6,364],[11,450]];
+function drawPoly(){
+  var i=parseInt($('polyk').value,10),k=POLY[i][0],lam=POLY[i][1];
+  $('polyklbl').textContent=k;
+  var dE=1239.84/lam; // eV
+  var y0=170, scale=22; var gap=dE*scale; var yL=y0-gap-0;
+  var yH=170, yLumo=Math.max(18,yH-gap);
+  var vis=(lam>=400);
+  var svg='<line x1="60" y1="20" x2="60" y2="185" stroke="#555" stroke-width="1.5"/><polygon points="60,14 55,24 65,24" fill="#555"/><text x="20" y="100" font-size="12" fill="#555" transform="rotate(-90 28 100)">Energie</text>';
+  svg+='<line x1="110" y1="'+yH+'" x2="260" y2="'+yH+'" stroke="#0e6b66" stroke-width="5"/><text x="270" y="'+(yH+4)+'" font-size="13">HOMO (höchste besetzte Stufe)</text>';
+  svg+='<line x1="110" y1="'+yLumo+'" x2="260" y2="'+yLumo+'" stroke="#b3261e" stroke-width="5" stroke-dasharray="1 0"/><text x="270" y="'+(yLumo+4)+'" font-size="13">LUMO (niedrigste unbesetzte Stufe)</text>';
+  svg+='<line x1="185" y1="'+(yH-6)+'" x2="185" y2="'+(yLumo+8)+'" stroke="#222" stroke-width="2"/><polygon points="185,'+(yLumo+2)+' 180,'+(yLumo+12)+' 190,'+(yLumo+12)+'" fill="#222"/>';
+  svg+='<text x="300" y="'+((yH+yLumo)/2+4)+'" font-size="13" font-weight="700">ΔE = '+dE.toFixed(2)+' eV ↔ λ = '+lam+' nm</text>';
+  $('polysvg').innerHTML=svg;
+  $('polytxt').textContent='k = '+k+': λmax ≈ '+lam+' nm → '+(vis?'Absorption im sichtbaren Bereich (Farbigkeit möglich).':'Absorption im UV-Bereich (Stoff farblos).');
+}
+$('polyk').addEventListener('input',drawPoly);
+
+/* ---------- Spektrum ---------- */
+function G(x,m,s){return Math.exp(-Math.pow((x-m)/s,2)/2);}
+function absRaw(l){return 0.9*G(l,490,12)+0.4*G(l,464,13)+0.1*G(l,440,18)+0.03*G(l,420,25);}
+var ABSMAX=1;(function(){for(var l=400;l<=650;l++){ABSMAX=Math.max(ABSMAX===1?0:ABSMAX,absRaw(l));}})();
+function absF(l){return absRaw(l)/ABSMAX;}
+function emF(l){return 0.85*G(l,517,16)+0.25*G(l,545,22);}
+function wl2rgb(w){
+  var r=0,g=0,b=0;
+  if(w>=380&&w<440){r=-(w-440)/60;b=1;}else if(w<490){g=(w-440)/50;b=1;}else if(w<510){g=1;b=-(w-510)/20;}
+  else if(w<580){r=(w-510)/70;g=1;}else if(w<645){r=1;g=-(w-645)/65;}else if(w<=780){r=1;}
+  var f=1; if(w<420)f=0.3+0.7*(w-380)/40; else if(w>700)f=0.3+0.7*(780-w)/80;
+  return 'rgb('+Math.round(255*Math.pow(r*f,0.8))+','+Math.round(255*Math.pow(g*f,0.8))+','+Math.round(255*Math.pow(b*f,0.8))+')';
+}
+var COMP=[[400,435,'violett','gelbgrün','#c8d400'],[435,480,'blau','gelb','#f5d800'],[480,490,'grünblau','orange','#f58a00'],[490,500,'blaugrün','rot','#e02020'],[500,560,'grün','purpur','#a0208a'],[560,580,'gelbgrün','violett','#6a2bb5'],[580,595,'gelb','blau','#2040d0'],[595,605,'orange','grünblau','#00a0b0'],[605,700,'rot','blaugrün','#00a88a']];
+function comp(l){for(var i=0;i<COMP.length;i++){if(l>=COMP[i][0]&&l<COMP[i][1])return COMP[i];}return COMP[COMP.length-1];}
+function buildSpec(){
+  var W=600,H=250,x0=50,x1=580,y0=30,y1=205;
+  function X(l){return x0+(l-400)/(650-400)*(x1-x0);}
+  function Y(a){return y1-a*(y1-y0);}
+  var s='<defs><linearGradient id="gr" x1="0" x2="1">';
+  for(var l=400;l<=650;l+=10){s+='<stop offset="'+((l-400)/250*100)+'%" stop-color="'+wl2rgb(l)+'"/>';}
+  s+='</linearGradient></defs>';
+  s+='<rect x="'+x0+'" y="'+(y1+6)+'" width="'+(x1-x0)+'" height="10" fill="url(#gr)"/>';
+  s+='<line x1="'+x0+'" y1="'+y1+'" x2="'+x1+'" y2="'+y1+'" stroke="#444"/><line x1="'+x0+'" y1="'+y0+'" x2="'+x0+'" y2="'+y1+'" stroke="#444"/>';
+  for(var t=400;t<=650;t+=50){s+='<line x1="'+X(t)+'" y1="'+y1+'" x2="'+X(t)+'" y2="'+(y1+4)+'" stroke="#444"/><text x="'+X(t)+'" y="'+(y1+30)+'" font-size="12" text-anchor="middle">'+t+'</text>';}
+  s+='<text x="'+((x0+x1)/2)+'" y="'+(y1+46)+'" font-size="12" text-anchor="middle">Wellenlänge λ in nm</text><text x="14" y="120" font-size="12" transform="rotate(-90 14 120)" text-anchor="middle">relative Intensität</text>';
+  var pa='',pe='';
+  for(var l2=400;l2<=650;l2+=2){pa+=(l2===400?'M':'L')+X(l2).toFixed(1)+' '+Y(absF(l2)).toFixed(1);pe+=(l2===400?'M':'L')+X(l2).toFixed(1)+' '+Y(emF(l2)).toFixed(1);}
+  s+='<path d="'+pa+'" fill="none" stroke="#0e6b66" stroke-width="2.6"/><path d="'+pe+'" fill="none" stroke="#2f8f5b" stroke-width="2.2" stroke-dasharray="6 4"/>';
+  s+='<text x="'+(X(410))+'" y="'+(Y(0.2))+'" font-size="12" fill="#0e6b66">Absorption</text><text x="'+(X(560))+'" y="'+(Y(0.7))+'" font-size="12" fill="#2f8f5b">Emission</text>';
+  s+='<line id="mk" x1="0" y1="'+y0+'" x2="0" y2="'+y1+'" stroke="#b3261e" stroke-width="2"/><circle id="mkc" r="5" fill="#b3261e" cx="0" cy="0"/>';
+  $('specsvg').innerHTML=s;
+  window._X=X;window._Y=Y;
+}
+function updSpec(){
+  var l=parseInt($('lam').value,10);
+  $('lamlbl').textContent=l;
+  var mk=$('mk'),mkc=$('mkc'); var x=window._X(l); mk.setAttribute('x1',x);mk.setAttribute('x2',x);
+  mkc.setAttribute('cx',x);mkc.setAttribute('cy',window._Y(absF(l)));
+  var c=comp(l); $('sw1').style.background=wl2rgb(l); $('sw2').style.background=c[4];
+  $('compname').textContent=c[3]+' (absorbiert: '+c[2]+')'; $('absval').textContent=absF(l).toFixed(2);
+}
+$('lam').addEventListener('input',updSpec);
+
+/* ---------- pH ---------- */
+var PK=[2.1,4.3,6.4];
+var SP=[['Kation','#f2a93b'],['neutral','#f6e27a'],['Monoanion','#f3d23a'],['Dianion','#f2a500']];
+function drawPh(){
+  var ph=parseFloat($('phs').value); $('phlbl').textContent=ph.toFixed(1).replace('.',',');
+  var h=Math.pow(10,-ph),K=PK.map(function(p){return Math.pow(10,-p);});
+  var c=[h*h*h,h*h*K[0],h*K[0]*K[1],K[0]*K[1]*K[2]]; var sum=c.reduce(function(a,b){return a+b;},0);
+  var fr=c.map(function(x){return x/sum;});
+  var html='';fr.forEach(function(f,i){html+='<span>'+SP[i][0]+'</span><div class="bar"><i style="width:'+(f*100).toFixed(1)+'%;background:'+SP[i][1]+'"></i></div><span>'+Math.round(f*100)+' %</span>';});
+  $('phbars').innerHTML=html;
+  var dom=fr.indexOf(Math.max.apply(null,fr));
+  var txt=['Überwiegend Kation: gelb bis orange, nur schwache Fluoreszenz.','Überwiegend neutrale Form: nur blassgelb, kaum Fluoreszenz.','Überwiegend Monoanion: gelb, schwache Fluoreszenz.','Überwiegend Dianion: intensiv gelb-orange gefärbt mit starker gelbgrüner Fluoreszenz (λmax ≈ 490 nm).'];
+  $('phtxt').textContent=txt[dom]+' (Farbeindrücke schematisch)';
+}
+$('phs').addEventListener('input',drawPh);
+
+/* ---------- Drucken ---------- */
+$('printbtn').addEventListener('click',function(){
+  [].slice.call(document.querySelectorAll('textarea')).forEach(grow);
+  window.print();
+});
+window.addEventListener('beforeprint',function(){[].slice.call(document.querySelectorAll('textarea')).forEach(grow);});
+
+/* ---------- Start ---------- */
+buildSpec();updSpec();drawPoly();drawPh();unlock();
+Object.keys(state.flags).forEach(function(k){if(state.flags[k]&&CHECK[k]&&state.flags[k]!==false){try{CHECK[k]();}catch(e){}}});
+progress();
+})();
+</script>
+</body>
+</html>
