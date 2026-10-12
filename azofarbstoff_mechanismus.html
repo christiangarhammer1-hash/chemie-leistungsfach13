@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Azofarbstoff-Synthese – Mechanismus</title>
+<style>
+:root{--ink:#1b2733;--muted:#5b6774;--bg:#f5f7fa;--card:#fff;--line:#d9e0e7;--acc:#c2410c;--acc2:#0f6e8c;--ok:#1a7f37;--okbg:#e7f6ec;--err:#b42318;--errbg:#fdecea;--hint:#8a5a00;--hintbg:#fff6dc;--ea:#d6336c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:16px}
+header.top{background:linear-gradient(120deg,#c2410c,#e8a33d);color:#fff;border-radius:14px;padding:18px 20px;margin-bottom:16px}
+header.top h1{margin:0 0 4px;font-size:1.5rem}
+header.top p{margin:0;opacity:.95;font-size:.95rem}
+.meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.meta label{font-size:.85rem;display:flex;flex-direction:column;gap:2px}
+.meta input{border:0;border-radius:8px;padding:6px 10px;font:inherit;min-width:180px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:16px}
+h2{margin:0 0 10px;font-size:1.2rem;color:var(--acc)}
+h3{margin:14px 0 6px;font-size:1.02rem}
+.small{font-size:.88rem;color:var(--muted)}
+.goals li{margin:2px 0}
+button{font:inherit;cursor:pointer;border-radius:9px;border:1px solid var(--line);background:#fff;padding:7px 13px}
+button.pri{background:var(--acc2);color:#fff;border-color:var(--acc2)}
+button.warn{background:var(--acc);color:#fff;border-color:var(--acc)}
+button:disabled{opacity:.45;cursor:default}
+button.on{background:var(--ea);color:#fff;border-color:var(--ea)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+/* Stepper */
+.phase{display:inline-block;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 9px;border-radius:20px;background:#e6f2f6;color:var(--acc2)}
+.phase.k{background:#fdeee3;color:var(--acc)}
+.dots{display:flex;gap:5px;flex-wrap:wrap;margin:8px 0}
+.dot{width:30px;height:30px;border-radius:50%;padding:0;font-size:.8rem;font-weight:700}
+.dot.cur{background:var(--ink);color:#fff;border-color:var(--ink)}
+.dot.seen{border-color:var(--acc2);color:var(--acc2)}
+.scenebox{border:1px solid var(--line);border-radius:12px;background:#fcfdfe;margin:10px 0;overflow-x:auto}
+svg.scene{display:block;width:100%;min-width:620px;height:auto}
+.at{font:600 20px system-ui,sans-serif;text-anchor:middle;dominant-baseline:central;fill:var(--ink)}
+.mol{font:600 18px system-ui,sans-serif;text-anchor:middle;dominant-baseline:central;fill:var(--ink)}
+.pl{font:400 24px system-ui,sans-serif;text-anchor:middle;dominant-baseline:central;fill:var(--ink)}
+.cap{font:13px system-ui,sans-serif;text-anchor:middle;fill:var(--muted)}
+.note{font:italic 13px system-ui,sans-serif;text-anchor:middle;fill:var(--acc2)}
+.b{stroke:var(--ink);stroke-width:2.2;stroke-linecap:round}
+.lp{stroke:var(--ink);stroke-width:2.6;stroke-linecap:round}
+.chgc{fill:#fff;stroke:var(--ink);stroke-width:1.3}
+.chgt{font:700 13px system-ui,sans-serif;text-anchor:middle;dominant-baseline:central;fill:var(--ink)}
+.ea{fill:none;stroke:var(--ea);stroke-width:2.2;marker-end:url(#ah)}
+.ra{stroke:var(--ink);stroke-width:2.2;marker-end:url(#rh)}
+.arr.hide{display:none}
+.selfbox{background:#f0f6f9;border-left:4px solid var(--acc2);padding:10px 12px;border-radius:8px;margin:8px 0}
+.expl{background:#fff8f1;border-left:4px solid var(--acc);padding:10px 12px;border-radius:8px;margin:8px 0}
+.expl.hidden{display:none}
+textarea{width:100%;min-height:70px;font:inherit;border:1px solid var(--line);border-radius:8px;padding:8px;resize:vertical}
+select{font:inherit;border:1px solid var(--line);border-radius:7px;padding:3px 6px;background:#fff;max-width:100%}
+select.ok,.okrow{border-color:var(--ok);background:var(--okbg)}
+select.bad,.badrow{border-color:var(--err);background:var(--errbg)}
+.fb{margin-top:8px;padding:9px 12px;border-radius:8px;font-size:.93rem}
+.fb.ok{background:var(--okbg);color:#0d4f22}
+.fb.bad{background:var(--errbg);color:#7a1610}
+.fb.hint{background:var(--hintbg);color:var(--hint)}
+.fb:empty{display:none}
+.ordrow{display:flex;gap:10px;align-items:flex-start;padding:7px 9px;border:1px solid var(--line);border-radius:9px;margin:5px 0}
+.ordrow select{flex:0 0 auto}
+.ordrow .h{font-size:.85rem;color:var(--err);margin-top:3px}
+.gap{line-height:2.2}
+.mc{margin:10px 0 14px}
+.mc .q{font-weight:600}
+.mc label{display:block;padding:5px 8px;border-radius:7px;margin:3px 0;border:1px solid transparent}
+.mc label.ok{background:var(--okbg);border-color:var(--ok)}
+.mc label.bad{background:var(--errbg);border-color:var(--err)}
+.mc .why{display:block;font-size:.86rem;margin:3px 0 0 24px}
+.eq{font-family:ui-monospace,Consolas,monospace;background:#f3f4f6;padding:8px 10px;border-radius:8px;overflow-x:auto;white-space:nowrap}
+.check label{display:block;margin:3px 0}
+.erw{background:#f6f2fb;border-left:4px solid #6b3fa0;padding:10px 12px;border-radius:8px;margin:8px 0}
+.erw.hidden{display:none}
+.progress{height:8px;background:#e5e9ee;border-radius:5px;overflow:hidden;margin-top:6px}
+.progress>div{height:100%;background:var(--ok);width:0;transition:width .3s}
+#printBtn{position:fixed;right:16px;bottom:16px;z-index:50;background:rgba(255,255,255,.92);border:1px solid var(--line);font-size:.85rem;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.print-only{display:none}
+footer{font-size:.8rem;color:var(--muted);text-align:center;padding:10px}
+@media (max-width:600px){main{padding:10px}.card{padding:12px}}
+@page{size:A4;margin:14mm}
+@media print{
+  body{background:#fff;font-size:11pt}
+  main{max-width:none;padding:0}
+  #printBtn,.no-print,.dots,.stepnav{display:none!important}
+  .print-only{display:block}
+  .card{border:1px solid #bbb;break-inside:auto;page-break-inside:auto}
+  .scenebox{break-inside:avoid}
+  svg.scene{min-width:0}
+  header.top{background:none;color:#000;border:2px solid #c2410c}
+  header.top input{border:1px solid #999}
+  .expl.hidden,.erw.hidden{display:block}
+  .arr.hide{display:inline}
+  #stepper{display:none}
+  .pstep{break-inside:avoid;margin-bottom:8px}
+  textarea{border:1px solid #999}
+}
+</style>
+</head>
+<body>
+<!-- Marker-Definitionen (nicht display:none, damit Pfeilspitzen überall funktionieren) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d6336c"/></marker>
+    <marker id="rh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1b2733"/></marker>
+  </defs>
+</svg>
+
+<main>
+<header class="top">
+  <h1>Synthese eines Azofarbstoffs – der Reaktionsmechanismus</h1>
+  <p>Chemie 13 (eA) · Lernbereich 2: Farbigkeit und Farbstoffe · Diazotierung und Azokupplung</p>
+  <div class="meta">
+    <label>Name / Kennwort<input id="kennwort" type="text" autocomplete="off"></label>
+    <label>Datum<input id="datum" type="text" placeholder="TT.MM.JJJJ"></label>
+  </div>
+</header>
+
+<section class="card">
+  <h2>Worum geht es?</h2>
+  <p>Azofarbstoffe sind die mengenmäßig wichtigste Farbstoffklasse. Ihre Synthese verläuft in <b>zwei Schritten</b>: Aus einem primären aromatischen Amin entsteht bei der <b>Diazotierung</b> ein Diazonium-Ion, das anschließend bei der <b>Azokupplung</b> mit einem aktivierten Aromaten zum Farbstoff reagiert. Beispiel hier: <b>Anilin + Phenol → 4-Hydroxyazobenzol</b>.</p>
+  <ul class="goals">
+    <li>Ich kann die Diazotierung schrittweise mit Elektronenpfeilen darstellen und das Nitrosyl-Kation als Elektrophil benennen.</li>
+    <li>Ich kann die Azokupplung als elektrophile aromatische Substitution (σ-Komplex, Rearomatisierung) erklären.</li>
+    <li>Ich kann die Reaktionsbedingungen (Temperatur, pH-Wert) fachlich begründen.</li>
+    <li>Ich kann das Gelernte auf einen anderen Azofarbstoff (Methylorange) übertragen.</li>
+  </ul>
+  <p class="small"><b>So arbeitest du:</b> Betrachte jeden Schritt zuerst <i>ohne</i> Elektronenpfeile und beschreibe in eigenen Worten, was passiert. Erst danach Pfeile einblenden und Erklärung aufdecken. Alle Eingaben werden automatisch im Browser gespeichert.</p>
+</section>
+
+<section class="card" id="stepper">
+  <h2>Mechanismus Schritt für Schritt</h2>
+  <div class="row"><span id="phase" class="phase">Diazotierung</span><span class="small" id="stepCount"></span></div>
+  <div class="dots" id="dots"></div>
+  <h3 id="stepTitle"></h3>
+  <div class="scenebox" id="scene"></div>
+  <div class="row no-print">
+    <button id="btnArrows" type="button">Elektronenpfeile einblenden</button>
+    <span class="small">Pfeile zeigen, wohin Elektronenpaare wandern – vom Elektronenpaar (Donator) zum Akzeptor.</span>
+  </div>
+  <div class="selfbox">
+    <b>Erst du:</b> <span id="stepPrompt"></span>
+    <textarea id="selfNote" placeholder="Deine Beschreibung dieses Schritts …"></textarea>
+  </div>
+  <div class="row no-print"><button id="btnExpl" type="button" class="warn">Erklärung aufdecken</button></div>
+  <div class="expl hidden" id="stepExpl"></div>
+  <div class="row stepnav" style="justify-content:space-between;margin-top:10px">
+    <button id="prev" type="button">← zurück</button>
+    <button id="next" type="button" class="pri">weiter →</button>
+  </div>
+</section>
+
+<!-- Druckübersicht: alle Schritte -->
+<section class="card print-only" id="printOverview"><h2>Mechanismus – Übersicht aller Schritte</h2></section>
+
+<section class="card">
+  <h2>Gesamtgleichungen</h2>
+  <p><b>Diazotierung</b> (salzsaure Lösung, 0–5 °C):</p>
+  <div class="eq">C₆H₅–NH₂ + NaNO₂ + 2 HCl → [C₆H₅–N≡N]⁺Cl⁻ + NaCl + 2 H₂O</div>
+  <p><b>Azokupplung</b> (schwach alkalische Lösung):</p>
+  <div class="eq">[C₆H₅–N≡N]⁺ + C₆H₅–O⁻ → C₆H₅–N=N–C₆H₄–OH  (4-Hydroxyazobenzol)</div>
+  <p class="small">Merke: Bei der Diazotierung reagiert das Amin als <b>Nukleophil</b> (Elektronenpaar-Donator), bei der Azokupplung ist das Diazonium-Ion das <b>Elektrophil</b> (Elektronenpaar-Akzeptor).</p>
+</section>
+
+<section class="card">
+  <h2>Fortschritt</h2>
+  <div class="small" id="progText">0 von 5 Aufgaben vollständig richtig</div>
+  <div class="progress"><div id="progBar"></div></div>
+</section>
+
+<!-- Aufgabe 1 -->
+<section class="card" id="A1">
+  <h2>Aufgabe 1 · Reihenfolge der Teilschritte</h2>
+  <p>Nummeriere die Teilschritte der gesamten Synthese in der richtigen Reihenfolge (1 – 4).</p>
+  <div id="a1list"></div>
+  <div class="row no-print" style="margin-top:8px">
+    <button type="button" class="pri" id="a1check">Überprüfen</button>
+    <button type="button" id="a1tip">Tipp anzeigen</button>
+  </div>
+  <div class="fb" id="a1fb"></div>
+</section>
+
+<!-- Aufgabe 2 -->
+<section class="card" id="A2">
+  <h2>Aufgabe 2 · Lückentext</h2>
+  <p class="gap" id="a2text"></p>
+  <div class="row no-print"><button type="button" class="pri" id="a2check">Überprüfen</button></div>
+  <div class="fb" id="a2fb"></div>
+</section>
+
+<!-- Aufgabe 3 -->
+<section class="card" id="A3">
+  <h2>Aufgabe 3 · Reaktionsbedingungen begründen</h2>
+  <div id="a3list"></div>
+  <div class="row no-print"><button type="button" class="pri" id="a3check">Überprüfen</button></div>
+  <div class="fb" id="a3fb"></div>
+</section>
+
+<!-- Aufgabe 4 -->
+<section class="card" id="A4">
+  <h2>Aufgabe 4 · Transfer: Methylorange</h2>
+  <p>Methylorange ist ein Azofarbstoff, den du als Säure-Base-Indikator kennst. Ermittle, aus welchen Edukten er synthetisiert wird.</p>
+  <div class="scenebox"><svg class="scene" viewBox="0 0 520 190" id="moSvg" role="img" aria-label="Strukturformel des Methylorange-Anions"></svg></div>
+  <div class="mc"><div class="q">a) Welche Verbindung wird diazotiert (Diazokomponente)?</div><div id="a4a"></div></div>
+  <div class="mc"><div class="q">b) Welche Verbindung dient als Kupplungskomponente?</div><div id="a4b"></div></div>
+  <div class="mc"><div class="q">c) In welchem Milieu führt man diese Kupplung durch?</div><div id="a4c"></div></div>
+  <div class="row no-print">
+    <button type="button" class="pri" id="a4check">Überprüfen</button>
+    <button type="button" id="a4tip">Tipp anzeigen</button>
+  </div>
+  <div class="fb" id="a4fb"></div>
+  <h3>d) Formuliere den Mechanismus der Azokupplung für Methylorange in deinem Kursnotizbuch. Notiere hier, wo du unsicher warst:</h3>
+  <textarea id="a4d" placeholder="z. B.: An welchem C-Atom greift das Diazonium-Ion an? Welche Base spaltet das Proton ab?"></textarea>
+</section>
+
+<!-- Aufgabe 5 -->
+<section class="card" id="A5">
+  <h2>Aufgabe 5 · Erklären und begründen</h2>
+  <h3>a) Erkläre, warum Benzol nicht mit dem Benzoldiazonium-Ion reagiert, Phenolat-Ionen dagegen schon.</h3>
+  <textarea id="a5a"></textarea>
+  <h3>b) Begründe, warum die Diazotierung bei 0–5 °C durchgeführt werden muss, und formuliere die Reaktionsgleichung der Nebenreaktion bei höherer Temperatur.</h3>
+  <textarea id="a5b"></textarea>
+  <div class="row no-print"><button type="button" class="warn" id="a5show">Erwartungshorizont anzeigen</button><span class="small" id="a5msg"></span></div>
+  <div class="erw hidden" id="a5erw">
+    <b>Erwartungshorizont a)</b> – hake ab, was deine Antwort enthält:
+    <div class="check">
+      <label><input type="checkbox" id="c1"> Das Diazonium-Ion ist ein <b>schwaches Elektrophil</b>, weil seine positive Ladung durch Mesomerie (über beide N-Atome und den Ring) delokalisiert ist.</label>
+      <label><input type="checkbox" id="c2"> Das π-Elektronensystem von Benzol ist dafür nicht elektronenreich genug.</label>
+      <label><input type="checkbox" id="c3"> Im Phenolat-Ion erhöht das negativ geladene O-Atom die Elektronendichte im Ring (Elektronendonator, +M-Effekt) → stark aktivierter Aromat.</label>
+      <label><input type="checkbox" id="c4"> Der σ-Komplex wird zusätzlich stabilisiert, da die Ladung bis zum O-Atom delokalisiert werden kann.</label>
+    </div>
+    <b>Erwartungshorizont b)</b>
+    <div class="check">
+      <label><input type="checkbox" id="c5"> Diazonium-Ionen sind thermisch instabil; N₂ ist ein sehr stabiles Abgangsmolekül (Dreifachbindung, Gas entweicht).</label>
+      <label><input type="checkbox" id="c6"> C₆H₅–N₂⁺ + H₂O → C₆H₅–OH + N₂ + H⁺ (Phenol statt Farbstoff, geringere Ausbeute)</label>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Eigene Notizen</h2>
+  <textarea id="notes" placeholder="Fragen an die Lehrkraft, Merksätze …"></textarea>
+  <div class="row no-print" style="margin-top:8px"><button type="button" id="reset">Alle Eingaben löschen</button></div>
+</section>
+<footer>Lehrplanbezug: LehrplanPLUS Gymnasium Bayern, Chemie 13 (eA), LB 2 – Azofarbstoffe: Synthese in zwei Schritten (Diazotierung und Azokupplung; keine dirigierenden Effekte).</footer>
+</main>
+
+<button id="printBtn" type="button" onclick="window.print()">PDF/Drucken (A4)</button>
+
+<script>
+/* ===================== Speicher ===================== */
+const KEY='azo13_v4_';
+const store={get(k,d){try{const v=localStorage.getItem(KEY+k);return v===null?d:JSON.parse(v)}catch(e){return d}},
+             set(k,v){try{localStorage.setItem(KEY+k,JSON.stringify(v))}catch(e){}}};
+
+/* ===================== Zeichen-Helfer ===================== */
+const R=34;
+const f=n=>Math.round(n*10)/10;
+function L(a,b,c='b'){return `<line x1="${f(a[0])}" y1="${f(a[1])}" x2="${f(b[0])}" y2="${f(b[1])}" class="${c}"/>`}
+function V(cx,cy,k,r=R){const a=Math.PI/3*k;return[cx+r*Math.cos(a),cy+r*Math.sin(a)]}
+function B(a,b,o=1,t1=12,t2=12){const dx=b[0]-a[0],dy=b[1]-a[1],l=Math.hypot(dx,dy),ux=dx/l,uy=dy/l,px=-uy,py=ux;
+  const x1=a[0]+ux*t1,y1=a[1]+uy*t1,x2=b[0]-ux*t2,y2=b[1]-uy*t2;const offs=o===1?[0]:o===2?[-3.5,3.5]:[-6,0,6];
+  return offs.map(d=>L([x1+px*d,y1+py*d],[x2+px*d,y2+py*d])).join('')}
+function ring(cx,cy,dbl=[[0,1],[2,3],[4,5]]){let s='';for(let k=0;k<6;k++){const j=(k+1)%6,a=V(cx,cy,k),b=V(cx,cy,j);s+=L(a,b);
+  if(dbl.some(d=>(d[0]===k&&d[1]===j)||(d[0]===j&&d[1]===k))){const a2=V(cx,cy,k,R-6.5),b2=V(cx,cy,j,R-6.5),q=.18;
+  s+=L([a2[0]+(b2[0]-a2[0])*q,a2[1]+(b2[1]-a2[1])*q],[b2[0]-(b2[0]-a2[0])*q,b2[1]-(b2[1]-a2[1])*q])}}return s}
+function A(x,y,t){return `<text x="${x}" y="${y}" class="at">${t}</text>`}
+function M(x,y,t){return `<text x="${x}" y="${y}" class="mol">${t}</text>`}
+function T(x,y,t,c='cap'){return `<text x="${x}" y="${y}" class="${c}">${t}</text>`}
+function P(x,y){return `<text x="${x}" y="${y}" class="pl">+</text>`}
+function LP(x,y,deg,d=15){const a=deg*Math.PI/180,cx=x+d*Math.cos(a),cy=y+d*Math.sin(a),px=-Math.sin(a)*6,py=Math.cos(a)*6;
+  return L([cx-px,cy-py],[cx+px,cy+py],'lp')}
+function CH(x,y,s){return `<circle cx="${x}" cy="${y}" r="8" class="chgc"/><text x="${x}" y="${y}" class="chgt">${s==='+'?'+':'−'}</text>`}
+function EA(x1,y1,x2,y2,b=20){const mx=(x1+x2)/2,my=(y1+y2)/2,dx=x2-x1,dy=y2-y1,l=Math.hypot(dx,dy),cx=mx+(-dy/l)*b,cy=my+(dx/l)*b;
+  return `<path d="M${f(x1)},${f(y1)} Q${f(cx)},${f(cy)} ${f(x2)},${f(y2)}" class="ea"/>`}
+function RA(x1,x2,y){return `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" class="ra"/>`}
+/* Bausteine */
+function nitrosoChain(x){ // N=O ab x (N bei x, O bei x+50)
+  return A(x,120,'N')+A(x+50,120,'O')+B([x,120],[x+50,120],2)+LP(x+50,120,-50)+LP(x+50,120,50)}
+function phenolat(cx,ox){const v3=V(cx,120,3);return ring(cx,120)+A(ox,120,'O')+B(v3,[ox,120],1,0,12)+LP(ox,120,-90)+LP(ox,120,90)+LP(ox,120,180)+CH(ox+16,97,'-')}
+
+/* ===================== Szenen ===================== */
+const scenes=[
+/* D1 */ ()=>[
+ A(40,120,'H')+A(85,120,'O')+A(135,120,'N')+A(185,120,'O')+B([40,120],[85,120],1,9,12)+B([85,120],[135,120])+B([135,120],[185,120],2)
+ +LP(85,120,-90)+LP(85,120,90)+LP(135,120,-90)+LP(185,120,-50)+LP(185,120,50)
+ +P(232,120)
+ +A(275,120,'H')+A(315,120,'O')+A(315,80,'H')+A(355,120,'H')+B([275,120],[315,120],1,9,12)+B([315,120],[315,80],1,12,10)+B([315,120],[355,120],1,12,9)
+ +LP(315,120,90)+CH(333,99,'+')
+ +RA(395,455,120)
+ +A(520,120,'N')+A(565,120,'O')+B([520,120],[565,120],3)+LP(520,120,180)+LP(565,120,0)+CH(581,98,'+')
+ +P(630,120)+M(695,120,'2 H₂O')
+ +T(110,190,'salpetrige Säure')+T(315,190,'Oxonium-Ion')+T(542,185,'Nitrosyl-Kation')+T(542,203,'(Elektrophil)')+T(695,190,'Wasser'),
+ EA(85,137,268,132,45)+EA(295,126,311,136,10)+EA(121,113,96,100,-15)+EA(197,105,165,112,18)],
+/* D2 */ ()=>[
+ ring(90,120)+A(170,120,'N')+B(V(90,120,0),[170,120],1,0,12)+A(190,90,'H')+A(190,150,'H')+B([170,120],[190,90],1,12,9)+B([170,120],[190,150],1,12,9)+LP(170,120,0)
+ +A(280,120,'N')+A(325,120,'O')+B([280,120],[325,120],3)+LP(280,120,-90)+LP(325,120,0)+CH(341,98,'+')
+ +RA(375,430,120)
+ +ring(500,120)+A(580,120,'N')+B(V(500,120,0),[580,120],1,0,12)+A(625,120,'N')+B([580,120],[625,120],3)+CH(580,96,'+')+LP(625,120,0)
+ +P(685,120)+M(745,120,'H₂O')
+ +T(110,195,'Anilin (Nukleophil)')+T(302,195,'Nitrosyl-Kation')+T(580,180,'Benzoldiazonium-Ion')+T(745,160,'Wasser'),
+ EA(192,122,266,127,28)+EA(302,112,320,106,-12)],
+/* K2 */ ()=>[
+ phenolat(170,90)
+ +A(275,120,'N')+A(320,120,'N')+B([275,120],[320,120],3)+LP(275,120,180)+CH(320,96,'+')+ring(390,120)+B([320,120],V(390,120,3),1,12,0)
+ +RA(432,480,120)
+ +ring(600,120,[[2,3],[4,5]])+A(520,120,'O')+B(V(600,120,3),[520,120],1,0,12)+LP(520,120,-90)+LP(520,120,90)+LP(520,120,180)+CH(536,97,'-')
+ +A(645,85,'H')+B(V(600,120,0),[645,85],1,0,9)+CH(626,166,'+')
+ +A(680,120,'N')+B(V(600,120,0),[680,120],1,0,12)+LP(680,120,90)+A(725,120,'N')+B([680,120],[725,120],2)+LP(725,120,-90)
+ +B([725,120],[752,120],1,12,0)+M(778,120,'C₆H₅')
+ +T(160,195,'Phenolat-Ion (Nukleophil)')+T(350,195,'Diazonium-Ion (Elektrophil)')+T(640,205,'σ-Komplex (mesomeriestabilisiert)'),
+ EA(198,138,267,131,30)+EA(297,112,316,107,-10)],
+/* K3 */ ()=>[
+ ring(200,120,[[2,3],[4,5]])+A(120,120,'O')+B(V(200,120,3),[120,120],1,0,12)+LP(120,120,-90)+LP(120,120,90)+LP(120,120,180)+CH(136,97,'-')
+ +A(245,85,'H')+B(V(200,120,0),[245,85],1,0,9)+CH(226,166,'+')
+ +A(280,120,'N')+B(V(200,120,0),[280,120],1,0,12)+LP(280,120,90)+A(325,120,'N')+B([280,120],[325,120],2)+LP(325,120,-90)
+ +B([325,120],[352,120],1,12,0)+M(378,120,'C₆H₅')
+ +A(290,40,'O')+A(325,40,'H')+B([290,40],[325,40],1,12,9)+LP(290,40,180)+LP(290,40,-90)+LP(290,40,90)+CH(306,22,'-')
+ +RA(420,470,120)+T(445,142,'+ H₂O','cap')
+ +ring(590,120)+A(510,120,'O')+B(V(590,120,3),[510,120],1,0,12)+LP(510,120,-90)+LP(510,120,90)+LP(510,120,180)+CH(526,97,'-')
+ +A(670,120,'N')+B(V(590,120,0),[670,120],1,0,12)+LP(670,120,90)+A(715,120,'N')+B([670,120],[715,120],2)+LP(715,120,-90)
+ +B([715,120],[742,120],1,12,0)+M(768,120,'C₆H₅')
+ +T(240,205,'σ-Komplex')+T(640,190,'Azofarbstoff-Anion (Phenolat-Form)')+T(640,208,'nach Ansäuern: 4-Hydroxyazobenzol'),
+ EA(276,44,250,79,-10)+EA(243,105,224,134,-16)],
+/* K4 */ ()=>[
+ `<rect x="70" y="72" width="380" height="96" rx="46" fill="#f7b733" fill-opacity=".18" stroke="#e8a33d" stroke-dasharray="6 5"/>`
+ +`<rect x="243" y="98" width="80" height="44" rx="10" fill="none" stroke="#d6336c" stroke-width="2" stroke-dasharray="5 4"/>`
+ +A(60,120,'H')+A(100,120,'O')+B([60,120],[100,120],1,9,12)+LP(100,120,-90)+LP(100,120,90)
+ +ring(180,120)+B([100,120],V(180,120,3),1,12,0)
+ +A(260,120,'N')+B(V(180,120,0),[260,120],1,0,12)+LP(260,120,90)+A(305,120,'N')+B([260,120],[305,120],2)+LP(305,120,-90)
+ +ring(373,120)+B([305,120],V(373,120,3),1,12,0)
+ +T(283,90,'Chromophor','note')+T(85,64,'Auxochrom (–OH)','note')+T(260,195,'ausgedehntes delokalisiertes π-Elektronensystem')
+ +`<circle cx="600" cy="115" r="34" fill="#f2a20c" stroke="#b86e00"/>`+T(600,175,'Stoff: gelb-orange')+T(600,193,'absorbiert v. a. blaues Licht'),
+ '']
+];
+
+const steps=[
+ {ph:'d',t:'1 · Bildung des Nitrosyl-Kations',
+  q:'Welche Teilchen reagieren miteinander? Warum ist das entstehende Teilchen ein Elektrophil?',
+  e:'Natriumnitrit bildet in salzsaurer Lösung zunächst salpetrige Säure: <b>NaNO₂ + HCl → HNO₂ + NaCl</b>. Diese reagiert mit einem Oxonium-Ion: <b>HNO₂ + H₃O⁺ → NO⁺ + 2 H₂O</b>. Das Oxonium-Ion überträgt ein Proton auf das O-Atom der OH-Gruppe; dann wird Wasser abgespalten, wobei das bindende Elektronenpaar der N–O-Bindung am O-Atom des Wassers verbleibt. Ein freies Elektronenpaar des endständigen O-Atoms bildet die dritte Bindung zum N-Atom. Es entsteht das <b>Nitrosyl-Kation |N≡O|⁺</b> – das eigentliche <b>Elektrophil</b> der Diazotierung (positive Ladung, elektronenarmes N-Atom).'},
+ {ph:'d',t:'2 · Bildung des Diazonium-Ions',
+  q:'Welcher Reaktionspartner ist Nukleophil, welcher Elektrophil? Begründe mit der Elektronendichte.',
+  e:'Das <b>freie Elektronenpaar am N-Atom der Aminogruppe</b> (Nukleophil, Elektronenpaar-Donator) greift das N-Atom des Nitrosyl-Kations (Elektrophil, Akzeptor) an; die Pfeile zeigen diesen Angriff. Aus dem Amin entsteht unter Abspaltung von Wasser direkt das <b>Benzoldiazonium-Ion</b> Ar–N⁺≡N|: <b>C₆H₅–NH₂ + NO⁺ → C₆H₅–N₂⁺ + H₂O</b>. Es ist nur bei <b>0–5 °C</b> beständig; bei höherer Temperatur zersetzt es sich: C₆H₅N₂⁺ + H₂O → C₆H₅OH + N₂ + H⁺.'},
+ {ph:'k',t:'3 · Elektrophiler Angriff – der σ-Komplex',
+  q:'Woher kommt das angreifende Elektronenpaar? Welches C-Atom ändert seine Hybridisierung?',
+  e:'Gekuppelt wird in <b>schwach alkalischer</b> Lösung: Phenol liegt als <b>Phenolat-Ion</b> vor, dessen negativ geladenes O-Atom den Ring stark aktiviert (+M-Effekt). Zu stark alkalisch darf die Lösung nicht sein, sonst reagiert das Diazonium-Ion mit OH⁻ zu Diazotat und ist kein Elektrophil mehr. Das Diazonium-Ion ist ein <b>schwaches Elektrophil</b> – seine positive Ladung ist mesomeriestabilisiert. Es reagiert deshalb nur mit stark aktivierten Aromaten. Ein <b>π-Elektronenpaar des Phenolat-Rings</b> greift das endständige N-Atom an; ein Elektronenpaar der N≡N-Bindung verschiebt sich zum ringständigen N-Atom. Der Angriff erfolgt hier in 4-Stellung (para). Es entsteht der <b>σ-Komplex</b>: Das angegriffene C-Atom ist sp³-hybridisiert, das aromatische System ist vorübergehend aufgehoben; die Ladung ist über den Ring und das O-Atom delokalisiert (Grenzformel mit C=O).'},
+ {ph:'k',t:'4 · Rearomatisierung',
+  q:'Warum wird ein Proton abgespalten, statt dass ein Nukleophil addiert wird?',
+  e:'Eine Base (OH⁻ bzw. H₂O) spaltet das <b>Proton am sp³-C-Atom</b> ab. Das Elektronenpaar der C–H-Bindung stellt das aromatische π-Elektronensystem wieder her – das ist energetisch begünstigt (Aromatizität). Bilanz: Ein H-Atom am Ring wurde durch die Azogruppe ersetzt → <b>elektrophile aromatische Substitution (S<sub>E</sub>Ar)</b>.'},
+ {ph:'k',t:'5 · Ergebnis: ein Azofarbstoff',
+  q:'Erkläre mithilfe des Energiestufenschemas (HOMO/LUMO), warum das Produkt farbig ist, die Edukte aber nicht.',
+  e:'Im <b>4-Hydroxyazobenzol</b> sind beide Ringe über die Azogruppe (<b>Chromophor</b>) zu einem ausgedehnten delokalisierten π-Elektronensystem verbunden. Die Energiedifferenz zwischen HOMO und LUMO wird so klein, dass Licht aus dem sichtbaren Bereich (v. a. blau) absorbiert wird – wir sehen die Komplementärfarbe gelb-orange. Die OH-Gruppe wirkt als <b>Auxochrom</b> (Elektronendonator). In alkalischer Lösung (Phenolat) verändert sich das π-System und damit die Farbe – das Funktionsprinzip vieler <b>Säure-Base-Indikatoren</b>.'}
+];
+
+function sceneSVG(i,showArr){const [base,arr]=scenes[i]();
+  return `<svg class="scene" viewBox="0 0 820 240" role="img" aria-label="${steps[i].t}">${base}<g class="arr ${showArr?'':'hide'}">${arr}</g></svg>`}
+
+/* ===================== Stepper ===================== */
+let cur=store.get('step',0), showArr=store.get('arrows',false);
+const seen=store.get('seen',[]), revealed=store.get('revealed',[]), selfNotes=store.get('selfNotes',{});
+const $=id=>document.getElementById(id);
+function renderStep(){
+  const s=steps[cur];
+  $('phase').textContent=s.ph==='d'?'1. Diazotierung':'2. Azokupplung';
+  $('phase').className='phase'+(s.ph==='k'?' k':'');
+  $('stepCount').textContent=`Schritt ${cur+1} von ${steps.length}`;
+  $('stepTitle').textContent=s.t;
+  $('scene').innerHTML=sceneSVG(cur,showArr);
+  $('stepPrompt').textContent=s.q;
+  $('selfNote').value=selfNotes[cur]||'';
+  $('stepExpl').innerHTML=s.e;
+  $('stepExpl').classList.toggle('hidden',!revealed.includes(cur));
+  $('btnExpl').textContent=revealed.includes(cur)?'Erklärung verbergen':'Erklärung aufdecken';
+  $('btnArrows').textContent=showArr?'Elektronenpfeile ausblenden':'Elektronenpfeile einblenden';
+  $('btnArrows').classList.toggle('on',showArr);
+  $('btnArrows').style.visibility=cur===steps.length-1?'hidden':'visible';
+  $('prev').disabled=cur===0;$('next').disabled=cur===steps.length-1;
+  if(!seen.includes(cur)){seen.push(cur);store.set('seen',seen)}
+  $('dots').innerHTML=steps.map((_,i)=>`<button type="button" class="dot ${i===cur?'cur':seen.includes(i)?'seen':''}" data-i="${i}" title="${steps[i].t}">${i+1}</button>`).join('');
+  store.set('step',cur);
+}
+$('dots').addEventListener('click',e=>{const b=e.target.closest('.dot');if(b){cur=+b.dataset.i;renderStep()}});
+$('prev').onclick=()=>{if(cur>0){cur--;renderStep()}};
+$('next').onclick=()=>{if(cur<steps.length-1){cur++;renderStep()}};
+$('btnArrows').onclick=()=>{showArr=!showArr;store.set('arrows',showArr);renderStep()};
+$('btnExpl').onclick=()=>{const k=revealed.indexOf(cur);if(k<0){
+    if(!(selfNotes[cur]||'').trim()&&!confirm('Du hast diesen Schritt noch nicht selbst beschrieben. Trotzdem aufdecken?'))return;
+    revealed.push(cur)}else revealed.splice(k,1);store.set('revealed',revealed);renderStep()};
+$('selfNote').addEventListener('input',e=>{selfNotes[cur]=e.target.value;store.set('selfNotes',selfNotes)});
+
+/* Druckübersicht */
+function buildPrint(){$('printOverview').innerHTML='<h2>Mechanismus – Übersicht aller Schritte</h2>'+steps.map((s,i)=>
+  `<div class="pstep"><h3>${s.ph==='d'?'Diazotierung':'Azokupplung'} – ${s.t}</h3><div class="scenebox">${sceneSVG(i,true)}</div>
+   ${(selfNotes[i]||'').trim()?`<p class="small"><b>Meine Beschreibung:</b> ${esc(selfNotes[i])}</p>`:''}<div class="expl">${s.e}</div></div>`).join('')}
+function esc(t){return t.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+window.addEventListener('beforeprint',()=>{buildPrint();document.querySelectorAll('textarea').forEach(t=>{t.style.height=(t.scrollHeight+4)+'px'})});
+
+/* ===================== Ergebnisse / Fortschritt ===================== */
+const results=store.get('results',{});
+function setResult(k,ok){results[k]=ok;store.set('results',results);updateProg()}
+function updateProg(){const n=['A1','A2','A3','A4','A5'].filter(k=>results[k]).length;
+  $('progText').textContent=`${n} von 5 Aufgaben vollständig richtig bzw. bearbeitet`;$('progBar').style.width=(n*20)+'%'}
+
+/* ===================== Aufgabe 1 ===================== */
+const a1=[
+ {id:'c',txt:'Das Amin greift mit seinem freien Elektronenpaar das Nitrosyl-Kation an; unter Abspaltung von Wasser entsteht das Diazonium-Ion',c:2,h:'Das Amin kann erst angreifen, wenn das Elektrophil (NO⁺) gebildet ist.'},
+ {id:'h',txt:'Abspaltung eines Protons – das aromatische System wird wiederhergestellt',c:4,h:'Die Rearomatisierung ist der letzte Schritt der elektrophilen aromatischen Substitution.'},
+ {id:'b',txt:'Bildung des Nitrosyl-Kations aus salpetriger Säure und einem Oxonium-Ion',c:1,h:'Ohne Elektrophil kann keine Reaktion starten – womit beginnt also alles?'},
+ {id:'a',txt:'Ein π-Elektronenpaar des Phenolat-Ions greift das Diazonium-Ion an – σ-Komplex',c:3,h:'Die Kupplung beginnt erst, wenn das Diazonium-Ion fertig gebildet ist.'}
+];
+$('a1list').innerHTML=a1.map(it=>`<div class="ordrow" id="r_${it.id}"><select id="a1_${it.id}"><option value="">–</option>${[1,2,3,4].map(n=>`<option>${n}</option>`).join('')}</select><div><div>${it.txt}</div><div class="h" id="h_${it.id}"></div></div></div>`).join('');
+const a1tips=['Teile die Synthese zuerst in die beiden großen Abschnitte: Diazotierung (Schritte 1–2) und Azokupplung (Schritte 3–4).',
+ 'Die Diazotierung startet mit der Bildung des Elektrophils. Danach greift das Amin an, und es entsteht das Diazonium-Ion.'];
+let a1t=0;
+$('a1tip').onclick=()=>{$('a1fb').className='fb hint';$('a1fb').innerHTML='<b>Tipp '+(a1t+1)+':</b> '+a1tips[a1t];a1t=Math.min(a1t+1,a1tips.length-1)};
+$('a1check').onclick=()=>{let ok=0,miss=0;a1.forEach(it=>{const v=$('a1_'+it.id).value,row=$('r_'+it.id);row.classList.remove('okrow','badrow');$('h_'+it.id).textContent='';
+  if(!v){miss++;return} if(+v===it.c){ok++;row.classList.add('okrow')}else{row.classList.add('badrow');$('h_'+it.id).textContent='Hinweis: '+it.h}});
+  const used=a1.map(it=>$('a1_'+it.id).value).filter(Boolean),dup=used.length!==new Set(used).size;
+  const fb=$('a1fb');
+  if(ok===a1.length){fb.className='fb ok';fb.textContent='Alles richtig! Du hast den Ablauf der Synthese vollständig erfasst.'}
+  else{fb.className='fb bad';fb.innerHTML=`${ok} von ${a1.length} richtig.`+(miss?` ${miss} Schritt(e) noch nicht nummeriert.`:'')+(dup?' Achtung: Du hast eine Nummer mehrfach vergeben.':'')+' Lies die Hinweise bei den rot markierten Schritten.'}
+  setResult('A1',ok===a1.length)};
+
+/* ===================== Aufgabe 2 ===================== */
+const a2=[
+ 'Bei der Diazotierung reagiert ein ',{id:'g1',o:['tertiäres Amin','primäres aromatisches Amin','Alkohol'],c:1,fb:{0:'Ein tertiäres Amin trägt kein H-Atom am N – die nötigen Protonenabspaltungen auf dem Weg zum Diazonium-Ion wären unmöglich.',2:'Ein N-Atom der Azogruppe stammt aus der Aminogruppe – ohne –NH₂ keine Diazotierung.'}},
+ ' in ',{id:'g2',o:['alkalischer','neutraler','salzsaurer'],c:2,fb:{0:'Das Elektrophil NO⁺ entsteht erst durch Protonierung der salpetrigen Säure – dafür braucht man viele H₃O⁺-Ionen.',1:'Ohne Säure entsteht weder HNO₂ aus Nitrit noch das Nitrosyl-Kation.'}},
+ ' Lösung mit Natriumnitrit. Das eigentliche Elektrophil ist das ',{id:'g3',o:['Nitrit-Ion','Nitrosyl-Kation','Chlorid-Ion'],c:1,fb:{0:'Das Nitrit-Ion ist negativ geladen – ein Elektrophil muss Elektronenpaare aufnehmen können.',2:'Das Chlorid-Ion ist nur Gegenion und selbst elektronenreich.'}},
+ '. Das Amin-Molekül wirkt dabei als ',{id:'g4',o:['Elektrophil','Katalysator','Nukleophil'],c:2,fb:{0:'Das Amin besitzt ein freies Elektronenpaar und gibt es ab – es ist Donator.',1:'Das Amin wird verbraucht und in das Produkt eingebaut – kein Katalysator.'}},
+ '. Die Reaktion muss bei ',{id:'g5',o:['0–5 °C','50–60 °C','Siedetemperatur'],c:0,fb:{1:'Bei diesen Temperaturen zersetzt sich das Diazonium-Ion rasch.',2:'Das Diazonium-Ion würde sich sofort zersetzen.'}},
+ ' durchgeführt werden, weil sich das Diazonium-Ion sonst unter Abspaltung von ',{id:'g6',o:['Sauerstoff','Stickstoff','Wasserstoff'],c:1,fb:{0:'Im Diazonium-Ion ist kein Sauerstoff gebunden. Welches stabile Molekül kann aus –N≡N entweichen?',2:'Denk an die Gruppe –N≡N⁺: Welches sehr stabile Gas entsteht?'}},
+ ' zersetzt. Die Azokupplung ist eine ',{id:'g7',o:['nukleophile Substitution','elektrophile aromatische Substitution','Addition'],c:1,fb:{0:'Angegriffen wird der elektronenreiche Aromat – das angreifende Teilchen ist ein Elektrophil.',2:'Im Produkt ist der Ring wieder aromatisch, ein H-Atom wurde ersetzt – das ist keine Addition.'}},
+ '. Das Diazonium-Ion ist nur ein ',{id:'g8',o:['sehr starkes','schwaches'],c:1,fb:{0:'Wäre es ein starkes Elektrophil, würde es auch mit Benzol reagieren – das tut es nicht.'}},
+ ' Elektrophil, da seine positive Ladung durch ',{id:'g9',o:['Wasserstoffbrücken','Mesomerie','Van-der-Waals-Kräfte'],c:1,fb:{0:'Zwischenmolekulare Kräfte verändern die Ladungsverteilung im Ion nicht.',2:'Zwischenmolekulare Kräfte verändern die Ladungsverteilung im Ion nicht.'}},
+ ' delokalisiert ist. Es reagiert daher nur mit ',{id:'g10',o:['desaktivierten','aktivierten','beliebigen'],c:1,fb:{0:'Ein schwaches Elektrophil braucht einen besonders elektronenreichen Partner.',2:'Benzol reagiert z. B. nicht – es braucht elektronenreiche Ringe.'}},
+ ' Aromaten wie Phenolat-Ionen oder Aminen. Als Zwischenstufe entsteht ein ',{id:'g11',o:['Radikal','σ-Komplex','Carbanion'],c:1,fb:{0:'Es werden Elektronenpaare verschoben, keine einzelnen Elektronen – kein radikalischer Mechanismus.',2:'Das Ring-System trägt im Zwischenprodukt positive Ladung (bzw. ist durch das O⁻ insgesamt neutral) – kein Carbanion.'}},
+ '.'];
+$('a2text').innerHTML=a2.map(p=>typeof p==='string'?p:`<select id="a2_${p.id}"><option value="">…</option>${p.o.map((o,i)=>`<option value="${i}">${o}</option>`).join('')}</select>`).join('');
+$('a2check').onclick=()=>{const gaps=a2.filter(p=>typeof p!=='string');let ok=0;const msgs=[];
+  gaps.forEach((g,n)=>{const s=$('a2_'+g.id);s.classList.remove('ok','bad');if(s.value==='')return;
+    if(+s.value===g.c){ok++;s.classList.add('ok')}else{s.classList.add('bad');msgs.push(`<li><b>Lücke ${n+1} („${g.o[+s.value]}“):</b> ${g.fb[+s.value]||'Überprüfe diese Lücke noch einmal.'}</li>`)}});
+  const fb=$('a2fb');if(ok===gaps.length){fb.className='fb ok';fb.textContent='Perfekt – alle Lücken richtig!'}
+  else{fb.className='fb bad';fb.innerHTML=`${ok} von ${gaps.length} richtig.`+(msgs.length?`<ul>${msgs.join('')}</ul>`:' Fülle noch alle Lücken aus.')}
+  setResult('A2',ok===gaps.length)};
+
+/* ===================== Aufgabe 3 ===================== */
+const a3=[
+ {q:'a) Warum kuppelt man mit Phenol in schwach alkalischer Lösung?',o:[
+   ['Weil das Diazonium-Ion im Alkalischen besonders stabil ist.',false,'Im Gegenteil: Im (stark) Alkalischen wird das Diazonium-Ion zu Diazotat umgesetzt.'],
+   ['Weil das Phenolat-Ion durch das negativ geladene O-Atom einen wesentlich elektronenreicheren Ring besitzt als Phenol.',true,'Richtig: Das O⁻ ist ein starker Elektronendonator (+M) – der Ring wird stark aktiviert.'],
+   ['Weil OH⁻-Ionen das eigentliche Elektrophil bilden.',false,'OH⁻ ist ein Nukleophil/Base, kein Elektrophil.'],
+   ['Nur weil Phenol im Alkalischen besser löslich ist.',false,'Die Löslichkeit steigt zwar, entscheidend ist aber die höhere Nukleophilie des Phenolat-Ions.']]},
+ {q:'b) Was passiert, wenn die Kupplungslösung zu stark alkalisch ist (pH > 11)?',o:[
+   ['Die Kupplung läuft schneller ab, weil mehr Phenolat vorliegt.',false,'Phenolat liegt ohnehin schon fast vollständig vor – das Problem liegt beim anderen Reaktionspartner.'],
+   ['Das Phenolat-Ion wird protoniert.',false,'Bei hohem pH-Wert wird nicht protoniert, sondern deprotoniert.'],
+   ['Diazonium-Ionen reagieren mit OH⁻ zu Diazotat und stehen nicht mehr als Elektrophil zur Verfügung.',true,'Richtig – deshalb muss der pH-Wert sorgfältig eingestellt werden.']]},
+ {q:'c) Warum kuppelt man mit Aminen (z. B. N,N-Dimethylanilin) in schwach saurer, aber nicht in stark saurer Lösung?',o:[
+   ['In stark saurer Lösung wird das freie Elektronenpaar am N-Atom protoniert; das Ammonium-Ion aktiviert den Ring nicht mehr.',true,'Richtig: Ohne freies Elektronenpaar kein +M-Effekt – der Ring ist nicht mehr elektronenreich genug.'],
+   ['In stark saurer Lösung zersetzt sich das Diazonium-Ion.',false,'Diazonium-Ionen sind im Sauren gerade stabil (sie werden ja in salzsaurer Lösung hergestellt).'],
+   ['Im Sauren entsteht kein σ-Komplex.',false,'Der σ-Komplex ist unabhängig vom Milieu die Zwischenstufe – das Problem ist die Aktivierung des Rings.']]},
+ {q:'d) Eine Diazoniumsalz-Lösung erwärmt sich versehentlich auf 30 °C. Was beobachtest du?',o:[
+   ['Die Lösung wird intensiv orange.',false,'Für einen Farbstoff fehlt der Kupplungspartner.'],
+   ['Gasentwicklung (N₂); es bildet sich Phenol.',true,'Richtig: C₆H₅N₂⁺ + H₂O → C₆H₅OH + N₂ + H⁺.'],
+   ['Keine Veränderung.',false,'Diazonium-Ionen sind thermisch instabil – über 5 °C zersetzen sie sich merklich.']]}
+];
+$('a3list').innerHTML=a3.map((it,i)=>`<div class="mc"><div class="q">${it.q}</div>${it.o.map((o,j)=>`<label id="l3_${i}_${j}"><input type="radio" name="a3_${i}" id="a3_${i}_${j}" value="${j}"> ${o[0]}<span class="why" id="w3_${i}_${j}"></span></label>`).join('')}</div>`).join('');
+$('a3check').onclick=()=>{let ok=0;a3.forEach((it,i)=>{it.o.forEach((o,j)=>{$('l3_'+i+'_'+j).classList.remove('ok','bad');$('w3_'+i+'_'+j).textContent=''});
+  const sel=document.querySelector(`input[name="a3_${i}"]:checked`);if(!sel)return;const j=+sel.value,o=it.o[j];
+  $('l3_'+i+'_'+j).classList.add(o[1]?'ok':'bad');$('w3_'+i+'_'+j).textContent=o[2];if(o[1])ok++});
+  const fb=$('a3fb');fb.className='fb '+(ok===a3.length?'ok':'bad');fb.textContent=ok===a3.length?'Alle Begründungen richtig!':`${ok} von ${a3.length} richtig. Lies die Rückmeldungen unter deinen Antworten.`;
+  setResult('A3',ok===a3.length)};
+
+/* ===================== Aufgabe 4 ===================== */
+(function(){const cx1=150,cx2=343;$('moSvg').innerHTML=
+  M(52,120,'⁻O₃S')+B([84,120],V(cx1,120,3),1,0,0)+ring(cx1,120)
+  +A(230,120,'N')+B(V(cx1,120,0),[230,120],1,0,12)+LP(230,120,90)+A(275,120,'N')+B([230,120],[275,120],2)+LP(275,120,-90)
+  +ring(cx2,120)+B([275,120],V(cx2,120,3),1,12,0)
+  +A(420,120,'N')+B(V(cx2,120,0),[420,120],1,0,12)+LP(420,120,0)
+  +M(455,82,'CH₃')+M(455,158,'CH₃')+B([420,120],[445,90],1,12,8)+B([420,120],[445,150],1,12,8)
+  +T(260,182,'Methylorange (Anion)')})();
+const a4=[
+ {k:'a4a',o:[['N,N-Dimethylanilin',false,'N,N-Dimethylanilin hat eine tertiäre Aminogruppe (kein H am N) – sie kann nicht diazotiert werden.'],
+            ['Sulfanilsäure (4-Aminobenzolsulfonsäure)',true,'Richtig: Sie trägt eine primäre Aminogruppe; aus ihr entsteht das Diazonium-Ion mit der Sulfonatgruppe.'],
+            ['Benzolsulfonsäure',false,'Ohne –NH₂-Gruppe ist keine Diazotierung möglich.'],
+            ['Anilin',false,'Dann würde die –SO₃⁻-Gruppe im Produkt fehlen.']]},
+ {k:'a4b',o:[['Phenol',false,'Im Methylorange findest du keine OH-Gruppe, sondern eine –N(CH₃)₂-Gruppe.'],
+            ['Sulfanilsäure',false,'Die Sulfanilsäure liefert bereits das Diazonium-Ion.'],
+            ['N,N-Dimethylanilin',true,'Richtig: Die Dimethylaminogruppe aktiviert den Ring (+M) – das Diazonium-Ion greift in 4-Stellung an.']]},
+ {k:'a4c',o:[['stark sauer (pH ≈ 0)',false,'Dann wäre die Dimethylaminogruppe protoniert und der Ring nicht mehr aktiviert (vgl. Aufgabe 3c).'],
+            ['schwach sauer (pH ≈ 4–6)',true,'Richtig: Das Diazonium-Ion ist stabil und genug freie Amin-Moleküle liegen unprotoniert vor.'],
+            ['stark alkalisch (pH ≈ 13)',false,'Das Diazonium-Ion würde zu Diazotat umgesetzt (vgl. Aufgabe 3b).']]}
+];
+a4.forEach(q=>{$(q.k).innerHTML=q.o.map((o,j)=>`<label id="l_${q.k}_${j}"><input type="radio" name="${q.k}" id="${q.k}_${j}" value="${j}"> ${o[0]}<span class="why" id="w_${q.k}_${j}"></span></label>`).join('')});
+const a4tips=['Schneide das Molekül gedanklich an der Azogruppe –N=N– durch. Jede Hälfte stammt aus einem Edukt.',
+ 'Die Hälfte, die eine primäre Aminogruppe (–NH₂) trug, wurde diazotiert. Die andere Hälfte trug an der Kupplungsstelle ursprünglich ein H-Atom und ist durch eine Donatorgruppe aktiviert.'];
+let a4t=0;$('a4tip').onclick=()=>{$('a4fb').className='fb hint';$('a4fb').innerHTML='<b>Tipp '+(a4t+1)+':</b> '+a4tips[a4t];a4t=Math.min(a4t+1,a4tips.length-1)};
+$('a4check').onclick=()=>{let ok=0;a4.forEach(q=>{q.o.forEach((o,j)=>{$(`l_${q.k}_${j}`).classList.remove('ok','bad');$(`w_${q.k}_${j}`).textContent=''});
+  const s=document.querySelector(`input[name="${q.k}"]:checked`);if(!s)return;const j=+s.value;$(`l_${q.k}_${j}`).classList.add(q.o[j][1]?'ok':'bad');$(`w_${q.k}_${j}`).textContent=q.o[j][2];if(q.o[j][1])ok++});
+  const fb=$('a4fb');fb.className='fb '+(ok===3?'ok':'bad');fb.textContent=ok===3?'Sehr gut – Transfer gelungen! Bonus: Überlege, warum sich die Farbe von Methylorange bei Protonierung ändert.':`${ok} von 3 richtig. Nutze ggf. die Tipps.`;
+  setResult('A4',ok===3)};
+
+/* ===================== Aufgabe 5 ===================== */
+$('a5show').onclick=()=>{const la=$('a5a').value.trim().length,lb=$('a5b').value.trim().length;
+  if(la<40||lb<30){$('a5msg').textContent='Formuliere zuerst zu beiden Teilaufgaben eine eigene Antwort (mindestens 2–3 Sätze).';return}
+  $('a5msg').textContent='';$('a5erw').classList.remove('hidden');store.set('a5open',true)};
+function checkA5(){const all=['c1','c2','c3','c4','c5','c6'].every(id=>$(id).checked);setResult('A5',all)}
+
+/* ===================== Autospeichern aller Felder ===================== */
+function saveField(el){if(!el.id)return;store.set('f_'+el.id,el.type==='checkbox'||el.type==='radio'?el.checked:el.value)}
+document.querySelectorAll('input,select,textarea').forEach(el=>{if(!el.id||el.id==='selfNote')return;
+  const v=store.get('f_'+el.id,null);if(v!==null){if(el.type==='checkbox'||el.type==='radio')el.checked=v;else el.value=v}
+  el.addEventListener(el.tagName==='SELECT'||el.type==='checkbox'||el.type==='radio'?'change':'input',()=>{
+    if(el.type==='radio')document.querySelectorAll(`input[name="${el.name}"]`).forEach(saveField);else saveField(el);
+    if(/^c\d$/.test(el.id))checkA5()})});
+if(store.get('a5open',false))$('a5erw').classList.remove('hidden');
+$('reset').onclick=()=>{if(confirm('Wirklich alle Eingaben und Ergebnisse löschen?')){Object.keys(localStorage).filter(k=>k.startsWith(KEY)).forEach(k=>localStorage.removeItem(k));location.reload()}};
+
+renderStep();updateProg();
+</script>
+</body>
+</html>
