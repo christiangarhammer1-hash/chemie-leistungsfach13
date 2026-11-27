@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Rechnen mit Säure-Base-Titrationen</title>
+<style>
+/* ===== Einheitlicher Stil für alle Arbeitsblätter =====
+   Kopfleiste, Schrift und Farbcodes wie im Strukturformel-Zeichner.
+   Farbcode:  INFO = blau (Balken links) | INTERAKTIV = grün (gestrichelt) | AUFGABE/FRAGE = orange (dicker Rahmen)
+   Zusätzlich unterscheiden sich Rahmenform und Beschriftung, damit es auch im Schwarzweißdruck funktioniert. */
+:root{
+  --paper:#e8edf1; --ink:#13243b; --mut:#56677c; --rule:#c5d1dc;
+  --info:#1f5fbf; --info-bg:#e6effb;
+  --live:#1b7f4b; --live-bg:#e5f4ec;
+  --task:#e4572e; --task-bg:#fdf1ec;
+  --hint:#9a5b00; --hint-bg:#fdf6e4;
+  /* Piktogramme (eigene Vektorgrafiken, direkt eingebettet) */
+  --ic-info:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M5 11c6-3 13-3 19 1v27c-6-4-13-4-19-1z' fill='%231f5fbf'/%3E%3Cpath d='M43 11c-6-3-13-3-19 1v27c6-4 13-4 19-1z' fill='%236f9be0'/%3E%3Cg stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M10 18c3-1 6-1 9 0M10 24c3-1 6-1 9 0M10 30c3-1 6-1 9 0M29 18c3-1 6-1 9 0M29 24c3-1 6-1 9 0M29 30c3-1 6-1 9 0'/%3E%3C/g%3E%3C/svg%3E");
+  --ic-live:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M14 8v29l8-7 6 12 6-3-6-12h11z' fill='%231b7f4b' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3Cg stroke='%231b7f4b' stroke-width='3' stroke-linecap='round' fill='none'%3E%3Cpath d='M9 6L6 3M16 4V0M7 14H3'/%3E%3C/g%3E%3C/svg%3E");
+  --ic-task:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cg transform='rotate(45 24 24)'%3E%3Crect x='18' y='4' width='12' height='7' rx='3' fill='%23f28ea0'/%3E%3Crect x='18' y='11' width='12' height='4' fill='%23b8c2cc'/%3E%3Crect x='18' y='15' width='12' height='18' fill='%23e4572e'/%3E%3Cpath d='M18 33h12l-6 11z' fill='%23f6c177'/%3E%3Cpath d='M22 40h4l-2 4z' fill='%2313243b'/%3E%3C/g%3E%3C/svg%3E");
+  --ic-q:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect x='5' y='5' width='38' height='29' rx='9' fill='%23e4572e'/%3E%3Cpath d='M13 34v9l11-9z' fill='%23e4572e'/%3E%3Cpath d='M18 18c0-4 3-6 6-6s6 2 6 5c0 4-6 4-6 8' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='28' r='2.6' fill='white'/%3E%3C/svg%3E");
+  --ic-hint:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='20' r='13' fill='%23f2c14e'/%3E%3Cpath d='M18 30h12l-2 7h-8z' fill='%23f2c14e'/%3E%3Crect x='18' y='36' width='12' height='4' rx='2' fill='%239a5b00'/%3E%3Crect x='20' y='41' width='8' height='3' rx='1.5' fill='%239a5b00'/%3E%3Cpath d='M18 18c1-4 4-6 7-6' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--info);outline-offset:2px}
+
+/* ---- Kopfleiste ---- */
+header.top{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.6rem;padding:.7rem 1.1rem;background:var(--ink);color:#fff}
+.logo{display:block;height:48px;width:auto;background:#fff;border-radius:6px;padding:4px 8px}
+.brand h1{margin:0;font-size:1.25rem;letter-spacing:.01em}
+.brand p{margin:0;font-size:.84rem;color:#b9c8da}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.3rem}
+.chip{background:#eef3f9;color:var(--ink);border-radius:8px;padding:.1rem .6rem;font-size:.8rem;font-weight:600}
+.ident{display:flex;flex-wrap:wrap;gap:.5rem;margin-left:auto;max-width:34rem}
+.fld{display:flex;flex-direction:column;background:#eef3f9;color:var(--ink);border-radius:10px;padding:.2rem .6rem .3rem;min-width:7.5rem}
+.fld.w{flex:1 1 11rem}
+.fld span{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+.fld input{background:transparent;border:0;border-bottom:1px solid #b3c0cd;color:var(--ink);width:100%;padding:.05rem .1rem;outline-offset:3px}
+
+main{max-width:880px;margin:0 auto;padding:1rem 1rem 4rem;counter-reset:aufg}
+h2{font-size:1.1rem;margin:1.6rem 0 .2rem;color:var(--ink)}
+p{margin:.3rem 0}
+
+/* ---- Legende ---- */
+.legend{display:flex;flex-wrap:wrap;gap:.5rem 1rem;font-size:.82rem;background:#fff;border:1px solid var(--rule);border-radius:8px;padding:.5rem .8rem;align-items:center}
+.legend b{margin-right:.2rem}
+.lg{display:inline-block;width:30px;height:30px;vertical-align:-.55rem;margin-right:.35rem;border-radius:50%;border:2.5px solid;background:#fff center/62% no-repeat}
+.lg.i{border-color:var(--info);background-image:var(--ic-info)}
+.lg.l{border-color:var(--live);border-style:dashed;background-image:var(--ic-live)}
+.lg.t{border-color:var(--task);background-image:var(--ic-task)}
+
+/* ---- Bausteine ---- */
+.box{position:relative;margin:1.3rem 0 1rem;padding:.65rem .9rem .8rem;border-radius:8px}
+.tag{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.1rem .6rem;border-radius:999px;margin:0 0 .35rem 2.2rem;color:#fff}
+/* Piktogramm-Plakette oben links an jedem Baustein */
+.box::before{content:"";position:absolute;top:-18px;left:-14px;width:50px;height:50px;border-radius:50%;background:#fff center/62% no-repeat;border:3px solid;-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:0 2px 5px rgba(19,36,59,.25)}
+.info::before{border-color:var(--info);background-image:var(--ic-info)}
+.live::before{border-color:var(--live);border-style:dashed;background-image:var(--ic-live)}
+.task::before{border-color:var(--task);background-image:var(--ic-task)}
+.task.frage::before{background-image:var(--ic-q)}
+
+/* Infomaterial */
+.info{background:var(--info-bg);border:1.5px solid var(--info);border-left:8px solid var(--info)}
+.info .tag{background:var(--info)}
+.info .tag::before{content:"ℹ INFO"}
+
+/* Interaktives Element */
+.live{background:var(--live-bg);border:2px dashed var(--live)}
+.live .tag{background:var(--live)}
+.live .tag::before{content:"⚙ INTERAKTIV"}
+
+/* Arbeitsauftrag / Frage */
+.task{background:#fff;border:3px solid var(--task);box-shadow:6px 6px 0 var(--task-bg);counter-increment:aufg}
+.task .tag{background:var(--task);font-size:.8rem}
+.task .tag::before{content:"✎ Aufgabe " counter(aufg)}
+.task.frage .tag::before{content:"? Frage " counter(aufg)}
+.task .afb{float:right;font-size:.74rem;color:var(--mut);border:1px solid var(--rule);border-radius:4px;padding:0 .4rem;margin-top:.1rem}
+.task .op{font-weight:700;color:var(--task)}
+.task textarea,.task select,.task input[type=text]{border:1px solid var(--rule);border-radius:5px;padding:.3rem .5rem;background:#fff}
+.task textarea{width:100%;min-height:5.5rem;resize:vertical}
+.opts label{display:block;padding:.15rem 0}
+.btn{border:1.5px solid var(--task);background:#fff;color:var(--task);border-radius:6px;padding:.25rem .8rem;font-weight:600;margin-top:.4rem}
+.btn:hover{background:var(--task-bg)}
+.fb{margin-top:.5rem;font-size:.92rem}
+.fb.ok{color:var(--live);font-weight:600}
+.hint{margin-top:.4rem;background:var(--hint-bg);border-left:5px solid var(--hint);border-radius:4px;padding:.35rem .6rem;font-size:.9rem}
+.hint{display:flow-root}
+.hint::before{content:"Hilfe: ";font-weight:700;color:var(--hint);display:inline-block;padding-left:1.9rem;background:var(--ic-hint) left center/1.6rem no-repeat;min-height:1.6rem;line-height:1.6rem;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ---- Ergänzungen für dieses Blatt ---- */
+.fsbtn{background:transparent;border:1.5px solid #8fa3ba;color:#fff;border-radius:8px;padding:.35rem .7rem;font-size:.85rem;font-weight:600;white-space:nowrap}
+.fsbtn:hover{background:rgba(255,255,255,.12)}
+.figure{margin:.6rem 0 .2rem}
+.figure svg{display:block;width:100%;height:auto;background:#fff;border:1px solid var(--rule);border-radius:6px}
+.figure figcaption{font-size:.8rem;color:var(--mut);margin-top:.2rem}
+ol.steps{margin:.3rem 0 .3rem 1.2rem;padding:0}
+ol.steps li{margin:.25rem 0}
+ul.mat{columns:2;column-gap:2rem;margin:.3rem 0 .3rem 1.1rem;padding:0}
+@media (max-width:600px){ul.mat{columns:1}}
+.warn{background:#fff;border:2px solid #c0392b;border-radius:6px;padding:.35rem .6rem;margin:.5rem 0;font-weight:600;color:#8e1f14}
+a.next{display:block;text-align:right;margin:.4rem 0 .8rem;font-weight:700;color:var(--info);text-decoration:none}
+a.next:hover{text-decoration:underline}
+.lt select{margin:.1rem .1rem}
+select.bad{border-color:#c0392b!important;background:#fdecea!important}
+select.good{border-color:var(--live)!important;background:var(--live-bg)!important}
+
+/* virtuelles Experiment */
+.simgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:1rem;align-items:center}
+@media (max-width:640px){.simgrid{grid-template-columns:1fr}}
+.simgrid svg{width:100%;height:auto;background:#fff;border:1px solid var(--rule);border-radius:6px}
+.ctrl{margin:.35rem 0}
+.ctrl label{font-weight:600;display:flex;justify-content:space-between;gap:.5rem}
+input[type=range]{width:100%}
+.lbtn{border:1.5px solid var(--live);background:#fff;color:var(--live);border-radius:6px;padding:.3rem .9rem;font-weight:700;margin:.3rem .3rem 0 0}
+.lbtn:hover{background:var(--live-bg)}
+.simout{margin-top:.4rem;font-size:.92rem;background:#fff;border:1px solid var(--rule);border-radius:6px;padding:.35rem .6rem;min-height:2.6rem}
+#teilchen{display:block;width:100%;height:auto;background:#fff;border:1px solid var(--rule);border-radius:6px;margin-top:.4rem}
+.tlegend{display:flex;flex-wrap:wrap;gap:.2rem 1rem;font-size:.82rem;margin-top:.3rem}
+.tlegend i{display:inline-block;border-radius:50%;vertical-align:middle;margin-right:.3rem}
+
+/* Protokoll-Papier */
+.ptools{position:sticky;top:0;z-index:4;display:flex;flex-wrap:wrap;align-items:center;gap:.3rem;background:#fff;border:1px solid var(--rule);border-radius:8px;padding:.4rem;margin:.4rem 0 .6rem;box-shadow:0 2px 6px rgba(19,36,59,.12)}
+.ptools button,.ptools label.pbtn{border:1.5px solid var(--rule);background:#fff;border-radius:8px;padding:.3rem .55rem;min-width:2.6rem;min-height:2.6rem;font-size:.88rem;display:inline-flex;align-items:center;justify-content:center;gap:.25rem;cursor:pointer}
+.ptools button.on{border-color:var(--live);background:var(--live-bg);font-weight:700}
+.ptools .sep{width:1px;align-self:stretch;background:var(--rule);margin:0 .15rem}
+.ptools .sw{width:2.6rem;border-radius:50%;padding:0}
+.ptools .sw span{display:block;width:1.3rem;height:1.3rem;border-radius:50%}
+.ptools .wd span{display:block;background:#333;border-radius:4px;width:1.4rem}
+#photoIn{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.pstatus{font-size:.8rem;color:var(--mut);margin:-.2rem 0 .5rem;min-height:1.1rem}
+.pstatus.err{color:#c0392b;font-weight:700}
+.pages{display:flex;flex-direction:column;align-items:center;gap:16px}
+.page{position:relative;width:100%;max-width:794px;background:#fff;box-shadow:0 2px 10px rgba(19,36,59,.3)}
+.page canvas{display:block;width:100%;height:auto;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.page .pnum{position:absolute;right:10px;bottom:6px;font-size:.75rem;color:#8a96a3;pointer-events:none}
+.pagebtns{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-top:.7rem}
+#printPages{display:none}
+/* Protokoll im Vollbild: Papier füllt den Bildschirm, Werkzeugleiste bleibt oben */
+body.pfull-on{overflow:hidden}
+#protokollBox.pfull{position:fixed;inset:0;z-index:1000;margin:0;border:0;border-radius:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 .6rem 2rem;background:#d9e1e8}
+#protokollBox.pfull::before,#protokollBox.pfull > .tag,#protokollBox.pfull > p{display:none}
+#protokollBox.pfull .ptools{margin:0 -.6rem .6rem;border-radius:0;border-width:0 0 1px}
+#protokollBox.pfull .page{max-width:1100px}
+#protokollBox.pfull .pages{padding:0 46px}
+.pnav{display:none}
+#protokollBox.pfull .pnav{display:flex;flex-direction:column;gap:10px;position:fixed;right:6px;top:50%;transform:translateY(-50%);z-index:1001}
+.pnav button{width:44px;height:56px;border-radius:10px;border:1.5px solid var(--live);background:rgba(255,255,255,.92);color:var(--live);font-size:1.3rem;font-weight:700;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+#pSave.dirty{border-color:#e4572e;background:#fdeee8;font-weight:700}
+#pFull.on{border-color:var(--live);background:var(--live-bg)}
+button.printbtn{position:fixed;right:1rem;bottom:1rem;z-index:5;border:1px solid var(--rule);background:rgba(255,255,255,.92);color:var(--mut);border-radius:20px;padding:.35rem .9rem;font-size:.82rem}
+button.printbtn:hover{color:var(--ink);border-color:var(--ink)}
+
+@media print{
+  @page{size:A4 portrait;margin:11mm}
+  body{background:#fff;font-size:10.5pt}
+  header.top{background:#fff;color:#000;padding:0 0 3mm;border-bottom:1px solid #000}
+  .brand p{color:#000}
+  .chip,.fld{background:#fff;color:#000;border:1px solid #000;border-radius:8px}
+  .fld span{color:#000}.fld input{color:#000;border-bottom:1px solid #000}
+  .logo{height:13mm;padding:0;border-radius:0}
+  main{padding:0}
+  .printbtn,.btn,.legend .noprint{display:none!important}
+  .box{break-inside:avoid}
+  .info{background:#fff;border:1px solid #000;border-left:6px solid #000}
+  .live{background:#fff;border:2px dashed #000}
+  .task{background:#fff;border:3px double #000;box-shadow:none}
+  .tag{background:#fff!important;color:#000;border:1px solid #000}
+  .task .op{color:#000}
+  .hint{background:#fff;border-left-color:#000}
+  .box::before,.lg,.hint::before{filter:grayscale(1);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .box::before{border-color:#000;box-shadow:none}
+  .fsbtn,a.next,.lbtn,.ptools,.pstatus,.pagebtns,.pages{display:none!important}
+  .warn{border-color:#000;color:#000}
+  h2{break-after:avoid;page-break-after:avoid}
+  #printPages{display:block}
+  #printPages img.printpage{display:block;width:100%;height:auto;break-before:page;page-break-before:always}
+  body.only-prot > *:not(#printPages){display:none!important}
+  body.only-prot #printPages img.printpage{width:210mm;height:296.5mm;break-before:auto;page-break-before:auto;break-after:page;page-break-after:always}
+  body.only-prot #printPages img.printpage:last-child{break-after:auto;page-break-after:auto}
+}
+
+/* ---- Ergänzungen Titrationsblatt ---- */
+.formel{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:.45rem .8rem;margin:.45rem 0;text-align:center;font-size:1.05rem;font-weight:600}
+.formel .fnote{display:block;font-size:.8rem;font-weight:400;color:var(--mut);margin-top:.15rem}
+table.dt{border-collapse:collapse;width:100%;margin:.4rem 0;background:#fff;font-size:.9rem}
+table.dt th,table.dt td{border:1px solid var(--rule);padding:.22rem .45rem;text-align:left;vertical-align:top}
+table.dt th{background:#eef3f9}
+table.dt.mw td{text-align:center;padding:.22rem .25rem}
+.task table.dt{font-size:.86rem}
+.muster{background:#fff;border:1px dashed var(--info);border-radius:6px;padding:.4rem .8rem;margin:.4rem 0}
+.muster p{margin:.28rem 0}
+.muster .st{display:inline-block;min-width:2rem;font-weight:700;color:var(--info)}
+.res{display:flex;flex-wrap:wrap;gap:.4rem 1.2rem;margin:.6rem 0 .2rem;padding:.45rem .6rem;background:var(--task-bg);border-radius:6px}
+.res label{white-space:nowrap;font-weight:600}
+.res input{width:6.2rem;text-align:right;font-weight:600}
+.task input.bad{border-color:#c0392b!important;background:#fdecea!important}
+.task input.good{border-color:var(--live)!important;background:var(--live-bg)!important}
+.opts .olbl{display:block;font-weight:600;margin-top:.3rem}
+.fb .hint + .hint{margin-top:.3rem}
+.fb .warnhint{background:#fdecea;border-left-color:#c0392b}
+.fb .warnhint::before{content:"Achtung: ";background:none;padding-left:0;color:#c0392b}
+.ctrl select{width:100%;border:1px solid var(--rule);border-radius:5px;padding:.3rem .4rem;background:#fff}
+.flaskrow{display:flex;align-items:center;gap:1rem;margin:.3rem 0}
+.simgrid svg.flask{width:80px;height:auto;background:transparent!important;border:0!important}
+.phread{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:.2rem .8rem;text-align:center}
+.phread span{display:block;font-size:.75rem;color:var(--mut);font-weight:700}
+.phread b{font-size:1.7rem}
+/* Aufgaben-Einblendung im Rechenpapier */
+.apanel{display:none;flex:1 1 100%;max-height:38vh;overflow-y:auto;background:#fffaf7;border:2px solid var(--task);border-radius:8px;padding:.3rem .7rem;font-size:.9rem;-webkit-overflow-scrolling:touch}
+.apanel.on{display:block}
+.apanel h4{margin:.5rem 0 .1rem;color:var(--task);font-size:.92rem}
+.apanel p{margin:.15rem 0}
+.apanel table.dt{font-size:.8rem}
+#pTasks.on{border-color:var(--task);background:var(--task-bg);font-weight:700}
+@media print{ .res{background:#fff;border:1px solid #000} .muster{border-color:#000} .lbtn,#simAuto,#simClear{display:none!important} }
+
+.simgrid{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
+@media (max-width:700px){.simgrid{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" alt="Logo Dürer-Gymnasium Nürnberg" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfQAAADICAIAAACRe4S/AACVCUlEQVR42uz9V5CdR5ImCnpE/OJolVoLpFbQkiBAASoQBIsssqpaTXfP7el7bdZWPOzjPu3rNdtds2u2tnOnbW6L6qouQa0VCJIAoVVCpNZaHy1+Eb4PkZlMpDh5UgGZ4PFOY6My//OfCI+ILzw83D8niAhpSUta0pKWJ0toWgVpSUta0pIG97SkJS3LCyKs4xicPjmnZYuEpN0yaUnLZkI8AElrIS1pyz0taXliJBIz/OFEisgubCpEmAzETZ42sNKSBve0pGW7meoIABCM6u9d7P3XL7uGJ6OQsrPlWtvEf/+k/eLdsbQa07LpIqVVkJa0bATZCYFwTP/o0sAPd8cSOpocf/1seX6GVfxpJSEEbrRPvXehf3gqMhGIU0qfasgmaYdOWtKWe1rSsh2EEEjo/LvmsYv3xjQdGYHm7pn/ONc9Mh1bFqnnDfq2gcBnVwZHpqIyo9PBxDs/9P54bxwR0g6atKTBPS1pefwS18xzt4a/ujEUS5gCzSmB5p7p33/TPTYdW4jmC6VtIPDehb7u0RClhCMwSqZDiT//0Pvj/XGSxve0pME9LWl5XCLwN6Gb394e+eLasD+sCWRHAARglNzpnv73b7on/PFF5jsBaB8MvHehr20wuPBtEiMzocQfz/dcbpkgkMb3tKTBPS1peRxCBLLfGvn82pA/rLGHXTCIwCi53TX95fVhTecLL1fbBgLv/tDXNhhcBPqIwBidDic++LF/YCJC0vHvaUmDe1rS8qjNdgQAGJ6KfXtn1B/WJLa8oS1J5Id7Y3e6pgkBzhEAdAOvtU21L0H2udeiKrPhqeinlwd1k6cvV9OSBve0pOWR2+0AOR5LU5nXqkjLBqkTAqaB+T5rSa4DAAgliCAxcrAmoyjbvpJVbnJUZVZX6pEoTVvuaUmDe1rS8qixHRFsFumN4yVPN+bIjC59wDCxOMf+l6fKsz0WRCAAhAAhUF3ofv1YUY7XsjQzHBFUib52tDAdE5mWTZFl4tx5Ol/uCXYpADC6mciBCLM4RYCQ5UFpHRn5CICIMBsqToA80px+RFg1aAU52CzSG08XI+L55lHOkcz11EQszrb/pxcrKvJdC6PdhZ72VWYC0P/4tmvCH6eEiI9wAFWhrxwqPH2okADhHIGs4nYnQNa0ByzuFM6+hS73lkVDhnNbGiL+NBpbOSizE+DRbdipKnMlNS47+ZdX41zX5pW4RWp8iFsGAR70+h/0zaRB8Mk0OQkYJma5Lccbc1SZPcqvNkyuGzyVJloVtpLLgqwMRo9Rhiaj//JlR0t/QJUpIpgci7Lsf/PirqoCN+dIl2ylAu7P3Rz53blukyOjxERUJXr6cOGZo0Xbp3e6wQ2TA4DEiCyxFYYVKV1xU0+LsJUTugkAhBBLkrm9BRNbemhL4Xjp/vi52yOyRNIuvycR3ImwvFwO+WBVFkfc+Hwa98e7R0KIaHKc9CeMJTeBCEApCYS1YFRP/m2IQCnkem2UACGQ4bI4rFKm22JTJa9TlRhZhI9bJyPTUX9IY3TFVSCCF3N9NrtFKsi0/dXzu/71q662Ab9EaVG2/W9frKgocHEEutwhiRBAgGMN2dNh7dMrA5rBbar06uGC00eKCCEIMOmPTwXjye05BLBbpKJse4o9MjmOTEXDMUM4iKKaGYkZTCKxuDEZSCx7lgtE9VBUAyAOi+R1qaaJFoVmui12Vc7xWRAhy61Kcy4pRIRNgniBRYGINjoTA/4IVgVwjg6rnJ9pW/VQG9dNfygRCOvzplIgqgEBw8Sp5SY/EBJLGFPBOACRGcnx2hCRMZLpstitUpbHYlFYhssy/72bqMZl3DKMEplRiaXB/Qk02wFAM/DU3vyaIg/i5lgK93pm/unT9oRuMkIoXQGRECglqXwdApici38ZHBWZ5nqtTqvsdSpFWfaibLvPqVbku+bfxBEJbLLdiAifXxv6/s6YzSJxzpdDAzARrCr79cmyo/XZAFCS4/i7lyr+j8864pr5ty/NemOSA4VFYa8fKwLEc7dHXjpY8MqRQkaJsPRb+vx/ON9jIpKVh1LTsanc+395sy6V7gDAvR7/777p8kc0SoAQEk0YoahOCSFk+R0IACiZHTKOKNxEwpx32+W8DDsiZnuseRnWmmJ3daF73iZFxA2OB3IklNzqnP6Pb7vJo1gXNGEYZTnO/3KmKsezImmE+H1bf+CdH3rHZ+KEACFEN7g/rIndiC07+REIIQK7EXCWIQ7BMLlFlXK9VrtFynBbirJspbmOxjLfvAWzKRNbWsbVlQbCJw/ZARDBMPGF/fl/8Vz50jvAdYsiU49D0XSTEsKTw3aqbWU/tRlgOpiYCMSNQbzaOum0yarMirPtR+uyqgrdGW5VoM+mG/KGiXHdpIwse/9EADgCIEYShvhqRCjKsv/dy5Um52W5zlXbI7omS/SVw4W1pZ7KAqdE6fwGrMhUN7lm4EovIQQ0LTU3lzgoIE4GYuOB+GzDEBklPpcKmHRk8OEWzyI+mBwHxsMApGc0bJqY7VHddrWmxH1qb15ehk0A0sZ5jxMajyU4o1sOR4SgpvNowkhFn+GYPjQZMzlSMruNeRzK6hMcF6tRrMeJQHxsBtsHg1cIuOxKQaa1LNe5ryqjstAt0U2Y2GnisJ8JsiMCObU/79fPlMuMbiIaCi+zyRHJJq3Dh9/CGGFAVVkcO3hCM5u7tfbBoCKRpnLfqQP5BRk2cX+wuUTqlAAly79R/G7hWUTge3G2PfUFSWZdK6y+xLOo8SK6hgIkAXdK19ZZiRGJEdNEQgAIQQTTxHUMisA/WWIAqMgSAYjEzUAkPDQVvd42eaQ263hjTmGmjRCywTkm+kjplidzUQqI6HUoHruyEH9XcmzKEkEdKQEkBBDWRteMiwcFGFUVAIC4ZrYPhLqHwz/cHasr9bywv6A816EqbCNqTIP7ky+IQCh5dk/u2yfKxKXf47r/Sva9CMvGhyAC/BSPA5QRBqCbXDfwx/vjt7um6ku8h2qzDlZnkp8iFzZHaUkqK83+dbmupa5bsqCxZNkDNCZt3uZ1Z5mG/bTVLPNFuGBUKAFFpogQjGhfXBu62jbx/N68U/sKLArboItmTW3eiDHBOdgskkWRUmnw/NBjimpcYWIvmtuUAJUJIiR0fqt9qrl75kRjzlsnS22qtG41psH9CbfZOYLEyMnduW8cLxaO0ccY2cA5rmToUEIQkRJCZ68xceX1IJYNoQTiGr/cMtE2GByaiBxryM72WCFdC2njw/QwdIl4mJUGZX4TIoRQCv6w9vGlwWjcfP2pElWmj2AsyLrDMsnsCQwR7aokMcJXvudYrxoFtM9mOcyqcbmpvUCNAIRwjt81jwKFt0+UWddrv6fB/QlHdpmRE7tzXz9WbLfIj9dmRwSLIqkyW7QMiQgXM0wCJKGb0bjBKKGUMEpI0lhv8RdFpqGo/vGVwQf9gTNHCutKPBJLp+atf84AAVn66ZKVI8QTpmaaEiWMEYlSvvKQIAIFohn8/J3RuGa+uL8gN8O61fhumAgAfK3pOQiiI5SSmGZs+vEAEWSJMMoQkADoBhom1wxTYkRM79WSGAARvrs9ShHOHC2e9+ynwT0ts8tSkejTTTlnjxU5bfJjs9kJGAYvy3PWFLrzMmzZXgtZAu6awSeDCUZhwp8YGI9MhRJxzZgKJHQDGVslzEbsWCbHtsHAzFeJw7VZz+/N9zqV9ARY6+5rmlie56wucmW4LJJEhOtfN/nQRHQmrE2HEv6INh1MqDJLsuku5MuMJsy/fbHColAE2IpQeERgjPhcCgFiUyVZoinmPSEAo9RhYaLnpokNZV7YjBUi1Jjjte6p8HmcyqzRTcEf1CJxY3QmPh1KzIQS4ZghbJfkhgsifnNrJBQz/svpaklac9vS4P5kCiIoMjvRmH3mSJHLpjxGTwUFYnIsynK8dqzIYZFXasf8bNZ0PjQZjcT19oFg12hofDo2GUxQQpLfrREARshkIPHZ1aFo3Dh7rNjjUNL+mbWZwBxLch1njhTbLAthATkCR+wfC08G43e7/TfbpyIJQ6IEV9lxyY32ybpi94nduVvnNy/Jdrx2rJBR6rYpqkxTt94liXgXmMOUUtgcMhZicJ7rs711olRilAAIR49wRyZ0c2gyOjIVu9sz86B/JhIzyWr3t4h4o2OqoWX86cactZ680+D+ZCK7KtPjjdmnDxe6twfGzSbgrRxRQ+Zms0Vhu/KdAFBf6h33x6eC8VsdU9faJv1hnbFV5jalYHJ+8f54js/6wv58mk6cXLtbhi62KAkjwIDsynftynftrcjMdFu+vDEUi68KTKAZ/OL98b2VGU7blrgEKYFcn2V3ecZ2G2eRPUAW3JgTSgDAqkoVBa6KAlfTLu/Njqkvrw+NTMeT5EMIIui4Zn5zc6Sq0JXjXZuPK+2dfBKRXaFPN+acOVLkdaqwzaxXssLPQhNebACMkjyftaHU+9aJsl8cLynOtsuUJD93IwIjRDf4NzeGf7w/LqL90nkbG51Rc/fYiKBI9JVDBb8+WWazSJj0+hERJEo6h0O3O6e3dLYL1zlu5AcflRrnvs5tV57ZnXv2WHF+hjX5pzhHVWbdo6Ef748bJl/TWk6D+5OG7BaFHW/MOX2kSPgldqLxSB6GFavKntmd+49nqg/VZq6aOy3+OO6Pf3Ch/8f7Y0Ya3zdlRMisQYoAqsxONOU8sztHkiiuBme6yX+4O8q3/iafbOSHPLqJTebUCIQcrsk6fbjQLrbJpG0wTD4wHonEzbWdbNJz9wmD930VvlcPF3kdCuKO9ziTuTAbSkhxtv3ssZJDNVmpxMJIjIwH4p9cGeoZDZE0um/qiIiw61P7CspznXw1VKIEBiej/pCWVt0iNQpOjoZSb5bHkvyqABFVibYNBsf9MVjLOSMN7k/U8XlvRcaZY8XipuiJcTjPlidFyPZY3jhecqg2K5VME0bJRCB2rXVSN9JVjTZ3OAgiep3K3soMeTV+AEpJPGFeuj8GIu47LQ8vWLtF3l3uU2SKPPkeSYIRfWgisupumgb3J3CecMDd5b5fP1ue57M+kaRv4jCb6ba8+XTpgSof56ssG0Ha19wz0zsaTtvumzzbEAAgx2uxW+TkkE2BxHWzuXtmbljSsmA+I8oSaSjzZjhVDqvkT1ECt7umIzEjdeM9De5Pgpgcdpf6/vK5shyvhSM8qYaqyOzIdKmvHCrKzbAaZjIrRhjvk/74j/fHogkjPUk213gHgOIsR6ZbneXZTyo8zTG7/HwmAOCyyRlzJG7JJZow+FoYgdLgvuP3f93kTWXev3lxV7bXuirT7BNh70BRtv1AVQbiKoFhBMDk/HLLxM2OKfJoK/s88bAEAA6bZFXZfEmhJEOmGWZC52nf2LJq9DiV4mxHKucaidI1AXYa3He2AaUZvKnM+z+drsp0W/DJtdkXLQlGyeGarDyfVTN4kmB2BKCEROLGzY6pYFQDksb3zTxCqTKzKCy5jwABKSFxjYfj+hxBTVoWYvtP0ZyrPjoZjKfI85wG9zVYi9vuB4BSktBNt03++5erPCI2hvxskAWgKNu+v0owQa6yMCRG+8Yio1MxAiSNLZsrWW6rKrPVoWn7FUfcJoIIskQz3WoqMzOmmWti0NmqDNUnaShNc9sZHJSQRFx325V/PFOT6VZ/Psi+0OQ50ZR7uWV8OqQlqY4mBm4mmLjSOlmW55SktDWzmSKJPMz0nrmxycxSW71sjYt8S8CdI5rGEzLghJAst0q3lSdbMCxKtrdOljaVe39uyD4veRnWpxpy37/YlzyziRDgiH1joUjC8EjKz1ZdW2J4bsGTaTVulg43GdwJgMGxrtj92rEiRp8EK4kQsKnStirvTghwBIvMfoY2+8LzLCGwt8L7/sW+VHQ2FdTGpmOz1XbSsnmmT4qPsfSOumE/h8+prunoudmWOwFEdNmUuhJvesweDcD9nMVtVwsybGMzMZbEeEcAgGjCGJmKVRe509NmEyWhG8kvAwkQk6NVYW67nJ6uK4m+qp8DAQBcNnlN1Y+3xLjmiJrBEYHjT7WydvAPbNOfn/NSEX132eTSPIdmcJI0ZoYQMEzeORwESOPLZsp0KKHpPCkvOVJC3HYZUrj6/nkaZ5G4MTQVTWVWehyyxBYWZ3zElvuCtUfW0Iy0pGU9NoQi0/Jc5/nbI2SV8yQYJk6HEghI0lNykxZ4NGFEVyP+RQRFphUFrjQUrHz6MSNxPYXZDl6nKks0dU2mgwfSsnMtHwCAXJ/VYV0lCV5cQYeiuq6njcfNMTkBYNwfD0Q0QkjyQt6M0cpCN6QtvZVQm2NCX4XukQNYFFqe55Qeu1smLWl5ZCIxKjGanFtcVCjWDT4dTsCj4u9+osEdAWAmqIViOk1ekgkw22MpzXVC2iG2nHIAYGQq1jcaISufKAkB0+QlOfZcnw3WEjOTBve07FzXAACARWFWhfGkBMc4VxgozT27KeclQojJeXP3lD+sJQkSFsS2h2oyFWkLcX3d12OPXY2UEJNj31g4ljCBrLhHEkIMEwuy7C5RCTkN7mn5GWA7AYAcryXbazHMVXlmiG7wUDQN7ptgthMCQ5PR1oEgSYrsHMFpkxtLvVt3WiIEJEYWZm6n/vP40R0gFNXv982YnNOV1WiY3OtQDlRmWhS2JjWma6imZcdb7haFCbcMpoAFadm4vanp5vk7oxP+OEtCF0OAEqgrcedn2gC2BE0RIK7xqWCCUYIAqkRT/BYCAISoImb8cVAj4Bzl3/W2yd7RCAJZafoSQnTdbKz11pS4RZmUNLin5edjSKZqFZoc45o5v7jSqluzoYmzLOTn74z+cHfc5CtGoBIChoEVBc43jpeqCtuiCHcEaBsM/PdP2ikFAmvIJEcAWSKZLisAEILP7M6THxUvxbwaTY4X7o59dm0woZt0RWQHg3OnTT7RmCszutbTTxrc0/LzsPIJaAafDmlpaF//MYlANGGcuzX68aV+3TCT8XEiSBLdV5WR67NyjlvE3kEAIjGjpd+/4CC3tinBETOcluONOfJWOqgXzjehxqlg4vKD8W9ujUwHE8mVY5h4pDarrtSzjnPnzxTcERZ6AcnC+ZJe9k+qga9I1CMKEKYHeWW4XBayOcexmXjbgP9629SDAb9p4kp8PsIGZZQcb8w+3pgDAFvKy0QISOL9a0+RErcCmR6LtNlEKYvUOP8vjhiK6tfapq61TnSPhHSTJ1GOiO+qL/W8cbxkfc3YXuCuGXyecRsRtLWQF89vkYq0vElBCFHmDl9k5X2QI4rICxG/S4CkHbVPhkiU2NX0UTUZJGkmD0Q1q8E4AEWIaebYTCwQ1bpHQi19gYlAPBIzbCqTaDJkRw51Ze7Xnypx2x4FTdv6r2oJIEKWW2Wbuf0gAdBNHoho4iaAm6hzPh1ITAbjD/oC4/5Y90gooXNFoisdfQgAoaAbvKbY8/cvVbjt61TjdpnrJsfr7ZP3e2YMRIJACGg6nwpq5pqq6iIwRjLciiIt9k9xQFViOV4rIiAHi4VlulQAoIzYVZlSsCpMlqjMqNMmz2+1ZM5sEcZeGuZ3+nEtXe8tCUQyRu73+gcnorNWMOJUKBGJG4INEBEZpXartBKluCiSxSjZU+l7+2Spx65wxG1C476CtQeEgEXZTE4zRJAY6RkN/X/eeSA8MLGEORWMi4ochskBgDFqkdlKU1GoMZEwa0s8f/9SZa7Pum41StthVhEC0bj52dWhlj7/Qlxe34GubWBZowIfqniChCMCoiQxj0NmlDhtskVhisQKMm1Om5zttub4LCbHLLdFnOWXGgtpqE+D+5MklJDpUGIykPjpN3TWoJEoESfZZZFdLATd4JTSZ5tyfnmi1KZKiI8jCgWXHXfk5vIwqul80+vrEkKicbM7Gpr/FqEHQmD22naF0kuCGd8w0KKwo3XZZ48V5cwWzlynGreL5S62UIvCZGnBiQ8fPqusunZn+7S6Lsi83xUhGjcQwB/WOAcOeL19kiN47YrTLiNHh1XO9lgq8l1et1JX7HHblYWwLoz6dJWZ7e9w4IgWiWW6LWltJMd3Ji2DlQjJ4kwNE4FAYZb9ud15TzVlWxXpEbPa4dwoL3WwcES7Rc5wqovaIyoF2qzyM3vyRP2/TWwwISDPo9CCywBMytNgmsgBC7Psbx4v2VeZIbw6G2nVNnJB4qysEDm7qXUBcIHKxfmAzR0TiApAwDRxOpgAxMlgvHskdKdrWpKIKkk5GZbKAldNkac8z2G3yOJDOBfflMb47Wy2M0asStrnvh7jN9muCZDvs55oyj1Ym5npssAjZKImBOpLPM/uzWcUTI6qzPJ8tqVlciklkrRMixBAotSisK04ha/1iChLxGVVd1f4ntmTV5Rlg9lksQ01Kz3XYcEN7kN7g8QIAJGAEAATuaZjQtOCMa1jMPj1jeHyPGdxtr262JPnteZn2uZPFukwu0d+5iMprgEOIJyeaUmO1/MzODlCCSJln8vym+fLd5f7fpr/j2wBIDityp5dvo184xYt2Fk14uy1bfInTcQ8n/03z5bXFLuFz31TAjnS4J4S6As3zry2DRNbB4IP+vznb4/m+qz1Zd6aQnd+pi3LYyELPpu25LfcGicQjunhmE4JSR4LhwgKox6nmh6X5KdnE39yc9Dk+yYCAaLrPBo351GSPOopgBxxI1eiZGugwxRMN3OXzJSuCPGCqycQ0aZCCfH8Zs3PNLivUxgFRqnJsW88PDAZudoyYbfK+yp9TeW+4my7YObkiCTtq9lidI9rRlwzV7l7JwAAskydVjmttRVPNojZHmuWW537nzA0GQlG9ZWulBCAMRqIaldbJ2qKXF6nmtah0JvLKhdm28icU2hkKjo2E1dlulLoHyUwE9a+uTlcU+zOdG1a7cw0uG/QrgeJUUCYCiUmgvHhqcjVtsmGEk9htr2h1OtzqmlHzVaLbqJhcLLaYEmMFAqSk7Ss5GMxsLrQ/dqxIlVmwor/8trQF9eHOSShU0ZGSftgsGUgcKwuOz3VCQHD4EU59n94pYoxwjnKEr1wb+x333TzpMzIjMLAROTrG8NvnyzdrLj7NLhvDspTQhghponDk9Hx6TgQqC52H67KbNrlE5GU6QKSW6F5QiAU1QWrePKLdImRLI+aHoLkosjEbVNUZTbX73Bt1p3u6cHJ6Er5qIjACAnH9B+ax3blOUXo3s9byQQAFIl6nMq8Gk425bb0+a+3T6kyXSFYEwCIbvLbndN7K3zVRe5NUWOa8nczfQQC4jmiaeK97pl//6b7f3zecf7OSCRupGFliyQcM0KzPvcVjSlEkBgty3VCulLHavulyREROAdEyMu07a/KoEmoH+fIBtoGApdbJgyTp+c5zMU1Cko7jmBR2ImmXJsq8aTX+YyQiUDsWtukyXFT1JgG903Gd7EKKAWJEt3ktzqn/vRd39c3hsb9cdNM48omaxsAInE9oa2CKQioSDQvw7bgc0/IkXErHAuEAKFACCgS3VeZmZ9hNZImihMARLx0f/xBbyC9fT6kRgLCxdJQ6q0tdpsmrsKAz/Fuz0z3cAjmyl2lwX07LjwxMopEo3H906tD/98PWi63jJs8HYq3aUIpMTkOT0YlRpMGygABkpdhVSU2f3B+LLi5ibOLUmJRt3DxzuuoIMu2vzqTkGReAhHvMTYTu9QyLg6paXhfpB9Fps/uyVMVmvwMRAkZ98evtk2aHAHIBudhGty3fh0Soum8ayT04aX+jy4NjM3E0mrZlAVDABK6OT4TYyxpjWYAIJDhslgUmhq2g11loi7rtu2+zKjXoT4CJcuM7qvwFWbYdCPZ8YgQ4AjtA8G2gWB6ci67U9aWuBtKval4rm61Tz3o9ad97jsDhigFRaJjM/H3LvT/9uuu1oFAWi2bpVszBQhmlJTkOARt0apLhhBw2eWl3HMPG6pgmDwU1XALjNRVO4QAEiPuJZRHW4FKiFCU7dhbmUFI0kLYCBIl06H49baJWMJMO94XCUdQZfZ0U45FkZIb7wRgMhj/7NqgvuELjDS4PyovDQIjhFFyp2v6D9/2POj3A6RPrxvDdYDpQLxjKChLdEWOPQBEKMi01Zd6gKR6zl3VeUYATI7R2OzOgpvZJ5gIxnWdr8QxLqpOU0rslkcS6kaAUXKoJivPZzWSGu8IgEBa+wP3eqch7XlfYjEAQEOpt77UY5ir3JcSQrqHQzfaJzc4tdLg/ojhCCRGe0ZCf/y2p6XfL8oFpGXdq6V9MBSMGsnDgjlilsci0pdSNIVUhVK6eoLCFkWGJDRjtVmBlBCZ0UdgH4guFmfb9wvjPen3MQIzYe2rGyODk1FC0vj+kBo5R0Wmx+qyHRYp+fhSCnHd/OTy4Lg/tpFtMg3uj0EYJT0j4d+f624bCND0Glj3UZfjRCAmJ4V2DmCzsMYyr9Mmc0w1wsxtV1SFIcfHkpOzSlIzAY6gyLQ017mZp4bV5FhDbqbbkpwzWTisOgYD390eWdU+/fmZIwQRmsq9lYVO5EiSHvQlQvrGIldaJskGwmbS4P54THiJkd7RyL993dUxGEyvgfXp0DCxfTAIZEWAIwRMk1cVuA5UZQKkxMws3uSyKRaJ8VVt9y2q15ds4c96tysLXNmeR8qTk59hPVaXZRh8FaIHAgDkZud031g47ZxZes5TFXa8MddmkXhyKiRCGCWfXR3qH4tQStZXh4A+YeqjlDDxw1L4oYTO/czGpT5CbJIZ6R8L/4/POzqHgpCuI7FG7RGAyy0T3cOhleIgCQHTRIdV2lOZsQb3NAIAOK2SJCVzQRBKNIOPzcRnK0FuqtN9dDqqmWYS+x0B8jKsjNFHqnACz+/Lqy31xDSevDQ2IeAPJX64O5bOyl4W33eX+yoLXLjKFo6Mgj+c+NevOmPrLSdCn6QVr5s8EteDUd0f1mZCq/8Eolo4podieiSuJ3TTMJHDLBPeIwB6BFAkOjgR/e+fto/NxCghaXhPFQAR4pr5XfOobmAyyjBC8jNs1YXutcKvz63arTJPcnZGAEKCUS0Y0YQJv1mLHxFi2ooRQOKBTJdlz64MRgl/VDc24gLZ41BPNuWK0hyrjRFeaRn/7s4obEYyzhM1exEUmT7dlGORafKJwxFsFqm1P/B989hOLbO3WWICz/FYS3IcDovkdiiUklXZqANhPa4ZhBCxJQQjeiiqB6OaOAEQIIzOMv1SQh+u8LE5IpyngxORf/mi8x9OV/tcSnr2p4LuhMya7apKVyr8Jqo3vHigID/DlnrdA/GURZH2lPt6R8Im8uV3eUSJklBUH/PHs71WsjnLHgkho9Ox6VBCXiHKHhEQsTDL5nOKimCPzjBmlHDEvRUZxxuyrrdNSlKyfBxCSDRhfnl9qLbEneO1co6Upm14oRoEIHUlnroSz82OqeQcYZwjY+TdC33l+c7KAtdaT0JPCLgTAtyAikL3r0+WetYS/yuqNyR0HksYMc2IJXhcMyb88b7xSDSudw2HglGdIyZ0gxAiUSoC1DbRFkFEi8JudU19enXgr0/tSvPqpeIfmA7Fr7ZOJHTTpq7ouyRAaord1UVuWLtpLVFSkGVTZBpN8GUZyTiAxOjIVLRtINhY5t20dY8QimkxzVh2zQvzOdtrPVSbabfK+MiJ6QkQu0U6fbiofTAYjukkqXNGYmR0Jvbp5cG/eqFcZiztopnXIUe0qdLh2uy2wUA0biZXi8xoJK5/+GP///JajU2V1oQPTxQrpERBligCYGrHVUKIIF6XGF3klk1opsl5XMfhyWjXcLBnNNQ/HonGjXDckBhldHPxHWyq9N2dUZ9TfflQAaTr9SX1DwSj+p++623tD1iV5UvIUwJxndeXeN46Ubqo5m2Kw0EI5PqsOV5r13CIsWTNGZ2OBsKay6GQTZgGSClp6QtO+BM2i7TsiYRSkuezlue5mDiYPmJwJ4AIu/Kdu8t9F+6Pr0qzDAAX749bVPYXz5Wnp+5CfAeA+lJPQ6n3SutEcgcwR1QkdrfH/8HF/l89Uyqt5aJFeiLXP1njGXBR/V9CQFUYALNZwOdU6krcCNA/Fu4fj9zsmOoYCgYjuixRSlavoZW6aAb/7OpgQaZt9y5f2sxZZoAACEAsYX5xdehqyySuoCNCwODosEpPNeQUZdnXAYDirRkuy54K38BEZCW/NiLKEm0dCLQNBg/VZG5kyObI5sj93pmL98ckuoxPhhKSMMyiLPuZo0VZHgs+1npSJ/fk3uqejsUNstplBud47tZIltvy3N48sSrT81oMnMMqvXyocMIf7x4NJXepEwLA8dKD8aJs+1MN2cL0S0WN6VDIuf2A/PSzdNUxSsrynCd35/6nFyv+p1cqT+zOsapMN/lmET2K+LZARPvz970dg8Gkmd4/M1hH4Iiifls4pn9yZeCrm0Mcl49rJACcAyPkmd15B6ozNgIlikSP1WdXFbg0Y8XgEEIgHNO/uTncPRwSj6x1p0fE+d71jUV+f657dCq2bKAOR5QZrS/z7spzkscHkfPG+3O788wU8gAIBd3g717oa+0PkHRI2MNSlus43phjVaTkGRiCJy4Y09+/2H+vZyb10U+D+yqgP4/yYlpmuNT9VZl/+Vz5P56pOlaX7bTJC3fjDRqnMqO9o6Evrg+Fojr8jMkJcI6wQSiWEhLXzKutE//8ece5m8OasbwfXKT7MkZO7M55YX++Td3QqRQRMl3qgZrMlZw/8wZ1+1Dg61vDk8H4vPEuGo+r9A4BgBAieOVudkz9+9ddQ5MxxsiyH2GUHK3LPrU377HfTCIgJeTpppzSHAfnq8x8UUE0mjD++H1v90iIEbK5vKgIwBGX/iDO0qmv9edRWi0wFxaZSjAMI2Q6mHj3h757vTM/X7fMVqE8+Wk+Oazynl0ZFfmuzuHQp1cGHvT6JUYZ3QR7W5bY3Z6Z75vHXjhQoEhPztYrMHqt2uYcQ1F9IhC/3j51pWXcH9aAELbcuYYQECEZxxuzzxwtztiMep6EkN3lvsv3J+73zVhVaSX/DAFyo21qwh9/4UB+XbHHYZUJSaV3BBHG/bGpQOJ6x9S11olwbOWKLoj7KjPPHivO8Voe+1CKmN1sj+XssaJ//bIrENVYck4xAEZIz0jot193/fWpXeV5zk1sjERnaRh24opAhAy3+trRomBM7xkOLbuvL/pI72j4ne/7EKGhzEtWK+GZBvd1mvNzEO+zq9KPmeMPev2jMzFpY/guHKmxhHn+zmhZnkv4+ne6j1KQfccSZiCqWVRr8ocjcYNzjOvmZCAejhlDk9HhyWjncDAQ1U1z1j2Cy7nUDBMpIycac147UuzbHGQHBMhwqaf2508E4jPhRBII0wzePhCMJozbndO78l2VBU4EcFpkSaKKRC0KA4BwzOAcCQHd4GMzsVBMH52O3e/1D05E4jo3TL508gjnalwzqwqdpw8XbQdkXwhM+yoz+8cin10bNIxV/DPi5NE9HP7tV92n9ucJNoiFBuz6Dr4IMDwVO39ndFEEAiIoEnFYVwQ3u0WSJbZoKiGCzGiOz8oe1dlItLqiwPVUffakPxaJG6uGUlBKekZD7/7QBwCNZV7y8Dlg0afT4L5+iBfhCpWFrvJ85/W2yXcv9I1MxWRpQ7lIiCAzMu6PX2ubLMu1W9WdP0CIEiXdI6E/nu/NcKqUAQC47ep8PUmO6A8lDI6Ugj+sC3Afn4nFEqaIQxXWIlsucYEQ4Bw4xzyf7Uhd5ommXJ9T3awdUbzkUE0G5/wP53v9YY2uECVFCVCJDE/GBiei19umirJshBCnTZYlqkjUZZNNjoGIzhEJIZrOR6YiwageSxg4ZwsvW6SUcyAEa4pcbz5dWpJj31Y7vcCR5/bljcxEr7dNpfIRRqF7JPgvX0ae25fXWOotyXHYLdIG/Zk9o6HukdDSRaTIRFDFLQ/uVnlROVPB4exxKP/55SqnTX6UqiYEDtdmDU9GvmseS/Hk1Dsa/uP5no7B4P6qjMIsu0iwT1vumz+/AYBRcqA602mV//R9b8dQQJXZhpx3BAghV1vHq4tcR2qzdrrxjgCUkqlgfNwfQz6bB2ZVJFmadZxzgEjcwDkQn/fhEDLrkhZ24iKVkjl6GVWmeT77WydKa0vcIlBsc9WFSI7UZZsc/+2rrmjCkCW2NJRFRFsRAowQ3eSdwyGxaYneIuJDAVwEGJkV0dxlvL0EEEGV6d6qjNMHC4uy7bD9pgEiuO3K6UNF00Gtazi0WonyWfs9oZnnb442d03vr8zMy7Dl+axuu+K0yRIjG1yGC3+jmzgVSqz0kclgYpFHgxDQdZ6bYTP5HInzI1S3yyYfb8zpGQ13jYSUpNlh863tHwsPTkRvd003lHlzvZZsjzXHa3VYJXmBLzcN7psjjJK6Us9fK7v+5cvOruGgKrONrBmJQjCiX2geK8l25GVYnwD9UEKY9NNy4Yhx7acprMp0KRLgw0fOhStZ1HFWZFqS7dhf7TtQlZXr2yotiW88Upc9NBW7/GB8JqSJkKoVGQIA5nCKPLwTLdO7xTG4c7CuG7www/7Cgbz9VZluu7I9Q2OFEkpzHW+dKPnzd71do6FVOTvETh/XzaGJ6GRgSJaozGim2/IPpytzvFaOSDepnyRptghZEnFCCCDSHI9VekwXXaW5zjeOl/z5u97+iciyx7jFVrlEEaFnJDQ0EbEoTJGZz6n+5fPlu/Kd8/nAaXDfTENmV77z71+q/ODHvvu9fnMDvB+ClqB1IPDj/fHXjhUpEn0SnO+42JUxv+BTP+iIOBPGaGmOY0+F72BNZp7P9ggsLUrI2ydKG8s8n18Zah8KxjUzeezaUss+xVOOaaLdIjcWOJ/bk7e7wgdzSVXb9vCKADXFnrefKfvo0kDrQEAQ8uAqygSgRNO5ppuawQ2T68YjDQ3DpWOCgAguuyQt2pcfoXW4e5ePEPKH8939YxGx5FddTYrMEDGaMMJxQ9PNhM7TbpmtmugcsSzP8Y+vVv2//vygbTCgSnQjzE6GyW91Tu6ryijLdcA2RndMekZe+GdMAfAWZWgsdFlQAoyR/Az7gerMvRUZBZm2+We2Gv7E+2uLPfk+++XWsa9vjEwFE4JtiMy5ktZKPTRv/ouELEJAlWh1kedwbWZTuU+kTG9istLSNI5l/rouGxkAqovcLpv85+97b3VOc5z7ohUUIrCVUkHZRGSJLduq5FW5N3//puBxqHS1TKstUqOQxnKv3Vp5/vbYtbaJWMIUV7vJNIlICDBCEUCWaPpCdWvtO0SwWeS/er78v33cNjodW3d8pKisPTodv9E2UZRtl7Yl75LomsKoaXARcWwYuOhQvLBcHFmNWUGkLHGcn7hElakkUbsqZXksJdmOpl3eTLcl22OBuQtt8ghzNRHB7ZBfOlBYV+Jt7pruHw+39gdjmqHp3ODIKKHinoCSZTaxWYcSzgO6YQKjRGJElaVMj6W+xL23MiPHaxU3gWLH2qyecY6azpMU0CAEEjo31muMIEJehu2vTu3KcFku3BszDIzrJiFA54Zc3KAAzuYxiYE2kJvm8gc3zjGh883l+UguJkfBNLWqGhM6X+mCgRCS0Lm+gdzGXXmu4iyHxyF/d2csoZsJzcQ57RFxKUUWzCIA00REDkAoJbNBoSQN7lvpiCzLc/7y6ZLff9szE9bWvT4JBc0w73TP7K/KKstzbEPbHTkWZtp+ebI0ENJCUV03+bg/LuZcJKaLZ6IJYy5CnHCOMS3ZCdyqMFVmFoURAFWVHBapLM9Rku3wOpVsr9Uiz5p48xeYj2VwCYGiLHtRlt0wed9YpGsk2DkYmgzGo3EjppnRuBGa6zsBmAd6zhERLCqTGUUEm1X2OpS8DFthlq2ywJXltvic6mx0PyLZbH4hr8tSX+I1VyYRFzGa+Zk2StevGZ9T/c1zZfsqM7pHQi39/rHpmGbwmGaYHHSDxxMGY8SmSkBAlakqM6dNznJb8n02cUyZ3ctm6R/UxjIPhUeXq80R83zWFZ3+BADA61TqSjy6uYoaS3Ls6xs9kcQrS/TN46VHarPbBwPtA4EH/QFKIKHzhGaK1aQqTFycyoy67LIqMbdd3l3uK8qywwK7iogtAOeq/P3zF53n74yuO55P9O1wTdY/vlYts5Q8xWK1hGPG//b+g5Y+v5zCZfGy36vp/Jk9ub95tvwRFQ5epVNICLlwd+z357pjmrkhQAF48WDBL58uXXc4wWORmXBCjONUID67GAjRDdMf1ky+/KxAQJ9TcdoUr0MBAO9y4eqzyfqP2wm97NXf4EQkENEmA4mRqeisMYg4HdAEa7TPqQAhHrtit0gmx2yPpTDLvojBdCtg/dFO+4d23KHJqD+SmAlphonRuDET0hSZZrhUSojLLjttcn6GbTus1m14IF44BTqHgrrJwzE9GNGnQ5puco9dsVkkRLCprCDL5rYp83kDabfMo7DxEOBIXfa9npkfH0xsaLPUec9IaCIQz/NZt+fd2rJd8zpmoXndKUX4sE+DzDm+ton/bVHfCYHCLHthln3xYd9EIEBBhD2urD0CZCt7t8wV4spTbiMnG1iQUFOQaZu/F0k+eZZ+aeoN3vTD2Tpm+yar8WENVBS4UlyDaZ/7I5kic5TWLx0qGJ6K9o9H1ud8RwRJot0j4Z6RUJ7PioBk+92rEpJsDeAKUYArvWr+ZE7IDogQIovufpdUdJnPKTc5wtwlwawXFcgjuzN8lHyM8z3CBerAhy1S8QwhJJkXhGz3EX80Q8bn/Ou4wLCf5x746T5/qQmSBuKtmwQcoCzXeWp/gcMibYQ+UtN5+2Awrpl055zY54MKKCEP/cwXuV3uh84m9+xIxuPZzj7co3kSsdm6vnT2AUqefNb+eYXQ+bLGCwaapssWpHxMfGheLZxFNNliSYP7Vo4KAADsrcgoz3cB4PrmMiFACN7rnRmfiUOaNHUHAhwhaRLztDw2/EnLForTJh2qzbJbZJPjem0VEo7pw1NRREgDRVrSkpY0uD9+EXZ2Q6mnIt+5PlwWl6iazm+0T2qGSQikTfe0pCUtaXB//KdyRPA4lEM1mTaLhBzJul5ichyYiAQiOgCk0T0taUlLGty3i9SVeKsL3RzXhcwIlJBQVL/f6wdIl1dNS1rSkgb37WG8A4DXqezKd6zvDSJyLq7xgfEwT5vtaUlLWtLgvk1EeN4LMu2ZbgtfVyISATA5H52JhXdUeVWcZ8HYpCfxp/KY+Aha9ZhVt6lv25593GCDxUxIUVeIuFlDv9b3PBb9p8H90RnvFQXO0hyHYfJ1pGeIqTEVSIzNRGEnoPt8AehF0cyc80gkEo1Gl6ho9snkq4b8FAhPNjAcOyDIfHObuCkvMwxTS2ibOz3mMToSjYYjkflI3/nJsOrKIikPJyFks4Z+re95LPMtnaH66MRhlfMybLJE14fNlJJgVB+ciFYWurdnqurS2WwYRigUnvLPDI+MBUOhhKYnEolwJMIodTkdTJIJgNvtysvJzs/NcTocSdZMPB4PBIMup5MxNuMPIKDP41UUea0NC4ZC0WjM43ZP+2e8Ho/VskxhUuR8OhBghHo87s1VSygUVhRZVVehZDBNc3xi0ulwOBz2DX4j5xiJRIAAArjsjo3Mms7unmu3br/60gs+j1uwJ21oeiBE47Gevv6JyanpGf+M348ITqfDZrVm+Lw1lRU+ryf5VwSCQU3TvR5PJBqNxWLZ2VlJsvz8gYCuGx63K55IMMZs1vVXd4nF4qZp6rpuIs/0+VZ9PhKJBEPhnOwsSjfTmE4kEpquOx2ONLg/bksWgABUF7kut6hjM7Flq7WtaqTENGMmrP30um1psIsFGQyF7z5oud/S6g8Gg6GwPxAwDJNzLksSpdQwTdM0DcPUdM3pcGT4vB63Kzszs6S4aG9jvUW1yIo0v3uJd45PTn385dfxWFyW5Ug0wk089czTh/bvTRFlxGMz/sB7H306PD7usNlcTsfZV16yWiwL3yD+rRvGue8vhMPRX5497XI6Nwhk868dm5j89Mtv9jbV72lsSP5kMBT6H//++8yMjFdfOlWYl7eRLzVN8/Nz5zu7ewrz81859Wxmhm993eGc37p775Mvv87OzHzxuZPrVoiYubFY7Prt5tt37w+NjAjYFb/XDYNR6vV4sjMzDu7be2j/HofdvtJ3dfX0nb/4oyLJCV1DxP/6D39ve3g0F8r3P15pvv/A63EnElptVcULzz4jSWytqpidilNTH332ZTgcqaupPPvKS8mUhkgJuXPvwWfffPu3v3m7orxss+aSYRjfXrgUjUZfOfWs1bo861Qa3B+pZLotHocyNhNbn/HOOQ5NReOaaVHYNiQRE9MuEo0232+5fP1GT9+APxCwWq0+j7tiV9muklK30+n1uCkl0/5AIqFN+/0dnV2BUHhoeHRweESRu6/euHX52vWykpKm+rrqivI53gwCAF6P2261Xr1+CwgwRk0TJZnt29MksdQqGhICAA9a27+/dJlQalXV//K3f+1ZwQLVDaO9s7t/cKi6ovzY4YObpZ+79x9cuna9ID+Xc57ciNM0vbt3oKu3PxaL/9Xbb2ZlZmxguHFgaPj2vfu6bkSi0cwM3/reMjE5fav5nt1mu3j16pFD+91OJ6739qh/YOj8xR9vNt/zB4M+j7uspCQ7K1OWJUScnvH3Dw4HgsFAMNgzMHjn3v2//tUvs7Mylx2mWDze2dMbCUcoZTarhZvJ6FfHJiYftHdYFBU5upwOwzAkaZ21MHVdf9DWHgyHc7IzU3l+JhB40Np+7oeL5aUlm2W8j01MfnfxUk5WprkyB30a3B+p6e51Krlea+dQaH1Oc0rI2ExsIhAvyrJvQ88MIWR4ZPTjL7662XzPMAwmSfU11Qf2NNVUVbjdLofNvqyTpLdv4Pa9+/da2qamp3VCOnv6Wju6/P5gYX6ew/4Tp6DT4Xj5uWdn/MHW9nYmSZzzgaHh9s6uuuqqVKwhAhAIBH+4fEVRFM757saGvU0NSTrCGE1o2o07zY31tU6HYyMGl/js1Iz/6s3bhJBQKKLrhqoqSd5JCLGoKkfe0t7x6Vfnzr7yoncDDiJFlm1Wq6IoG0GW7368ND0zoyjK8OjY9PSM2+lc6/lR9HdoeOSP73/Y2tEpS/L+3Y0njx2trtylKsr8OePmnbsfff7l2MSkaRjjk1Mm50mGyaIqyJEQoipK8m+XJclqsVgtFm5yWZY36FOyWiy6YUiStOqsQ0RN1202W0tbR0t7R111FcBGb4wQ8erNW9MzM7nZWQlNc4B92bFIg/sjQz4AAJnRomy7IlFN52StCw2BEBKO6pGYsQ09M5zzW833Pvjsi/6BIYtFtVosz5888fTRQxk+76IVvnByu5zOpoa6poa6B23tN+/cvXz9pmma3DQ9LqciS4s+mJOTdfzoob6BgUgsJjEWjyc++PSL8pISi0VNBVnut7Z19/YBgaqKXWdfeXGhE2mRhELhhKYzxjq6eu63tB45eGDj+mm+96B/cAgB/MGAYRoqrAJGJufitvDHK9cIgbMvv7juCwBE5KJWyHp3pqGR0dvN93D2mpdcv327tLhoHQ6NaCz2+3feb+noVGR5b1PDm2deyczImMcsAGCMHdy3J9Pn/aff/n5waLi6cldeTnaSXZBz5JwTQlblXBJKELLx2JUU30MI0XUtEAhKEgsEg9dvNdfXVIsGb+TbB0dG7t5v1XQ9Go2HI5FFS+wnWzCNuo8M20Xp9/xMm6IwXDuPGAJQCsGoHo0bsM3iZYQp8bs/vzc0PGK1Wihlp1889YtXX8rwefnD4S9Lr0xFVFldddVf/+qXLzxzghJiGGZJcaGiKEsXT23lrl27Sk3TRETGWN/g0PXbt8ViS9I2RIxEY+cv/Mg5mqZ55qUX8nKyk6yxUDisaRohJKFpF69ej8biwlxa34ENAKKx2PmLP4r6ctFoLElrlwIioeTC5avnL17SNO1xje/o2Hg0HpclSSjh2s07Q8MjsJYIP6HAi1evdfb0MkqdDseLz57MzMhYpAoE4JyXlZa8+dqrdru9uLBg5+Z1iJZHIjF/IMgopYx1dPeMjo9TSte90QLA9Iz/o8++Ghkbk2U5FAmFw+GV0CAN7o8UAgHAbVcYgXXnIukmD8f1bdUtwzCvXL/55w8+DobCiqIwSs++8uIrp54V05GuFjQm4F4s8tdPv/T8M08XFebn5GQtfQwA7Hb78UMHXU6ncFtricSPV29EojGy8oIR779+6/bQyKgsS08dOlReUsRXMAbFLwPBUCKhUUIopd29/c337q/f1kMkhPxw6crE5BSZVZeBaxl+0f4vz53/+vz3mx3+nur4tnZ0zvj9hmkAgCRJUzP+S9dvrMOfcO36LTHQVRW7Mn3LXO0SAEop53z/7sZ9uxvLiou2Q+GtjYjJuWEYiGhV1d7+geu3mzcSa2+YRv/g0OjYuGmaBICbpslXvGlIg/ujFlWiDqu87o9TQmaCCVhQnPPxGuwA0NXT+85HnwSCIVmWEPmpZ068/PwzYganviznzZlXX3j+v/zNX4oQkaUfR8SG2poTTx1OJBKAqKpqe1f3nbv3CaxYHh4AgsHQ9VvNgVAoPzf3jTOvWCyW5H7PcCSs67p4QNO0H6/dWF98NM6dA65cv6lpGqXU5HxqesYwU628qOu6YRiUUt0wvjz3XfP9lnWfIdbtk+ns7rl2647VYtlVWmIYBqVEN4yhkVHDMNb0tvGJyWg8PueOczCJraRScTfwF2++Xl5astPXu2EYCU0jhJic26yWC5eujI5NrMN4n43j0o3LN26Ojo8zxgAgoWnxlTMP0uD+iH0zIEnUbVcIWZdjBQEAZiK6YSJ53J4ZMdti8fitu/em/QFZlnXDKCspfubpY7CyOzu5ZQcAqqqWFBcluaqSJGlvQ0NudrZuGMLkv3DlaiQSocuiHiEAcLP5Xkd3t9fjObCnye1y4nIVUBdKMBTW5sCdEDIyOtY7MAhrzzMUnp9LV28MDo/KsjwbxGaa/kAgRQ1XV+7Ky81BREmS4lrizx98fL+17ZHhOyEkHo/funt3amr6wJ7dv/rFa3ablXNuUdXBoZH2ru4UWyKe6RsYikSiQqsup0NW5ORbrN1u39nLHREAZgKBgaEhxpgYxJGx8d6BAVj7cUQ8f+fu/YHBQZibmZFoLBKJzn9XGtwft+Uus0yPum5oJgDBqGaY/PFPXQAAGBoeuXmnWWLM5KbT4Th+5LDH5ULEjQRmJMELgSYlRYUvPndSkiSTc4uqdnb3ND9oWXbBEICJqembzXcTmpaXk/3siacoXb0EUCAYSmiaCLJkjE3PzJz/4UdE5GvMOCcAI6Nj12/fMYy5rQKAczOeSKSwmME0zYN79/zNr36Zm5NlGAalbGR84pMvvu4fHHxk+B6OREbHJ1wu5zPHj5aXlu5urI9EY4osT83MXL95OxaLpw5SC0nzSArU1U8Gi1IsnkgkNIvFIu5gFVm+cuPmLCKvcblFItG2zq5AMGyzWOYtD38giHz55ZYG90dotxMAAIvC8nw2QmB9BJEEYDqYSGjm453+wvjVdf3yjZuBUJhSyjlaLEphfu6mGIyrPnBg7+7S4kJD1wGAI/5w6Wp4yYIRARJtHZ3tnV02m+34kUMWVV0VEzVNi0Sjiiw3NdQV5Ofpui7LcvP9Bz39A4zSFO9CRSMpoV+d/769sys3J3s+vIRzTKR+NYqwq6zs5LFjTofdMAyJsZ7+/nc++LRvYOgR4DvnvKW9s6OrZ1dZaWZGBiGkpKhIONwUWb5zv2VoZDSVA414IByJGIYxn+NmzvqmMNk5d2evdwKA/hk/ItRXVxfk5YmLos7unvutrWs+JQO0tHfcunsv0+errtylKLLQqslNBL6sHtPg/pi8M+v+JCGcP36jRizRnr6B+y1t3DQJAcZYTUVFSVERbPENGCEEAVxO59ED+2VZ4pwzyvr6B27fvb/Ua+QPBC9fu2EYRnFB3p6G+tRs1WgkEpVlub6man9TIxDCGJuambl87aZws6Su/JaOzraOruyszF+cfqW4sFAcaHRd9/uDKcXmEyJW9dPHDj17/ClFUTgiAGnt7Hz/k8+mp2e2Dt/Fa+OJxN0HrbFYvDAvV+QcVO4qK8rPTyQ0xlggGByfnExxMwYAt9Mpy7IIhW2+d394eAQAOH+SV7qum/5gEAEtFuWVU89yREZpPJ64dP1mSES5pOzUmvb7mx+0cM7raqpLi4uFlw8AItFYQtOX9cykwf0xCCUENlBZc/tQGg4Oj8RicUqpaXKbxdJUX7uC929Ldsd9e5r2NjZqmiZJNJ5IXLlxMxgKwYJQekS896Clp6+/uLDw9dMvu5zO5EgkWh6ORGLxOCFEkdW9TQ1F+XmJRMJmtV66dn1weISI8iupLGzDuNfSOjQyUlpc3FBXk5nhFSRXumEEgsEUPTzihCcx6cRTR08cOyIxJuJ82jo6P/z8y1A4vEX7qHhta3tna2dndnbm/j1NkiSZplmUn793dwOlREQB3bl3PxgOpQhSGT6voiiInDE6Pjn16dffjo5PUEp2BEnn+sQwjEAwBAhul7Opvra6olwzDMZYd0/f/Za2n47zq5rthNy41Xzp6g2P23304L76miqn3S5+HwqHEyvcqabB/dF6MwAYJT6Xss4liUAITIUSmm4+9r5wzvsGByPRKGUMEa0WS8EsCwo+Gk067PYXn3vGYbcbBpdluaev/1bzPXHYF2DhDwSv3ryj6ca+3Y21VZUp+MEQAKKxWDQWU1XF6XTk5mTvaawXDs1wJPL9j5cRVre4Z4OIuvuu3bzl8XiOHT5os1pcjlnSLo5c0xJr2QMJArhdzlMnn97TUM8oJYRw5Lfu3rt87Sbn5qaD47wX5fK1G5FIdF9TQ3lpyfw9ylOHDnpcTsM0KaVtHd1t7d2rnkLEXwvy8+x26/wotHR0fHnufN/AoIhEesLwHWc3eD0QCgABu82uqurJY0cJgCRJ4Ujkxu1mvz9AUlhllNLpGf+1W7cJJccOHcjLzpIlJkmSUFgwFIon4mlw3y5jLjGKuH4I1HTOZwOlH+d6SCS0YDBkmpwgEkoL8vM2TmG4JuMdEUuLC089e8IwDUappmnffH9hcHh0HmhuNd/r7usrLirYt7sRU3YWRaLRaCymKorb5QCAg/v25mZnmaapyvL1W7cHBodXt7OARKLRey2tM4FgdeWu0qICAPB6PHQuoj+WSOACGF3dFQeAiD6v5/QLz5WXFuu6TilNJLQvvz1//Vbzphvv4oUDQyODIyMuh6OirGwhyU9+Xq7P6xNJZOFo5GbzXU3XV+0LIsqStK+pScSNUEoN3bx8/eZ/vPvBdxcvj09MLuRueyJWOgKAYZiBQIhzzPB5AKChtrq2qiqeSMiy3N7V3drRueq+LNRy+979rp7e4sKCA3t2S7KsqKokSUhmv0IwNKR97ttCVJk6rNK6J/FjT+kQLR8dnwiFQoxRBKCEeN2uOQ6vR9c+QsiRA/sL8/N0XZckaWh49M7de5qmE0Imp6dv37vHOd/TWJ+fm5N6myKRaDQSUxVFuHFys7MO7N2DiITScCR6/sKlVHae0fGJ67fvKJJ8ZP8+t9sFAExiQjW6bgQCIb5GZ7NY5Hm5Oc+fOJ6fm6PrJiEkEAx98tW5uw9at8LyHRub8AeCHo+7IC930dDvaaqTJAkRkfPRsbFAMJjiO589fqyprlYk7hMCpsm7e/v+9MGHv/3TO+d+uDg1PQMpM7nvFLeMPxB02K12mw0AbDbb4f17rapKCInEYjfuNPv9AUJW7Oy84+Xi5atAyNGD+31eDwC4HE5VUUUmZDQa1XUDIO1z3x6iyMxhlRB3djxAJBqNa9pjzB4UVnB2Zsb+PU1ACCJKErt07UZHd08wFPrs62/7+gcP7993bI3MMNFoVDN0j9st8kQopQf37c7OyjRNk1B690FLT19/EvQhhATD4QtXrvkDgSMH9+8qKxE2laooLpdTbITxRCIUCq2jy5TSpob6U8+cdLmcpmlKEhsZHfvzhx8/aOvYXHwXW6NuGHsa6nNzsuHhc8/BvXsEf4MkSVN+/4PWtlQ8M4hos1lPv/D8rvJSjshNk1JCKTUMs6Wt492PPv2X3//x2x8uBoKzt807G98JAYCp6Wnd0F1OpygbwBH37W4oLS4SgU8dXd1tXd2w2pnyxu3m7r7+suLixtqa2ZBHAozNRvRGorFYLJZ2y2y3Q9vOFko3P0l2rYXQxPw+emB/cWGBaZqU0vHJySvXb1y7eefqjduKouzb3Zjh86YYkyBydianZyTGXC4Ho1T8Picr68iBfYZhKrI8OT3949UbJl8ey8QXdXT2XPjxis1me+WFZwUdPABIElNVRbjsDcPQRITD2vd3Runh/Xteef5Zl9NpmJwxOjg88sEnn42OjRNCcHM8dfigtb2ts6swL08w5gtbGxHFJurzeg/v30sppZRGIrGbd+9NTE2v6iUUGispKvzLX75xeN8eh8NhmCbnXLihDcO439r27sef/bd//u3FK9emZmZ2tOlDADjngyNjmqa7XE6r1Sqmh9VqPXpov6C6i8biV2/eGp+cWtZWQAACJBaLf3fxEgAeObAvKzNDPEYp9XpcsiyJKoMz/sCyO0Qa3NOyTonH45pubPKSWGMhNGHfZWVmnH7heZF6KklS8/0H33z/g6YlmupqK8pL17SPhsKRqalpJklu56zlLtbSgb2783OzNV2XJan5/oOWtraVtodwJPLjtWuarh0/clDQp8Ac36GqqKLYuWGYcRHqvi4AU1X15FNHnn/maVmSOKKqKB3dPX/64KNoLEaAbLC6LAD4A6G7D1pN09xVVpLh9ZCFMluundTX1mRlZnDOZYn19g3ca2lFjinWuisqyP/rX/3yV2+8vrexwef1EEq4yQkhqqpqmtbR1f27P7/33//ld13ihLRzDTiAeYY7MZdEgNz+PbuLCvLFxUNbe+elq9eW5bBDzoHAj1ev9/YP7Cot3d1YP/+M2A7n/ieuxAORBve0rFM457hh8tKHgDUUnpicEo6ReDy+Jnzf29Swf3ejgNeEpk1MTmVlZDTV19pttvUVXGWMLOxpXk7O/r1NiFyW5YmpqfMXfvQvcTSLlrR3dj9o7cjNyjq8fx/MpZ8AgEVR3S4XAlJC4ol4MBiCDdxOyLJ84ujhp48epoRwREVRHrR1fPntd4ZpbHxEhkZGBwaHJEkqzM9TZBFcv+BQhYCIPo9HeGYoIdForKOrO5iyowkRVVU9vH/P3//lr//yl28cO3SwqLCAUmKaJiVEliTOeXtX1+/+9O6dew92ov2Oc+gcjoRNzu1Wm6oqwlWDCBZVffroUYHOCU1rvv9geHRskfGOCITSSDT649VrHPHA3t1ZGT5cUGDWbrUxysSHIpHosm6xNJ97WtYpNptNXcDKu5FFKOK97rW0nvv+gtfnDYfDtVVVLzx70qIqqUP84f3779xvmfEHRFuyMjPy83JhjSw3kVjMHwpJjLldLsHuNO/8PXbo0LWbdyYmpxRZbu3obO/oPLhv76L6fLF4/IfLV2Kx2KmTx/NycvgCGgaLRXXPVeyLxeMih2UjJrbdZnvpuZODQ0Mt7Z0WVdUN84tz530ez/Ejh9bH/TBfLqOjqzsQDAGBazfvtLR3zqeVLtkDRiiloo+jYxNT/hm325Victacj8LSWF9buat8aGT0+q3b3X39Pf0DdK5WSXdf/x/f/8jtcpYWF21GdbpH63UlxOS8f3BI0zS3yylKthJCOEdCSENt1a6ykraOLlmWh4bHrt++U5CXu7CDiJwSeuX6zfaunvLS4qcOH1zoeCGEuFxOSZYSmo6IM8GgYZryEjqmNLinZZ0iMUooE2sGAROGMbd+1llGJBgOd3T3kJ4+zdAdNqeu6ymC+6wzt7iwobbm/IUfZVnmiA67XXg2UwSF2ciEUGh8YkJikgiVmXfLcM5zsjLz83LHJyYppfG4dvn6rZqqyvkKq+Jbmu+3dnR25+XlHNi3h9KHKkhIkqTMUWWJ8sob9F8hosft/tWbr//Tv/770MiYqiiGYb7/yeeMscP79zImrQuUcGp65u79FgSUJLmlo2PWY7AcMsqKTCkBBErp+MREa3tnSWEhY6kWgJyHeItF3VVWUlJUMD45+cOlK1dv3A6FI4xRq8UyMjr62dfn/uZXv3SsXAY65bMOo3N0fRvcJ+aHO7kHTNf0WCzOORfhUsKCoZRwzh0Ox/49uzu6egiAwc2791v2NzUWFRbMGxOU0hm//9K1G4D49JFDC6tgi2e8bo8sSQDIOffP+E3dFGz7C7uWBve0rGd2A4Db5bLbrIicEImb3B8I6IYu8Gt9whizWCySJEmapihrK4Rmmpwxmp2ZOZueCiBJdE0GrPi6aDRmmqZFtYiYs/nVIv77/Injre0dum4yRjt7eh+0dRw5sG+WJICQSCR6/fbtcDT61JHDJYUFC7knxQMWiyqQwTDMRArcYak0uLig4K2zZ377x3f9gYAkSaFw+M8ffGy1WPbtblyrrSpeeOXGreGxUa/HvXd3o8flWgkKhbvpxu3m3oFBQohm6DduNzfW1RYV5K9pd58/GEmSlJ+b++s3Xi8uKPzThx+FwxHGmKIodx+09A4MNdRWb9B493rdFovFNE0gEInFktCgryqapsXicUapzWZL8pg/ENB0fT4X/aGSNQAlRYU52dnDIyOSJA0MDV++cTMnJ3u+HArneL+tvbWjs7iw4MihA7jkcEzpT1dTHPmyF+lpcN+BHr2fRvLxOCTFtzrstjm2E0DEQDBomubG+rXRQmiLvJbrsIWDoZCIQFgW+GqrKqsrKu49aGUSi0SjV2/eqq+udM7Z+HdbWh+0tOdmZz3z1JFFmMgRGSEu56zXIhaLB0LhTZoM2FRf99ZZ7Z9++ztBOhgMhd79+DO7zVpdWZF65JFo2PDo2J37LZFIrLGu9uxLL65avzAzw/dvf3wnEolSQicmpzp7egvz89ZHZjs/fEcP7Y8mYn945wNhwEajsZHRsbrqys0qLY2AgWBQ13WwWtfnuQpHIoFAyOt1Z3g9SXoUDIXj8YTNZnE67Au7Kdx9xQUFTXXVYxPj4ob60tUbVbvKdzfUCwM/Eo2e++6CaZovPHvSYbUu3dhcLockyeIWJBAKLbtXpS9Ud5bJDIiQ5bFYFPbY22K32/Nyc9Q5mnK/PzgyOr5j90sUFtlMIIgAPq977gZs4bUqIuKLz50ECoAoMdbV03u3pU2cZPyB4M3bd2KJ+P6mprzcnCTQgIiM0Wg0Gl0hPHmtyMhNfnDf7l/94jWOaHKuqurgyMjv33l/cnp6rdHiU1PToXDY6/Hs391ksah8NamrrhL5q5QS3dAHh4dn6R82cBZBxKcOHqyu3CUqHRJGItEo37DLfJEeNhJTRAkRPjctqW8tFIkIsl/7cgY+peTg3j252dmmaTJKI9HotZu3Y/G42MNu3L7T0z9Quat8d0Pdsk4um9VG5qowh8MRfbm4tTS47zxRJEq3R+GxwvxccdQVrobewfVUIdg+Ypg8Go0Cot1mW3o9JaJucrOzigryDdNkjIXDkVvNd2dmZgBIZ3fPvZa2/Nzcp44eQkT+cCE9oRGvx+VyOgSsRGPx+IY9M7Mvp4QQcuLo4b2N9aKim01Vh0ZG3/3w02AoJMssRSAzTbO9q3tiYrKmqmJ3Q53YiujKIoIXjxzYpyoKIpgm7+js6e0fWM+56eHzk8Wi7m6YTYIlCPMxqRuRn2IHESYnp/V1RfESSjnn/QNDjDFKiNvlSvJwMBhKaAmHze71eOadmQu3scKC/MbaGmnOFdPW2d3e0QUA4Ujkh0tXdN146tBBr8ct1tcyOCBLMEsizaemp9Pg/oS4ZbaJqVtaXCRShAghCS3R2dWb0BLbpYlrl2g0OjgyggAet0dV1GVxx+1yHdm/b76wTltnV0dPXyQavXjlWkLXiwsL3C5nkkh9MveqcCQiKjZsPA9TfJmiKH/99pvVlbs0Q0cASZKu37794edfhcNRia2C7+LWtHdg8PqdZotFLS0uVhRl1YQD8c6cnCy7zSqiuccnJ6/evD1fxGojwhdohm+MF1i8pzAvz+mwi1eZphmORNbnkNQNY3JmhhBCCamvqUpquYcTmsZWyPQTq+bAvj3ZWRnCFRMMha/cuGma5tUbt3r6+ivLyw7v37tS3RtFkTN8HkoIEDAMUwRfLVL7EwXuO8hkJGSnq5oAQG529v49jcoctXRXT+/d+61iZe6w/RIAAHTDCIUjuAIN07zsaWooKSowDJNSGovFr9649f3Fy739A9mZmfuaGq0WdSlz5Gx1b5vdZrOJVb1ZbpmFYOF0Ot/+xdnKsjIB1oTQ6zdvf/r1uWA4RCldqU9zEZD8VvO98YlJu81WWlSQij9HdCrD622orRH/Nk3eNzAoSN6X/XhKO5l4rdstKquYnHtcTrb2oqOLxOlwSEwSgZumaXb3rfmUKS5jotF4d18/paS8tESWk4UPhELhREKzWq1OpwOW3I/NMmXm5uxtbJQkCQEQsau375vvL9y+98Dk5qF9e0SYzUqNxLks1nhC6+0ffJItdwQwzJ1BR8ERDXNDaYTboZfCWKuvqc7OyhSmRzgSuXrzlqZpZGcSP3GOBIAQ4vO4l43CFJCX6fPtbWqwWBRElBhr6+j88tvv4olEfm5ORVkJpWylncFmtVotlllwj8VjsfgmNl60rbSo8Ndvvl5cVCAKfMfjiR+vXBsaHp0Pw1jps6MTE+2dXYyyyl1lRYX5qaCe4PaxqGpZSbG4JKSUTM/4V7p6STXcBREAAsGwbugAoCqK2+3e+FEgK8NXVloiuO10w+jp61s7dxsQQn68em1iYpIjFhbkKyuDuz8QCIbClBJVUZwrFIMVK2h3Q52gHaWUBEPhz74+193TW1pcdPzIoSQakyUpw+sRBCDIuaZrTya4EwDOUWbU51RlaQf0KBo3/CGNUrJm/EMABKsqSXS7WP5ZGZnVlRUwF5zb3tV943azAJodhO5i0gyPjohC9XQujHKlpXVg925RNU0gRSQatVosTfW1Xq8nyYJ0OO0Ou12ESIbC4Ug0BpuaXk8IQYSy4qIzL57KzckBAEJJQtdns5AwmQF+937LyNg4Is/LyVYVZU3fm5ebnZudZZqcUhoKh+8+aInFY0uV0NHdOzI2lqIXZXRiPBKNmaaZm5OdmeHb+CnTbrfXVVUqsixisTp7ejq7e1J3i82WQ5rxX7p2AwHsNtuexnq2nL9L/O8Zf8AfCFBKrVaL3W5LMpcK8/N2N9SLXQcRo9GYYZo1lZVOpyPJlkYopZSJIEuOfNmM7h0P7gSAIxBCnqrPfroxR5V3QI8QwVwv9CGgxykr8iw53GP3zFitlueefmr/7ibxm1gs/vk35++1tFFKYQdV2CEEEaen/YZuUkrtNttKfolZX0SGb19To6qq4pjPEbMzM2qqKpOf9EWUxfzXhSNh2Oz7Z8Efu7uh/rkTx1RVFQn9KRxZeN/AYCIez8nOqquukucioFbfFCkFgKKC/Ma6WlmePRy0trW3dT6Em2IXvHHnzp/f/zgQCCbZ0oSJkNC0yclpSqmqKLvr68SF5EYUJVqSmeFzuZyzKUIzgUvXbopQQp5CDVjxhotXrk5OTWmadmjfnvKS4iRamg+oTZLuRGapTKWm+tqCvDyxB4vL6tLiwiSfAgBGqdNhF4NrGMa0P/CkgfssslNytC7r7FNFOV7rjmg2f4KKziBAdlbmqZPH83KyNU2XGBsdH//T+x/da2lLvcKOWAmPN8yGcx4Kh03TIIQ47PYkLZ/lNG9sEDHdnHNVURrr63OyMleFwoV9jIQjhmFsep8FN+TBvXuePnJIlmXOOSSrLIgA0NrR2dXTo+lGRXlZbnb2mpAUERmTcrIzLaoqQDwUiXZ29ywlw4pEotdv3zl34aJIgFrG5hXef8P89KtvOrt7JEly2O27G+rFhe3GNVNYkLe7vm7OuiYP2tpbOzpF3E8SLtL5qKG2zq4r129qup6dlXn4wD620jX1bB2rcCQapZRSQle1kAoL8kuKC+bpH8pKiuuqq5L3RZKYw26DuQy7REJbekW8g8FdGCmUwNHarNefKs72WHdIm8Ef0mDnF3ef318BoLSo8OwrL+blZEfjcUrpyNjYnz/8+Mbt5kAwOG+54NwV0ENOJgSAWXLqRCIxu+09DtWYnAdCYZEMsiiQcXl/VKZXVOAzTbMgL+/AniZISvIOAFaLRbhlxC8nZ2Yi0c0JmFm65Trs9udOHN+7u1GSVikLoxv6D5eu+gMh1aIU5efb7bZ1BDuVFBXm5+bMW6N9A4OhyE8FoCmliUQiFIpQyi5evnrp6nWOfG5izE6Dud0dO7p7zn13IRaPu53O5585UZifBxueE+K7LKp67NDBhtoaE01KSSAUeu/jz1raOxOJxEJGAURYmMgmKJqb7z/484cfj01MZGVm/PK1VyvLy1aKYxEy5fdPzfgtqurxuFdtnixJ1bt2eT1uwzRlRTlyYJ/L6eSrsfJJkkTmoq80TQsvqbhNdy6mIAIQcrgu6xc7BNmF1g2TB6I6x3UV2iOAZDua/UySdjfU/+qN13bX14nj+ejY+L/8x5/+/Y/vdvX2iTrOZK5i3MJBFLMzFI7cfdBy5/4DASto4gbKVK2JM/gn6xURg8GgYZiqqipJoyCEtU4IrSgrdTmdjLGG2mrhFyar2ciMsfmCf1PTM0kCZtbcjSVY5vN6zrzwfF1NFYjoHbLMCZIQMjo2MTQ8YphGVmZmYUEeAOBavne2RFROTnFR4XxA+tDIcEtbx5yuEAAmpqanZqZlWQpHoh99+dXX538QDKCiXeKuMhqL/XDpyvuffh5PJBhjLz3/zLPHj84RBK2IA2tSVH5+7uuvvlRfU22YJiD2DQz+07/++zsfftrW2T02MTkXZQTzTKKxWHxoZPTzc9/+2x/+3NPbn+HLeP3ll4TZvtKXii0qFolxkzPGViXkEBOjrKQ4LzdH1/XKslJRaD5JpzhHAOJxuyllwkUTjkZHJyYX+bt2LP0AAd3gu8t9bz5Vkumx4I4whHG22cGwsNzX1WQkLqsisW23K1NKm+rrSouLPvv6XGd339DoSCwWu3X3vj8YzM7KrCgrzc7KlCRJVRRxnDQNY2JqOhgOh0LhgYGhe+3toWBYkiSO6LDbsjJ96+vjT/wFa/xgOByJxuOcc7vNarNZkq+u+dN0Q11NZ3dvbVUlYzQVwiybzSpLksk5RzTNZDcvohsbnG65OdkvPXtycnKqd2BwmfmGCIQMDo0EggFEnunzZmVmrM9IppTm5+ZYLJZIJEIpDYUjl2/caqybpVwGALfLWVtV4Q8EdV2fmpp57+PPHrR1VJSVOh32DK83oWuRaLS7t/9W871wJOL1uI8fPvTMU0dn98KkHk6+Ft5pAlBSWPjmmdMOu+3azTuibNa5Hy40P3iQn5tbmJ9nsVosFtVmsYTD0XA0EgqFh0ZGewcGGaW11ZVPHz1yYO/uVa8xgqHIyPg4EODcXHUQZ29xfN6mutrhkbGmhjq3y8UXEBOtqHPGANCcY132C7f7glm4I8GdEDBMXl3g/tXJ0h2D7AuWHMeNfBydVolRsg17jQAup/PVF09NTE1funJtZGy8f3BocHiks6fnyvWbPq9XkpkqK1aLBQgxDGPGH4jH44lEAgixWNSiwnynzVZXW52Xk1OQn6uq6tohhlhUVVEVRJRXtq2WlZGxMdMwrDabIsur0pgI54OqKHsb6t0uZ0525k+7d1Jx2u02m5Wb3ORmLB7XNO3h9fjT+61Wi5bQKGPrHmbh164oL3vuxPF3Pvp0Ka+9iJW819JiGKbb5Wqqr/OJXMq1jjsiIaSuuur67Tsdnd2KopimOTkxNTg0Ul25SzzgdDhee/ml3Oyc+21t3b19um40339w4/Ydm9Xqdrl0TYslEohos1rra6qOHTp4cO8exmjymxhCiCzLgl9+TVmsRQX5v/rF2dKiov7Boa7e/mm/f8YfHB2fuHH7DgJYVFVVlHA0Krh6VFUtLyk+sHd3Q01VdlZWKqpIaFoiodmsFkmSlqY6L/spSumexgZN16t2la26vwqVqIri9Xhgxr/oLmcHW+6UQFw3y/Ncf/dyZWGWbcc5rxO6Oe6PIQKh60zklES45/ZD9zlCMbvDbs/LyY7FYkPDo32DQ30DA9MzAcM0tIQW0aPhSAQIqLLFbrPl52a73e6crMyykqIMn0+SpPXhi4hCKSku+vWbr1tUdWxisry0xJLa9jDvxDj78ovCCZ6TmQWrXSqKv1ZVlJcUF1oslhSfz83NOXXy6SyfLxpPRKJRQeW68HPiMafT8Z9+/db0jL9iV9lG7pnFZ/fvadI0XZKY4DGedy6LRNmaqoq9TQ2BULi2qmIj3+J02A/t21NfU53p8WiGEY5GXS7HQrW4nI7nTh4/uG93R1dP/9BQb99AMBTWDY1ztNncBTZ7Q01Vfl5ufn5eps+78M0rSWFe7svPP+txuULhSCweVxQFUrsKFpvN8yefjsXi3X39/YODE5NTfQODlNCEnhDnvqysDLvNlp+bW1pYWLGrNCszM3VV2K2Wk8eOHNjTFAyFy0uKU5wbmRkZp04+LUlSir1wO50vPfeMqsimaU5MTy+9CZ8NCcC5aPF//qLz/J1RWVqnZ5cQ0A1+uCbrH1+rlhlNBX+E2RKOGf/b+w9a+vyyRJN8NSGCYI/+X9+qbyz1mBwZ3THYLpbTyFT0f/3jvclAYh1KJgQ0nf/X12uO1mVv274vjAAT42sYumDdmvbP6LpJKVDKvB6PxOhc7BdbOJnnXJ9k7V89C5QpUoo/euE4myf1iHfnlUzghb/fYMCSCDhJcuiZLUo1t7XouhGNxwKBIGPM63HLkjzvnl5HS9b6kUWz1DRN3TA451PTM6ZpMkY9breqKIxJjM3aUksTj7cDnizbnR1puZuIKmN/dWpXY6kHEXYQss9LKGaY5rqD3MFukWzqth61RYG9s2dnAADIz81NvtjE8+smd50jhlrnIlwf2q4JVugCq5lsKlqlMihJBmsj97fzr1o49EvftuiviiIriux5mHtrpc+uqqj18QzPf918mVNbgXXFr4Ct3W/W+pEFXSA72y0jQtplif7F8+UnmnK2rWm26mD4w5rBOVm7z5wAcA52h2yzSLDt2WlWshNXemAzgWy9BjHZvJ5u/COP0kjc7EQqkuJfRZQSPFxA7lE2fpmy1AuMjA1+xaPpS5KP7AxwF4GPlMIL+/Of2Z27E5F9/lQejGqGyZOkgyfRAnJ0WmW7APcd2H1Cnozg/rRs2rrebiv5SZqidEfMAI5IKby4v+DNp0pwJ6d3miaOTsd0A+k6/QZoVZh1G1TqSEta0pIG901AdonRFw/kv/l0iQgU2Ymbq9iSDI69o+G4ZlJC1rFHcQ75GVaPQ33syfo7UP+rJ0YhIj5BzBBp+ZnL9r6aAzA5KAp7YV/e2WPFskRxx56bRKu7h4OhmC5JBNfLBqiqjBBIyheSlmVQe+HN4bqfSUta0pb75ggHsKj0hf15Z44WqTLDnc/H4g9rsYRB19UPzsFll/N8ttl9Ly1r2FlJLB6fnvEnz4iJxmLxRCKN7GlJg/uW+zEIwFP1OWeOFFkVCZ8IQBudiYeiOqVrj3AH4IA2VfI6FNhAQMjPU0Lh8Hsff/7Pv//D1MwMrFAreWJq+o/vffT+x58HgoKAKa22tOxs2b5uGUrhUE3WK4cLrMpODQ75CT4ACMBEIN4zEjJMVOT15IghokVhboeSnrVrkmA4/NmX31y8fNVE/s6Hn7519lXfgpIa4h8Tk1MffPbljdvNjFGO+OqLz7ldrrR/Ji1py32zD9EAnOPBqsy3ni7JdFmeBBsKAQCmg4npUGI9BZiErY7gc6j5GaKqS3rqpiS6rv94+dqFy1cN0yCIt5rvvvPhJ/5AkMxReBNCJqenP/jsi9vNdxG5YRiXr1//9MtzgWAoRTL6tKQlDe4pYRgBopm8JNdx5mhxhtuyc0PaHzLbCRgGtg4ExmZijJJ1XKZyDqrCinPsOzEp9zHoHBEADNM8f+HHL789r+n6nJ3Ob9xp/uP7H4ZCYZHWGE8k3v/ki1t37hrcFJ/VNP3Ha9c/+fLrcDhC1hXUlJa0bAfZRm4ZAkAJ6CYvzXG8ebykINOGT4aJigAEglGtdyRkmOshhBEOd4kxn0vddp1bOen08ZvthtE3OBQKR0TBCgQghJqG0dXbF4vHRU160zRn/H7dMBij8z3RNG16xq9pGoB9IwpZzZAhT5LCV+34NvRxrelk9sjan0qrUiqCuG20DBwhrpsFmfa3TpY2lnvJk3JpKKIeJ4PxoanYOjtFABCcNrks1wHb7K6PLJBt1SoAsKrqcyeON9TWcFHdgBDOudvtfvPVV7LnSuLZbbYzL50qLSnmHOc7UFNZcfqF53w+L6z9soekLLiuyPrto/BFLV+9v3OyPWfvqgJzBcW2Tp84zxSTYmOS6lPaBvoFAJAkYrOwwkz76UMFTWW+J8anjAiEENPE213Tk4H4+nKXAIExWlXoKsyyw3Y6zSBiNBZLJDQApJQ6HA6JbX72LOcm4jz3CCxLKybge4m/C8uKi86+/CIitrR3cESP2/WLV18+fGDfQmiqrarkHD/87Iv+gUHOeeWustdPv1xeWrzcO5FQulx2Mc6WB0HUdF2wWmqaZnK+9FFFUQghom4JrJGRcU7hCQCglNrtdlnakkCyn/pOgK6wkYhfmiafOyfppmmu9ELG2EIG5hT7a5omEAIbBlRKH+qCYZqCm1M3DMMwRF90XRe/f7jZkqgsxii1WCwPc3Vt2sEeHuY+iycShmHoui7mqKYbsiwJqgZFlsVjqqpITNoBbhkEsCrs1L58iZGKfNcTdltIAAYmwm39AURcB7jPMqYxUpRtZ2z7nLSQEKJp+rc//Nja0SF49fY1NR47dECSNnlSdXT19A0OEQAElJhUU1WxlF3y6s3b/kCAPYz7iJiZmbG7of6NV19B5OMTk6+98tLRgwfmeAR/mn71NVUI+Kf3PwKAl557pry0eGpq+s79B6Ig/TyYcdO0Wq17GhtcTsdCPUSi0Ru378ZiMULI9ExA03VKqT/gXxo1T4B4PG5Zkm02a0Fujsvp9Hg8HrfTZrWmAnm6rl++duNm811KqcSkvU2Nxw8fpKlxa6cuo+Pj91vbTcMglHLTzM3JaayrWbSnjk9MjoyNB4KBeHy2j/5AMBZfJkuAAJgc7XZLcUGBw273ej0et8tqsayK8qZpXr1xS9Ro3IjxaBrGrvKyyvKy+d8NDA539vQQgGAoHApHKKWUkkAwGI3FHvouRJvN7nQ4OOcWVSkoyMvOzPR5PBlzdPMbJ0menYaE6IY+Nj4Zjcam/TMDg8PhSHQm4BflXGcCQY/bLcwar9sj2Cszfd7c7CzVonpcrqzMDHm5wpDSNoE/AGgo9cITJ2LoWweCQ1PRdWsHEV02uarAPUuzs212P8M0+geHWjq6GKXIef/gECJ/+uiRdXP2ListHV1fnjsvrEJZkl596dRCcBcr5Jvvf+jq7lMUedEp9cDe3bXVVSXFhb84c3pwePjYoQNL/ZXif9RXV+mvviTLSkNNNQD0DQy+98nn8XiCzUU3icr0Drvd43E31dWK7xWoGgxGPvnym8npaVmSuKivPFfld4XZPtsEVVUL8/Nzs7P2NNbVVlfJkoSAyV13k1MzLe2dkiQh50Mjo4ySY4cPbq6Lpqun7/2PP0toGqXUMIw9jQ2Vu8psVutslxEJIbea773z0SeM0oUFDRFX2mVmP2ixWIry8/PzsutqarJ8vvy8nCRThXP+w+UrHV09G51OBN589bQoaS0UNTo2/tFnX8YSCUYp53w2b2Q5BweZ84oKy9rlchTmFxzY3ZidlVWQl2O1WjcGDgQQR8cnunp6B0dGu3p6Z/z+UDiy2NuCODYxucBDOMu3RgixqGpVRfnbr7+WlZmxdKfZXnHu+GSlXopQn76x8N3uaU3nZN1KQVKYbZ9LX9peQimRGGOUIqXhcOS9jz8nhD595BBsnlN4YRHkJLzky7qh5+uPlRUXFeTlJjG1CCF7GxuTvDO5p3v+r/PkR+Kf8FDdElz0j0Qi0d7V1dLefuf+g7rqyqcOHaypqkgeISYULjGGlM4E/O99+jkQcuzwgc1116Xq2X/4zyuN0TxteiKRaOvsaunouH67uTAv/8Sxw1W7yt1u16rNSIqPyUwrE9FmtTgd9kW//2m85neO+TkmnlgAr/P/DARCk5N329o7PR7300cOPfP0Mcvai0HO7fw4NT19++79G813e/sG4vG4JEnC6Zek14s2oGgsFo3FV9LP9gL3Jy/KjyN2jwR7xsImR2ldEe4cQZXZnl0+l13enmk18xc7jLFoLPbnDz6yqOqh/Xu3SWvJ3EAockp16DerzbM1zhB1wxALms2t3PkUZUKILEmyJIVCoR8uXRkYHPrLX75RVbkruermFS5RKRgMvfPRJ4SSYwcPbJP5oOsGRz6/JVNKGWPzWQWyLBFCIpFoW2fn4PBQTWXlmZdOFeTnra+0RfLy04QQwzRVRXE4HKm/0DQ5As6DLGNsPuOBEKKqqsnNsfHxj7746n5b21uvvVpcVJh6y0U3Q+Hw1Ru3rt68PTA0nEgkZFm2Wq0/HXx+ets84/0yyA4AlNIMr3elA4QEadkyWKeEdAyEvrg2HNfM9SG78MMUZFrKcu2EkG2eUiPwPRZPfPbNt8WFBbk52dtnN0qlEZveVM65w27fVVrMJMk0+YzfH0vETYMHAsG5coCz52/GmF2SBodHfvund/7m129XlJemojoElCQWCoX/+O6HBMjRg/sfu8IlSSopKvR6PIZhRGOxWDwWi8XHxydkRWGMcVFuca6edSQau36nWTeNv3rrTa/HnXrjKSWMMavVKssyJC3LaRpGVkamzWZN7bU0OzPD5/OqihKNxmLxRCwem/YHtERCUZT53RoARBHwO/cecJP/57/+TYbPl1pJUSSEBIKhP7334fU7zYZpMspUVRWbivgvR+QP38NTRimZLUhJ5i74RTNM0ywqzLfZrJzzpc6rNLhvmUMGgCNe75gYnIwqMl0fLBMCJkefy+J1qrgzOo6SJA0MDf+3f/nt//J3f5OTnbWtLgkepTBKo7FYU33d/+m//L34zcTkVCQWi0ZjH3/+ZUt7p6LICz02JqIsy0Mjo//6hz/9P/7v/zdVSYlngnOUJCkcjf7HO+8TgCOPFd8R0WqxvPri8031dQAQiUaDoXA4HGnt6Pjh0tWJyUmLqi7EJmHR33vQ8vEXX/3i9MtOZ0r2tWGYVbvKnj3xlNPhtFhU5JjcB6JIkrgCTa4Wk3OrxXL2lRf37W6ilGqaFgpHQuHI4PDwpWvX27t6Fl7Xi4Aou83W2dP749UbLz//jLzauVDg7+j4+B/f/+h+SxsAyJIkANo0udWiOp0Ol9PhdDidDvtCI33a7w+Ho6Fw2B8M6Lohzn8Cyn1eb3ZmJoHlXVNpcN86W5F8dX3o4r1xRaKw7mrjnHscyoHqTJdN2SkpXYioSFL/wOD/7//4l3/8u7/Jy8lZ1qz4eezxqKoKIhqmKTGWlZmRBQAAOdmZdx+0fvPt92OTkwLgFjyvDg6NfPrVN2+8+krq3yJLUjQW+9077yPA0YP7H2+XE5omIintNpvdZoMcqNxVtn930/XbzV9/f0GLxxcFgBqGeav5XmNtzZ6mhlV3JpGskJWZcXDvnk1drLO3BW6Xi1JqmqgoSoZPyfB5S4sLG+trP/7i6/M/XGQLIn3nDfmvv/u+MD93b1Pjqsg+PjH5v//zb3sHBtW5c4BhGKpFPVBf99ShAz6f16JaLBbVoqoLjyORaCyuJRLxRCQW6+7tHRufnJ4J9A0MhMIRr8ft83pW2rfS4L41ZjuBUFT//OpQKKpL649fJMihptizryJjZyXBc0RVVfsHh//pX3/3D3/zl3m5OT9bEi7RcXFPhnNO1Qyv95mnjuq6/sGnn2uaQRckLSMiZfTG7eY3Tr8Ma/HkyrIci8X+8O4HAPB4/TOiv3zO4yT+m5+XezYvd2pm5vLVGw9HGyJjTNf13sHBxvo6mlr+tmEYs972FKLgxfVpio0XQVmUzjrZRQfcTudbr53WNe27i5esVutCRz9jLBaLT07NmKbJVk7yoJRGo7E/f/Bxb/+AxWKZzYTQ9byc7F/94mx9TdXizy5osN1us9tt4t+V5WWcc9M0Y/F4T99ANBqdvSteroM/R3tq6xczxDXzvYt9oaguSket1yHD7RaposAhy5TstNtmzrmiKH0Dg//j338/ODKSplecRT1CCCHC87yvqXFXWSlHvkg5jNJIJHK/tR3Wkh/POZclKRqN/un9j368ch2Xy+l69P0VQE8pNTkHgJPHjs5Scj78WCwe7+0fiMaiKZK1zb+WEkLpKj9rmnuLgqOo2Kg4V1X18MH9WZkZD6U+zC35W3fvRWOxJOPlDwT/9Q9/utF8V1VVsTdwzjO83rfPnmmqr52/cJ6/g8GFP4iIyOf88pRSWZZdTufuhrqjhw64XS5YARzS4L7JNjsQEtfMP37Xe/72KOe4gfVFEFFVWFGWk+xMenFhTnb39v/xvY+WJVL/GaO88AA4szIzGKXwcKg4YywUiXb396/jwMQkKRSJvPvxpz9eu27ybQDw80BDCABkZ2UINwI8bL1TSmPxRDgc2abjRSkCVJaXFhXkJxLa0t1icmpqanpmpU0XAL769vvL127Oe2NEQuyxQwfqa2sW7iVkQTjmTz8LtpmFX73qakqD+yYvWtPkf/qu9/ztYYANGdviWL1nl29XvmPnKkTge3tn1zsffjIxOZUm0V1oHjLGyktKLKpq8sXG+7oPOsL/HgiFPvni69b2Dtg+6A4AABJjbo9bGC6L/qQltFgsvk3HCwAQJSbl5mQLNoIlCA5zjV9s1FNKh0ZG79y7J9jrYC4bLic7q6aqQpLYulfEqpMkDe6b64uAr2+OnBPIvmFY9NiVw7VZqsx2Ou8xAt66c/f9Tz6fxff0RJkjHXI67EsdtSLZZ3Jqat0OMYmxqenpdz785EFb+2ZQs2ye/U6Zqiiw3BTYEZu+qsrLhQYQjqau68t+xOT8xu3mweHRhenTpmlm+nw+z5JDzOZqO73MNscbA2CY+PXNoXd/6F05CXsNJwDd5PuqMstynbCjeI+XZVQiQBDg5p2773/6+fjEJNle1uRjPtksO/qIaBpmipBHlnstpbR/aPjPH358v7WNbPMuE+GBlK1Wy45Y6Ut2LKLrxpTfL+7bFh2+R0fHr9y4udDep4Toup6VlSmoSbdudNLgvikmGGiG+e2t4Xd/6EsYnJENaZUQQA55GbZ9lT6LwnYQDhJCBFnH8pnTgLea73342Zdj4+Mk7X9f+WTNOcqyLJLyV03+J4TwhzFloQ9kYGjk3Y8+vdfSBttD4UnakOHzzILdNrZlVqIEkCTmtNuX+tYMw7xz//7o6PhCn4xhmg6nsyg/D7bYykmD+4asVLH8pkPx9y/0v/9jf0wz1peJutAKMzkoCn1hf35lgQt2TpAM5zwzw/vCsye8Hre+JKJg/jR6q/nux198PTY+kfa/A4CuG0uVgACyLIsoiORAabNZD+3fm+HzadryCpcYGxgafu/jTx+0thNC8HEfmUzTnJycAnxoXnNEiUk52dkLQ/530nghSkwS47Xoj7qhDwyNELrYEW9VVa/wyWxlf9Pgvv7TmQhi6RwO/fvXPV/dHI7EDYnSjQ4WAQJYmGWvLHCpMttROkGJSccOHnjzzCset2tZ+12YLTeb7330xddjExM/5/hIQoBz7g8EDdMU7IDzKkLOFUlyO5yrThXG6JH9+14//ZLLaTeW21BF7E3fwOCnX5+bnJ4hsHkbKlnz9EDE0fHxodGxRScSClBUWFBVUb7NzXYA8PuDmq4vyrhGAMbYHP3ZQ+odHh3t7O6mlD5E8gjIGFuV6SgN7o8J1gkg4shU9Ksbw//8ecf1tknTRLbhq0ICYJpoUaTThwqLs3dckIzoPjm0f9/zJ46LmNxl8d00zZt3mj/6/Kux8Ymf85mPIwbDIdM0F10yi6jqgoK81RWOIEnS4f17z77ykqAdXxbfJUnq6ev76LMvpv1+4cbZ6m1+kQCACOO7dfd+PBFfyMMl4qmOHNxXXVGxnQ0XwQkzPTNDyGIqEQKQk51lW3JhYHLe0dUr+OIfOuOaaLWobrdzq5udzlBdw4IkswYXxjTzauvE5ZaJ3tFwXDMZI5tzSUgAAOpK3TUlHkbJjguSIXPAdfzIoYnJyR8uX2NzmZlLj+c379wFgLMvv5SdlYFPIiHoKjYCIbquD42MJDRNkR+ioTc5391YX5ift6oli4icmwBw4qkjlNIPP/syHIks78c3+fVbzUDIG2de8bhcW5q/KmgU2YL3c84N0+wfGLrf0oomn6NEnnXBV+4qq6+uEkmh648BXdnFsVk9HZuYmJ7xLwqFFJvTsUMH7Dbb/HfNkvpyHggGF3WKACByRVHczjS4bwcjC2fZ/DnHyWDiduf03e7pruFQKKZLEhVO9o0jOyUQ182GUu8bx0utMoWdXBzc6XC89fpriHDxynXGlq/Qxjm/cbsZObz9izMet+tnyE/Q0dXTPzAs8lJwAQ66HI5TJ4+nMGFIKBSJRKMAQIA8ffQwcvz4y69XKl1kmOa1G7eR4y/Pvup2ObdI4Rz5jN8/OTVtGAahFABm/DN+f/D2vfuDQ8NT0zMwW6kOTM5lxmpra1576VROdtaa2oMICzkAEIBRutULprd/cHJ6ev5qVExjTdOa6utqKnfNlzGZ37w5x0AoaJqmvHDznjusbLDQRxrcN3RqFv8ic4n/YzOxez0zl1sm+8bCsYTBGFFkipt3RYUIBMhTDdmFmbade9EoJjfn3Ga1vv2L1xDw0tUbK1XgRMQbd+54Pa4zL7+wjqIHO2tGLTT3CCF+f/DStRtT09OyLPMFYKHrRlXFruzMzFReq+u6rhsweyfJTh4/igCffPl1OByGJX5hQoAjv3brFgK+/YvXXA7HpuM7ISQWi3/8+ddfnPsOOYqFYxqGYfJIJCIqx8Ist75ktznra6pfeeG5rIyMNdnXjNHxyclvf7i4sHcZXo/gbFl0spFluTAvb56bJfXFOA8DIiSpvavn6o2by77/yMF9Lucy1glHPjPjNzlXlhxeH02h8DS4r+RemP1XOKY/6AuMTEfv9850DYcNg1NKFJltcmgZAY7w7J7cpnLfDkV2QkA3jEgkAlmZwrFrs1rfPvsaIly+fnPZWGzx329+uMAoPfPyC/LWXzE9Jh8M0ofB635r27cXfmzv7FoYH0IIMU3udjl3N9SliHQLstWFE488c/woEvz0i29WLj1Krly/abWov/rF6yI9cnPxHREj0SiP/MQeQwgBQpQ5BmPTNDN83uNHDlXtKs/LzXXYbWu02ZEx1j841DcwuKpydF3Pzcn+r//5b+1r/BZKf4KBaCz2oKXty/Pf9w8OzbO6w2yko3Fo/97aqkpC4GG+nJ/OYY9x4klbOaeBA27bkzaZ/b/lDCKTTwUSE/74zc7JsZl411AoENFkicoSlRjBzQ4ZJgCazhvLvL96psxhlXdoPiohJKFpgXB43mnAEe122y9fO+0PBFvaOxgly+WvEG7yz899i0BeP/2iALsnxj9DQAShk3giEQgEQuFI//DIwMBAa0fXxOS0JLGFNFWI6HDY3zzzylOHD87XLVrT5iqm5TPHjhKEj7/4eiX/O6X04pXrDrvj1RefZ4wtvfDYoPbZXNItmfM4zW/koj2myccnpnwerywrdquVrN3b/lB5vJWaQYhpmqqqOtdydWmapmmaM/6Alkj4g8GegcHBoeGW9s5wJCLN7cRiT01oWqbX+/zTx13O5X1cwWBI03T6SEJ+lwUNaUuWOSXi7pHthHsy3eC6wQ3ESNSYCMR7R0M9I+Hh6Wg4ZkwHE0DAKjOHTRYHKdx8ZYHJ0WWT/9OLFQ6rDDvZ1U5mRx7m8R0RXU7nb944+x/vftja0UGXw3cRKPbJV18Tgq+ffnnbh8OlDBOcWyyW1raO/+f/+v82DEPTdMMwItFoLB6XJWk+GV0Y37puOB2ON8+8cvzIoXVvb/Ok5M8cPzYTCJz77oJhmIuW4ByFuv7JV98AkDMvPS/0P+9Po5Rm+HyU0fVBkuAvJHNAaRgGY0xU2mOUmpxTSmf8/u8uXrp8/UZpcdHuhrrdDfUFeblrKuqybIG9Rb8UDnFBqJjSgYDSeCLx2z++qyiKpmvc5Jquh6MR0zAZY/Kcq50SYnJumIbH5f7NL39RVlq8kk8pHo8bhr6O9YwcCSVrhZEtt9wRgRGY9Mc/uTyY4VJddnkbOhkQgBIIRvRgVNMMnArGZ0KaP6xNBRMxzUAE4S4kBOwWCQggR863pBvikhYA/uaFXbk+K+fwhNW0EAZpXm7Or988+x/vftDa3k4pW7quRCnRDz/7khDyi1dfeWKMd0pJNBYL9oXIgoKcNqt1octVUJMX5Oe9cuo5UWdjg30X2jvz0guc83PfXzRNc3GcNSKljHP+8edfAvAzL72wEN8BQJKldbdBkqTa6origgKOGI1Gp2cCkUgkEAz5g8FQJGK32URopizLpmn29PX39PW3d3X/4vTLpcVFKY87qopqtVkWrWqJUafDgQsWl8l5VUW5KispNp5zPj45ObfNEEIJo5QpDBYc1uOa5nI6GmprTh47UrmrPCnOIK7Lc9HV29vR1ZM6viNHh8O+p7FhUR3wzbfcCYXO4VBLf4A/kkuDjeAOIUAIUCCiRiGlQAkBAoTO+ms4bmFOn0B2yugvjhUdqs3iiJQ+geEiovRrfm7OX/7yjd+/8/6DtraF8QbzcAMAqqp+/MXXFeVlDbU1C9f5Np9Iq+E7VRfcFS+0Lgkh3DQzvN6njhw6tH9PTlbWJm6oiiyffeUlADj3/UXT5GSJ/U4p5cA/+uJrQugrLzwnMZakEHPq+4rNaj1x7GhTXe0CAzYxMTk1OT198er1ew9a5l00VCw/Qprvt4TDkX/4T3+Zm52dSiUmTTNqq0peP/3SIrNSlqUMn+ehtiMAQYtFTX3LXHTxs+jmkxCyp7H+peeeqa7YtdDRtKw4HQ5xPks9GVs8fONO8weffjnPD7wqBnGOGV6v2+Vqqq99aJPeiuUsS6BI0koe7e1jvwu9IRB4uLTBI6DBJgAcQZLpa0eLzhwperK5EoU7ODcn6zdvnv3D+x89aG1b1mFKCGGS9M///oe//atfNdb+NE29HreqKtFobEea8wgmN1dyE5uIGV7Ps08fc9jtm1iMcB7fXz/9MiX0mx8umoaxFEcopcD5J19+jYAvP/+cIksbP6EiYiKREIWeKSGIYLGoRYX5RYX5jfW1f3zvwwuXr5gm/2nCIyqyPDg88od3P/z1G2dTKaqOiE6HvbS4aEucaaYpqjstW7+Jc56dmVFdsUvkiyVvp2MO3Nfahmg0xhi12SymyYV9IK4uxAFrOcJhtNmsIhLpIcNiS+YzAkfkHM1t/MM5cg4cQWjrUWIrAeAcVIWePVr06uGieXp+eJLxnXDEvNyct18/01BbYy4XRSCsuWA4/Ns/vNP8oGXe3rGoCqNsJ3ZZ0/X8vNxfv3n27ddfe/rokUXOX+HnHRobu3z9hmGY69u6VtoPxIFJlqQzL506fvggX0nhlCLi5998+/nX5zRNS1Iobk0dp3PC2CweCSLiX/3itddefnHZsKgHrW3ffPeDpump2Lkm51wUJ1rws5Kk3nLG2MG9e3555vTrr7y47DaDiDfv3BsYHEplGxZ3s8vqPBaLTU1Pr/RBi6paLRaLqoofzrlumqZphiOReDzOV5ClPU2HQj4GM9Yw0aqwVw8XvnywkFHyM8nPpIQgQEFe7ptnTxNCmh+0LM1fFYFuM/7A7995HxF319fB3LXETuyvruu5OVnPn3gaAIaGR++1tvr9gYVdJoREY/HvLlyuLCsvKS5ch/E+m8REVjgwASiKcuLYkZHR8XutreqCSL6FWGOa/MtvvwPAF545YbVaEfmmTngyf5iQJOnksaMDg8PXbt1elA0ElN65/+Cpo4dKi1Z3vpO50k6b2EjDNG1W69NHD9VUVSJiRobvd++8F4/FF4arMsb8gcC5Cxd/88YvFEVedd+122zLdYQAIF+e7ZkAwLHDB3eVl8lslhF2cnraNExK6dT0dHt379j4eIo7VhrcH6nBDgC6wbPc1jNHCo81ZMsS/Vll3oueFublvXHmFQBy90HL0vxVRGSMTk3P/OG9D5HjnsZ6QlZ3O25npzwimtzMzck+tHfv59+cW2QdM0rGJiZu3GkuKsx/KMsxJbOd+ANBACAr2e8AAFCQl/v2L14lH8C91rZFVAfzByZd17/+7gLn/NUXTzHKtkKdIi3ZZrNWVe5qftBiLPAUiSYFQ+GxsfHSoqLH6H+b34pqqyp2lZbcb2lbanz8eOV6Q03t/j2NJuds5c2YEuJ2uxldHHdEKYkn9GAonJeTs+wHS4oKS4oKl/3Tux9/9vXERIqzPU0c9ghdMQgcobbY85vnyk7szhWkjz9PXsTC/Lw3Xn25vrba0I2lCxkRGKXj4xOffPV1T18/IXRVNUlMejSAsI4sB0IIIDBG9+1pyM3JXnpUp5ReuX7zXkvbOkAtxY8UFRS89fqZhprqhKat5J9JJBLnvr/4zfcXw5HIskGrmwKdiFhRWpKXky0Y0xY90NM3sOzvH7Fwji6X68j+vRZVXTTcBMAwjM++OTft9y8F7p8OTQCM0swM39LwAUppOBIeHRsHWDHweVn/kmGYuJasqDS4PyJXjIkoMbKvMuOvTpUfrM58IgNj1obvBXmnX3i2uKhgWXezOML3Dwy9/8nnPX39FFYJu87KyFiWDXyz0y9BYkxVlDVPAEoRsaSoqLG2ZokbFwDAHwj+8ONl4XHeIoUXFeS/9fqrjbU1K5EDE0Ji8fi57y+cv3BJX27T3Sx893o9Drt9KbciIo5OTGor1Kt79NZYdWVldWXFos2GIyqK0t3be+X6jZVqrolfUcbycrIpWRqHSjRNj0RiSWw7soKszTGYRt6thnUgoBvcbpFf2J//F8+WCS5f8rPXDAJUlpe//YvXigoLjJWNtfbO7lt37yUSCZqUK5/JbFknQCQa3cQUcM65qiget3vdeHF4/77y0uLlSs1BZ2/fvdbWLXUxFRUU/PK10yXFhbq+/C7CGAuGQi3tHbqu0y3IuRBfarPZrBbLYiOUEAAIBoNLTzaPxTmDiB63a29Tg91mXcSljIiMssvXb05OTyfHW5/H43I68OFEfUKopmljkxP6Fm9jaXDfWjE5EoTSXMdfPFv22tHiTI8lXV1uoXVTU1nx9uuvFeblGkti9WbXGGAwGNJ0fZ5PeMW9Ysn7TZMHQ2G+3kzL5X7JrTar2+VcH14AQHFRwdGDB6xW62ImWEKi0di3P1yc8Qe2Ft8LC15/5eWC/PyV8B22/gKDrFivDoKhkGGY22eW1tdW79u9e2lVSMbYyOj4tZu3V7oNEs/7fF6fz8PnWI4X4ns4HI5GY2lw35EGOyKYHHO9llcOFf7nlyqPN+ZYVYY7mV1gi6S2quLXb5wtKMjbSGJqdlamtFwYHyIuu22stiWb04GgaZoi4GThkq6p2GW1WNbn8BELvqG2pqSoYDkaBtLa3nnp2vWtTnporK996+yr+bm5xgrVEB/neW7b2D6iPJbb6Tx6aH9mpm+Rc0b8+8Llqy1tncs2Wzxgt9lqKisoo4v6KMvSyMjY8Nj4lnY5De5bYpAaBsoSqSt2/8Vzu15/qrg0z7nwr2lZNNdrqirfeu1Vu92+7nDvyrKSRTdXCEAp0XQ9EAityVkkTEhBS7L4MM7YRnJnxGHf63Ef2N1ks1k452TJA99euNg/OLR1bFMCsxrrat5+/UxOdva6Fb4RMUzTMJfbVwioirJ9rqNE3fGSoqKG2pqlFA4SY2PjE19+e37m4fDWh0BckuqqqxcVyRITaWxicnh0OG257yRY5xwoIZUFrrNHi//2pcrdu3yyRNOumFUhr6666oWTxyWJrS+qPTcnxyVK25CH3hyLxccmJtZgaCMCADfN6ZkZY4HzV1QHLMzPq62q2Hh/a6ury0qKFiXYiDU/Pe3/5Muv9a20qcXJoLG+9tdvnM3JzprNyXyEhvnE5FQgGFqaH0QACvLz13FfvXUrGhFURd6/Z3eG18v5QywOHFGW5fbO7qu3bic5A7ldzqyMDH3J8ZFQ0tXTHwyGtu6glgb3TYN1ExEASnLtbz5d8p9fqTpztCjXZ4W5OglpSQ43lNIXn3vmzIunVgwvS2KKAlgtltLiwoW8EQIrA8FgS3sHrDEDeWpmprO7xzSMhVakbpinTj5ts9k22FNEzPB59zY2WC2WpSHniqJcu3nn/A8Xt9RBIZzIjXU1v37jtezsTHy0d5gjo6PTMzN0yUATAj6PZ5vR+iMAFBcW7G6oXRobIyjdv/3+woPW9qXck2JmZvi8zxwX9BImeXgjf9DWfv32HcMwyNY4Z9LgvkFUAkKIicgRXTb5WH32/3ym+vThwvxM6zylQRrYUxTG2Cunnjv94vNMYnN1KFO1Bxlj+/fsViRpYcSYiA7u7Rvo7u0jScvfIMI8hToi3Ll7f9rvl6RZrhWxhmurKxrramDDTBWigfU11ZW7ypeWtEZESZY+/frcnXsPHoEd3VhX+/brr2VnZyLiVpsgImxJ1/WW9o5gKLQwGkeMmizJVZW7aGq7O6Ygm3XKURXl4L492VmZiyx0MfEmp6bf/+Tzrt5eWAGjD+7dXVO5S9MeCkCilEYi0XPfX+zq6V14rEkyOdfaqTS4bwjWDRMTuul1qMfqsv7Pb9T93UsVeRk2RFEzLw3ra7c1GH31xedPv/CcJMlrQlEEqK7cVV9bsyiQjjE2NDr62VfnhkdHBYI8RMbBUfx/MZqEkFA4/N3FSxeuXIvHE2IpUko55y6X85evnbbZbUsd5euTDJ/vuRPH8/Nyl+bsMErD4cgf3vtA4PsWlWQT/RUcD2+9/lpOdiY3NydmVDDJCHapWeIXzkWeFCGktb2z+X4r4uJ61qZp1tVUp+j1IqnJbEtWoF5Z0ymnrKTk2ePHlnWsS5I0MDz87YWLgWBwWec7Y+zEU0c9bre+IBBIbAzjU5PfX7oyMTW1YHLO6W1O5ienJLGl7GBJJE0/sB4PDAKYJhICZTmOyiLX3oqMuhLPT67DtBdmA7hACDn9wvPhUPT8hYuQcrU5zrnVYjmwZ/eD1jbt4SA/Qsjte/eD4cjrp18syMt7KJBxrhhXLBYbGhnrHxq619LafL+FUTqbEkXANE2OeObFUxVlZcnTzdfazbqqiqMHD3zw6eeLWGEFXoxPTv3HOx8gwJ6GujmzbvPn1Ty+EyB//uDjsYmJDc5eQogsy3RRkDwhANDV3TMxNX3uh4sz/gClDzmaOeeqqhzY02SzWlcl2CGEhKPRvoFBxqjL4ZQktpLFa7fbN2sxEkL279l9r6Xt7oMWZQlFD2PSjdt3E5p+5qVTpUVFC3FA2P4NNdVvvPryHz/4SNcfsv0pobea7/n9gZNPHW2orX7I6Tf3WCKRiMZiY+OToUi4b2Bw2dojj6JYxxML6GTWLWZwBARCoSjL/lRjzr7KjGyPBeZYgpelCU3LWrGGEvrqS6fiifil6zdTpFUTZ/nG+pqXnnv2i2/PC4LD+fQlxlhvf/8//+4PXo8nOyvTMExVUbKyMhD59LQ/HInGYrHxycnRsXHKmCjVLVpiGmaGz/Ps00+dfOooArBNpeQlhBzct6ezu+f2vfvywxaZIOydmJr8j3fe7+0f2Le7sbggf0sdJk31tdFo9A/vfRiNxShdZxkmQkg0Frt89frY+MRsBCoB0+ATk1OapvX0D4TCYcM0FnJ8EkI5N1RFffG5ZxrqameJiJPui5IkdfX0/e///FtKqcNuY2xFcLfZbaqsICAiVJaVHDm032qxrnu8vB73r988G4lFe/oGFFl+ODkOAeDGrTsjI2OvvfzCof17H3I6AXDOTzx1FAn88b0Pdd2QJGn+45zzlo7OoZHR/LzcnKzMzAyf+Mp4PD41NUMoCYXD8XhicnomHo+L5LL5bWPudGIahplmhVyz44UAmCaK8xQlJMOtHq3NrihwFWfbM9wqiIIeMFvlIy2bBXxOh/3t119DIJevXU9Rs4QQi6q+8uJzhJJPvvo6Fo1ZrdZ5Vy+hZMYfnJiaftDaDgCUzpZs1jQdESmjsiTZ7aKQDXKOCU1DzosKC/7q7TerK3ats6bOas7cDK/nrdfPcM7v3Lu/yB5ERFmWp2dmPv78y5t3mutrqjK83tIV+KQ2xT9zaP/eWCLx4WdfRCLRZbkcUhHDMG7cuXvjzt2FsJdIJAghqqIyRiUmzfvBAIimaapFffH5Z155/tkUCYcJgUQiEY3GANAUXrUVnjTnvDGiROaBfXs2OC3zcnJOn3r+f//nfzMMQxSTWviM1Wodn5z8tz++89V33+8qLamrqa6rrlJkef7jJ48d7ekduHzjhqbpksQoJeJSR1WUWDz+oK39QWvb/H0y51zTdCDAKKOUSJJEKZUkSeA6Ipom13SNUWqz2bxut7LkIjoN7st4XcT/MwzUTdMwuduuZHqsFQWuPK91f1VmfqZtbvkBANKft6m+Ee6L5G4Wu9321tnThMDlazcQkTJGuLlqGQdG6YvPnrRZLT9eu9Hb168bhkVVxadkWZJliVhFruss56oiy/O1pQUQJDRNlqSSosLykuLnTx7Pz81NxdW2VAOr6kT8ITc76zdvnkXE5vsPlAVRgMLVzhhjjI1PTA4Nj/i83r/45evCJFxou23iOD57/Bgh8MGns/ie5P0r9W7ZmiSqoiy8OxDjq+s6/P/bu7betoogvLvnfny/x3FaJ05vlDa3hoY2jaCgSqhCCIFUVJBQ/xhvSLwiJCQqXoCHgmhVEC2loS1VkialVIlTx3F89jY8rG1c23GdJqiQnHmyZJ/1nt3Zb2dnZ+ZDkE4l35g5c3ZmuiM3epd/UTvBs+el/iGXyajNvmPLvSiw4iQYHzl26aMPPvn0s3KdNbAxX1JKXdc553PzD+YXFsvrlYOFIVWGU7UMAJc+vDA5NvrFV5fn5heqTJiGob4ihLiOg5quVTFCtm036wOq0dIKLrhlGIGAeyCTH8hlT06MHxgaRHWV6Abue8cGVcMIWMXY4hqVLoAARDDqTzi5VGBfKpBLurmk258M4Kcf3AMcGz1ZapQxDRO1XHfq6o8QAghCweB7b58nmFz58SplDAEQzLv8RQPEz85MT06MXbv+8083bs4tLK6Vy4q8G7ctAFGz7BCAFFIaun5ouDA1MT4xejwSCaPeLlEAgDFGKVOcEXVfEKGU9pIfm06lLr7/LkLo+i83lH+mHWiklEJwKUFKSSlVbkDO+XPk33Z5C4TQ69OnMcaff3m5VFrTNMI471ich3PuUaoSx1RfYfO6AsrCrbHiSCkBIuFQYSgzPJifHB0ZzO9vnr5W7aI7U+XGcWytThUrpaSMUco0jSgXNiaYc0FN1r0Skerh1IkJ13G//ua7W7d/b76Nb9ZeIYRou6BWvzl29PBALvvtle9/m727sLRUqVQ0QnA96rY51gsJ0TxoBONQKJhOJQf6sv39fdlM+mBhyNw8LaAV3CUA54Bbr7J3pyjnFcGIaAQBckw9EbEjAbOQDeYzwUTYioasoK03AF2imh77fvWGEhcG867jEo2AlI7jxGPRnTtFYYRQOBR8561zlmXen5tHCDSi2Zb9TMCVUoYCgbMz0yfGRuYfLM7evfektPbor8cPHz3CGAshmyEYAIWCgfzAwOD+fblcXzaTScRiqhFc9292Nwxd1zk5OV4ur2uahpoIKKqed2i4gJ7FLAGA0qnkxxcvnBgbuXPvjyeltVK5vLJSBACJwDateCwSDoUPHxjel8t6lL525rRGCMJYCHFEhZcAbF8pG286c+pVx3Z+uHptfWMDpEynku1oMHrs5UplY72ywThbKRaFkIRgj7KV4mp7WVqMkACIRyPBYHAgm03Eo/3ZbH9fJhoJt3Bztzx3cHg4k07vyOG4MJhv3FpnMqnpqVcoY80tSyld1+3LpNHmCxzXYff40SPDQ/kbt27P3rm3WiqV1korxVXBBSAwdCMWjeSyfSNHX6ptS23RrtFI+Py5N2dOTS0+/PPmrdmVYvHB0tK6cjQJqZ7QiSYAEvFYwHX35/pj0UgiEY9FIqFQMBoOK+8NAOpC+NfKg3Pl18c37xf3QkFaABQLGY6l26YWD9qahpMRK2jrhGDX1jXyDzuzAhof0Dvaeh6lIGtaTzAyDJ3sKCWeWvlVz/M8qqrrGYbpOnaPdqiaNsYY58JjlFKKEX68vFz1PIIJQiiZiJuGoWnEtm3XcRrHZ7SV6jEAklLWgU0dQNM1s4esnAbAbVSrnHPOBeO1koEEY90wDE13HBtjQimDesAERmCa5r9RvhFArlc2uBAYIV3XXKcDoxDjjHOJJFDO1NRICY1ut7WIdF3XdM22rIYvovvBCACqnofRziRwGrqu61rjJME4b6GAUUZbM5t5d+tBDXu16jHBBReMMdWeCti3TNOyzM1gt/mtKWWUUc/zpISqV11eWQUEhqanUkmMkGEYRCOOZRlNg9ajirZGZQoJEgDtjXR5QmpmeKfy1gj5Fvou2H626DjbKqzv+Da2pyyD//X7NgLktukH24oNAZv5r3oCdx8IfPnvrqXtTRDUN+12C+hFAXqXY+VTOVwvqHO9jzk0A14Pnp9dqJywrfmCTTXz+cesUzGzPYMXPpT74osvu1V0H/J88cUXX3af+LVlfPHFF192ofwNJfPAakp5FQAAAAAASUVORK5CYII=">
+  <div class="brand"><h1>Rechnen mit Säure-Base-Titrationen</h1><div class="chips"><span class="chip">Chemie</span><span class="chip">Jahrgangsstufe 13 (eA)</span><span class="chip">LB 3: Säure-Base-Titration</span><span class="chip">Bearbeitungszeit: ca. 90 min</span></div></div>
+  <div class="ident">
+    <label class="fld w"><span>Name</span><input type="text" id="name" autocomplete="off" aria-label="Name"></label>
+    <label class="fld"><span>Klasse</span><input type="text" id="klasse" autocomplete="off" aria-label="Klasse"></label>
+    <label class="fld"><span>Datum</span><input type="text" id="datum" autocomplete="off" aria-label="Datum"></label>
+  </div>
+  <button type="button" class="fsbtn" id="fsBtn" title="Vollbild ein/aus">⛶ Vollbild</button>
+</header>
+
+<main>
+  <div class="legend" aria-label="Legende">
+    <b>So erkennst du die Bausteine:</b>
+    <span><i class="lg i"></i>Info zum Lesen</span>
+    <span><i class="lg l"></i>Zum Ausprobieren</span>
+    <span><i class="lg t"></i>Hier musst du etwas tun</span>
+  </div>
+
+  <!-- ===================== 1 ===================== -->
+  <h2 id="s1">1 Grundlagen: Rechnen mit Titrationen</h2>
+  <section class="box info">
+    <span class="tag"></span>
+    <p>Bei einer <b>Säure-Base-Titration</b> gibt man zu einer Probelösung mit unbekannter Konzentration so lange eine <b>Maßlösung</b> bekannter Konzentration, bis die Neutralisation vollständig ist. Diesen Punkt nennt man <b>Äquivalenzpunkt (ÄP)</b>. Dort haben genau so viele Oxonium-Ionen mit Hydroxid-Ionen reagiert, wie die Reaktionsgleichung verlangt:</p>
+    <div class="formel">H<sub>3</sub>O<sup>+</sup> + OH<sup>−</sup> → 2 H<sub>2</sub>O</div>
+    <p><b>Am Äquivalenzpunkt gilt</b> (z = Anzahl abgegebener bzw. aufgenommener Protonen pro Teilchen):</p>
+    <div class="formel">z(S) · c(S) · V(S) = z(B) · c(B) · V(B)<span class="fnote">für einprotonige Säuren und Basen (z = 1): c(S) · V(S) = c(B) · V(B)</span></div>
+    <p><b>Rechenschema in vier Schritten:</b></p>
+    <ol class="steps">
+      <li><b>Reaktionsgleichung</b> aufstellen, Stoffmengenverhältnis ablesen</li>
+      <li><b>Stoffmenge der Maßlösung</b> berechnen: n = c · V (Volumen in Liter!)</li>
+      <li>Über das Stoffmengenverhältnis die <b>Stoffmenge in der Probe</b> bestimmen</li>
+      <li><b>Konzentration der Probe</b> berechnen: c = n / V, dann Einheit und Plausibilität prüfen</li>
+    </ol>
+    <p><b>Näherungsformeln für die charakteristischen Punkte</b> (25 °C, pK<sub>S</sub> + pK<sub>B</sub> = 14):</p>
+    <table class="dt">
+      <tr><th>Punkt der Titrationskurve</th><th>Was liegt in der Lösung vor?</th><th>Formel</th></tr>
+      <tr><td>Startpunkt, starke Säure</td><td>H<sub>3</sub>O<sup>+</sup> (vollständige Protolyse)</td><td>pH = −lg c<sub>0</sub>(HA)</td></tr>
+      <tr><td>Startpunkt, schwache Säure</td><td>überwiegend HA</td><td>pH = ½ · [pK<sub>S</sub> − lg c<sub>0</sub>(HA)]</td></tr>
+      <tr><td>Halbtitrationspunkt</td><td>c(HA) = c(A<sup>−</sup>)</td><td>pH = pK<sub>S</sub></td></tr>
+      <tr><td>ÄP, starke Säure + starke Base</td><td>nur Zuschauer-Ionen</td><td>pH = 7</td></tr>
+      <tr><td>ÄP, schwache Säure + starke Base</td><td>korrespondierende Base A<sup>−</sup></td><td>pOH = ½ · [pK<sub>B</sub> − lg c(A<sup>−</sup>)]</td></tr>
+      <tr><td>ÄP, schwache Base + starke Säure</td><td>korrespondierende Säure BH<sup>+</sup></td><td>pH = ½ · [pK<sub>S</sub> − lg c(BH<sup>+</sup>)]</td></tr>
+      <tr><td>nach dem ÄP</td><td>Überschuss an OH<sup>−</sup> (bzw. H<sub>3</sub>O<sup>+</sup>)</td><td>c = n(Überschuss) / V(gesamt)</td></tr>
+    </table>
+    <div class="hint">Am Äquivalenzpunkt und danach ist das <b>Gesamtvolumen</b> größer als das Volumen der Probe: V(gesamt) = V(Probe) + V(Maßlösung). Diese Verdünnung musst du bei jeder Konzentration berücksichtigen.</div>
+    <p><b>Indikatoren</b> (der Umschlagbereich muss im pH-Sprung um den ÄP liegen):</p>
+    <table class="dt">
+      <tr><th>Indikator</th><th>Umschlagbereich (pH)</th><th>Farbe sauer → basisch</th></tr>
+      <tr><td>Methylorange</td><td>3,1 – 4,4</td><td>rot → gelb-orange</td></tr>
+      <tr><td>Methylrot</td><td>4,4 – 6,2</td><td>rot → gelb</td></tr>
+      <tr><td>Bromthymolblau</td><td>6,0 – 7,6</td><td>gelb → blau</td></tr>
+      <tr><td>Phenolphthalein</td><td>8,2 – 10,0</td><td>farblos → pink</td></tr>
+    </table>
+  </section>
+  <a class="next" href="#s2">Weiter: 2 Musteraufgabe ↓</a>
+
+  <!-- ===================== 2 ===================== -->
+  <h2 id="s2">2 Musteraufgabe: So sieht ein vollständiger Rechenweg aus</h2>
+  <section class="box info">
+    <span class="tag"></span>
+    <p><b>Aufgabe:</b> 25,0 ml Natronlauge unbekannter Konzentration werden mit Salzsäure, c(HCl) = 0,100 mol/L, titriert. Bis zum Farbumschlag von Bromthymolblau werden 21,5 ml Salzsäure verbraucht. Berechne c(NaOH) und den pH-Wert der Natronlauge vor der Titration.</p>
+    <div class="muster">
+      <p><span class="st">①</span> H<sub>3</sub>O<sup>+</sup> + OH<sup>−</sup> → 2 H<sub>2</sub>O &nbsp;⇒&nbsp; n(NaOH) : n(HCl) = 1 : 1</p>
+      <p><span class="st">②</span> n(HCl) = c · V = 0,100 mol/L · 0,0215 L = 2,15 · 10<sup>−3</sup> mol</p>
+      <p><span class="st">③</span> n(NaOH) = n(HCl) = 2,15 · 10<sup>−3</sup> mol</p>
+      <p><span class="st">④</span> c(NaOH) = n / V = 2,15 · 10<sup>−3</sup> mol / 0,0250 L = <b>0,0860 mol/L</b></p>
+      <p><span class="st">✓</span> Plausibel: Man braucht weniger Salzsäure als Probe, also ist die Natronlauge verdünnter als die Salzsäure.</p>
+      <p><span class="st">pH</span> starke Base: pOH = −lg 0,0860 = 1,07 &nbsp;⇒&nbsp; pH = 14 − 1,07 = <b>12,93</b></p>
+    </div>
+    <div class="hint">Schreibe in deinen Rechnungen immer zuerst die Formel, dann die eingesetzten Werte mit Einheit, dann das Ergebnis. Runde erst am Ende: Konzentrationen auf drei gültige Ziffern, pH-Werte auf zwei Nachkommastellen.</div>
+  </section>
+  <a class="next" href="#s3">Weiter: 3 Virtuelle Titration ↓</a>
+
+  <!-- ===================== 3 ===================== -->
+  <h2 id="s3">3 Virtuelle Titration: Kurven vergleichen</h2>
+  <section class="box live">
+    <span class="tag"></span>
+    <p>In der Vorlage sind <b>20,0 ml Säure</b> (c = 0,10 mol/L). Gib mit dem Regler <b>Natronlauge</b> (c = 0,10 mol/L) aus der Bürette dazu. Die Messkurve wird mitgeschrieben. Wähle einen Indikator und beobachte, wo er umschlägt.</p>
+    <div class="simgrid">
+      <svg id="tcurve" viewBox="0 0 470 310" role="img" aria-label="Titrationskurve: pH-Wert gegen zugegebenes Volumen Natronlauge"></svg>
+      <div>
+        <div class="ctrl"><label for="exercise_sim_saeure"><span>Säure in der Vorlage</span></label>
+          <select id="exercise_sim_saeure">
+            <option value="hcl">Salzsäure (stark)</option>
+            <option value="hac">Essigsäure (pKS = 4,75)</option>
+            <option value="hcooh">Ameisensäure (pKS = 3,75)</option>
+          </select></div>
+        <div class="ctrl"><label for="exercise_sim_ind"><span>Indikator</span></label>
+          <select id="exercise_sim_ind">
+            <option value="">ohne Indikator</option>
+            <option value="mo">Methylorange (3,1–4,4)</option>
+            <option value="mr">Methylrot (4,4–6,2)</option>
+            <option value="btb">Bromthymolblau (6,0–7,6)</option>
+            <option value="pp">Phenolphthalein (8,2–10,0)</option>
+          </select></div>
+        <div class="ctrl"><label for="exercise_sim_v"><span>V(Natronlauge)</span><span id="simVv">0,0 ml</span></label><input type="range" id="exercise_sim_v" min="0" max="40" step="0.1" value="0"></div>
+        <div class="flaskrow">
+          <svg viewBox="0 0 90 100" class="flask" aria-hidden="true"><path id="flaskLiq" d="M33 50 L12 86 Q9 92 16 92 L74 92 Q81 92 78 86 L57 50 Z" fill="#eef4fa"/><path d="M36 8 L36 46 L10 88 Q6 96 16 96 L74 96 Q84 96 80 88 L54 46 L54 8" fill="none" stroke="#4d5d6e" stroke-width="3" stroke-linejoin="round"/><path d="M32 7 L58 7" stroke="#4d5d6e" stroke-width="3"/></svg>
+          <div class="phread"><span>pH</span><b id="simPh">–</b></div>
+        </div>
+        <button type="button" class="lbtn" id="simAuto">▶ Automatisch titrieren</button><button type="button" class="lbtn" id="simClear">↺ Neue Messung</button>
+        <div class="ctrl"><label style="justify-content:flex-start"><input type="checkbox" id="exercise_sim_hilfe"> Hilfslinien für ÄP und Halbtitrationspunkt zeigen</label></div>
+      </div>
+    </div>
+    <div class="simout" id="simOut" aria-live="polite">Bewege den Regler oder starte die automatische Titration.</div>
+  </section>
+
+  <section class="box task frage">
+    <span class="tag"></span><span class="afb">AFB II</span>
+    <div class="atext"><p><span class="op">Entscheide</span> mithilfe der virtuellen Titration: Was ist bei Salzsäure und Essigsäure gleicher Konzentration und gleichen Volumens <b>gleich</b>?</p></div>
+    <div class="opts" role="radiogroup" aria-label="Antwort Kurvenvergleich">
+      <label><input type="radio" name="exercise_vgl" value="a"> der pH-Wert am Startpunkt</label>
+      <label><input type="radio" name="exercise_vgl" value="b"> der pH-Wert am Äquivalenzpunkt</label>
+      <label><input type="radio" name="exercise_vgl" value="c"> das Volumen der Natronlauge bis zum Äquivalenzpunkt</label>
+      <label><input type="radio" name="exercise_vgl" value="d"> die Höhe des pH-Sprungs am Äquivalenzpunkt</label>
+    </div>
+    <div><button type="button" class="btn" data-check="vgl">Antwort prüfen</button></div>
+    <div class="fb" id="fb-vgl" aria-live="polite"></div>
+  </section>
+  <a class="next" href="#s4">Weiter: 4 Rechenaufgaben ↓</a>
+
+  <!-- ===================== 4 ===================== -->
+  <h2 id="s4">4 Rechenaufgaben</h2>
+  <section class="box info">
+    <span class="tag"></span>
+    <p>Rechne jede Aufgabe <b>von Hand</b> auf dem karierten <a href="#s5">Rechenpapier (Abschnitt 5)</a> mit vollständigem Rechenweg. Trage danach nur die Ergebnisse in die Felder ein und lass sie prüfen. Bei einem Fehler bekommst du schrittweise Hilfen. Im Vollbild des Rechenpapiers blendest du die Aufgaben mit <b>„📋 Aufgaben“</b> ein.</p>
+  </section>
+
+  <section class="box task calc" data-n="2">
+    <span class="tag"></span><span class="afb">AFB I</span>
+    <div class="atext">
+      <p><b>Salzsäure unbekannter Konzentration</b></p>
+      <p>20,0 ml Salzsäure werden mit Natronlauge, c(NaOH) = 0,100 mol/L, titriert. Bis zum Äquivalenzpunkt werden 14,6 ml Natronlauge verbraucht.</p>
+      <p>a) <span class="op">Berechne</span> die Konzentration der Salzsäure. &nbsp; b) <span class="op">Berechne</span> den pH-Wert der Salzsäure am Startpunkt.</p>
+    </div>
+    <div class="res">
+      <label>a) c(HCl) = <input type="text" inputmode="decimal" id="exercise_a1_c"> mol/L</label>
+      <label>b) pH = <input type="text" inputmode="decimal" id="exercise_a1_ph"></label>
+    </div>
+    <div><button type="button" class="btn" data-check="a1">Ergebnisse prüfen</button></div>
+    <div class="fb" id="fb-a1" aria-live="polite"></div>
+  </section>
+
+  <section class="box task calc" data-n="3">
+    <span class="tag"></span><span class="afb">AFB II</span>
+    <div class="atext">
+      <p><b>Wie sauer ist Speiseessig?</b></p>
+      <p>10,0 ml Speiseessig werden im Messkolben mit Wasser auf 100 ml aufgefüllt. 20,0 ml dieser verdünnten Lösung werden mit Natronlauge, c(NaOH) = 0,100 mol/L, gegen Phenolphthalein titriert. Verbrauch: 16,8 ml. M(CH<sub>3</sub>COOH) = 60,05 g/mol, Dichte des Essigs ρ ≈ 1,00 g/ml.</p>
+      <p>a) <span class="op">Berechne</span> die Konzentration der verdünnten Lösung. &nbsp; b) <span class="op">Berechne</span> die Konzentration im unverdünnten Speiseessig. &nbsp; c) <span class="op">Berechne</span> den Massenanteil w(Essigsäure) in Prozent und <span class="op">vergleiche</span> mit der Angabe „5 % Säure“ auf dem Etikett.</p>
+    </div>
+    <div class="res">
+      <label>a) c(verdünnt) = <input type="text" inputmode="decimal" id="exercise_a2_cv"> mol/L</label>
+      <label>b) c(Speiseessig) = <input type="text" inputmode="decimal" id="exercise_a2_ce"> mol/L</label>
+      <label>c) w = <input type="text" inputmode="decimal" id="exercise_a2_w"> %</label>
+    </div>
+    <div><button type="button" class="btn" data-check="a2">Ergebnisse prüfen</button></div>
+    <div class="fb" id="fb-a2" aria-live="polite"></div>
+  </section>
+
+  <section class="box task calc" data-n="4">
+    <span class="tag"></span><span class="afb">AFB II</span>
+    <div class="atext">
+      <p><b>Charakteristische Punkte einer Titrationskurve</b></p>
+      <p>25,0 ml Essigsäure, c<sub>0</sub> = 0,100 mol/L, werden mit Natronlauge, c(NaOH) = 0,100 mol/L, titriert. pK<sub>S</sub>(CH<sub>3</sub>COOH) = 4,75.</p>
+      <p>a) <span class="op">Berechne</span> den pH-Wert am Startpunkt, am Halbtitrationspunkt und am Äquivalenzpunkt. &nbsp; b) <span class="op">Berechne</span> den pH-Wert nach Zugabe von 30,0 ml Natronlauge. &nbsp; c) <span class="op">Wähle</span> einen geeigneten Indikator und <span class="op">begründe</span> deine Wahl.</p>
+    </div>
+    <div class="res">
+      <label>pH(Start) = <input type="text" inputmode="decimal" id="exercise_a3_p0"></label>
+      <label>pH(Halbtitration) = <input type="text" inputmode="decimal" id="exercise_a3_ph"></label>
+      <label>pH(ÄP) = <input type="text" inputmode="decimal" id="exercise_a3_pe"></label>
+      <label>pH(30,0 ml) = <input type="text" inputmode="decimal" id="exercise_a3_p30"></label>
+    </div>
+    <div class="opts" role="radiogroup" aria-label="Indikator Aufgabe Essigsäure">
+      <span class="olbl">c) geeigneter Indikator:</span>
+      <label><input type="radio" name="exercise_a3_ind" value="bt"> Bromthymolblau</label>
+      <label><input type="radio" name="exercise_a3_ind" value="mo"> Methylorange</label>
+      <label><input type="radio" name="exercise_a3_ind" value="mr"> Methylrot</label>
+      <label><input type="radio" name="exercise_a3_ind" value="pp"> Phenolphthalein</label>
+    </div>
+    <div><button type="button" class="btn" data-check="a3">Ergebnisse prüfen</button></div>
+    <div class="fb" id="fb-a3" aria-live="polite"></div>
+  </section>
+
+  <section class="box task calc" data-n="5">
+    <span class="tag"></span><span class="afb">AFB II</span>
+    <div class="atext">
+      <p><b>Eine zweiprotonige Säure</b></p>
+      <p>10,0 ml Schwefelsäure werden mit Natronlauge, c(NaOH) = 0,200 mol/L, bis zum Äquivalenzpunkt titriert. Verbrauch: 12,5 ml.</p>
+      <p>a) <span class="op">Formuliere</span> die Reaktionsgleichung für die vollständige Neutralisation. &nbsp; b) <span class="op">Berechne</span> c(H<sub>2</sub>SO<sub>4</sub>).</p>
+    </div>
+    <div class="res">
+      <label>b) c(H<sub>2</sub>SO<sub>4</sub>) = <input type="text" inputmode="decimal" id="exercise_a4_c"> mol/L</label>
+    </div>
+    <div><button type="button" class="btn" data-check="a4">Ergebnis prüfen</button></div>
+    <div class="fb" id="fb-a4" aria-live="polite"></div>
+  </section>
+
+  <section class="box task calc" data-n="6">
+    <span class="tag"></span><span class="afb">AFB II–III</span>
+    <div class="atext">
+      <p><b>Ammoniak im Glasreiniger</b></p>
+      <p>10,0 ml eines Glasreinigers (Wirkstoff Ammoniak) werden mit Salzsäure, c(HCl) = 0,500 mol/L, titriert. Verbrauch bis zum ÄP: 8,40 ml. pK<sub>S</sub>(NH<sub>4</sub><sup>+</sup>) = 9,25.</p>
+      <p>a) <span class="op">Berechne</span> c(NH<sub>3</sub>) im Glasreiniger. &nbsp; b) <span class="op">Berechne</span> den pH-Wert am Äquivalenzpunkt. &nbsp; c) <span class="op">Wähle</span> einen geeigneten Indikator.</p>
+    </div>
+    <div class="res">
+      <label>a) c(NH<sub>3</sub>) = <input type="text" inputmode="decimal" id="exercise_a5_c"> mol/L</label>
+      <label>b) pH(ÄP) = <input type="text" inputmode="decimal" id="exercise_a5_pe"></label>
+    </div>
+    <div class="opts" role="radiogroup" aria-label="Indikator Aufgabe Ammoniak">
+      <span class="olbl">c) geeigneter Indikator:</span>
+      <label><input type="radio" name="exercise_a5_ind" value="pp"> Phenolphthalein</label>
+      <label><input type="radio" name="exercise_a5_ind" value="bt"> Bromthymolblau</label>
+      <label><input type="radio" name="exercise_a5_ind" value="mr"> Methylrot</label>
+    </div>
+    <div><button type="button" class="btn" data-check="a5">Ergebnisse prüfen</button></div>
+    <div class="fb" id="fb-a5" aria-live="polite"></div>
+  </section>
+
+  <section class="box task calc" data-n="7">
+    <span class="tag"></span><span class="afb">AFB III</span>
+    <div class="atext">
+      <p><b>Detektivarbeit: Welche Säure ist das?</b></p>
+      <p>20,0 ml einer unbekannten einprotonigen Säure werden mit Natronlauge, c(NaOH) = 0,100 mol/L, titriert. Messwerte:</p>
+      <table class="dt mw">
+        <tr><th>V(NaOH) in ml</th><td>0</td><td>3,0</td><td>6,0</td><td>9,0</td><td>12,0</td><td>15,0</td><td>17,0</td><td>17,5</td><td>18,0</td><td>18,5</td><td>19,0</td><td>22,0</td></tr>
+        <tr><th>pH</th><td>2,46</td><td>3,19</td><td>3,57</td><td>3,86</td><td>4,16</td><td>4,56</td><td>5,09</td><td>5,41</td><td>8,27</td><td>11,11</td><td>11,41</td><td>11,98</td></tr>
+      </table>
+      <p>a) <span class="op">Zeichne</span> die Titrationskurve auf das Rechenpapier (x-Achse: 1 cm ≙ 2 ml, y-Achse: 1 cm ≙ 1 pH-Einheit). Nutze das Lineal. &nbsp; b) <span class="op">Bestimme</span> das Äquivalenzvolumen und <span class="op">berechne</span> die Konzentration der Säure. &nbsp; c) <span class="op">Ermittle</span> den pK<sub>S</sub>-Wert durch Halbtitration und <span class="op">identifiziere</span> die Säure mit der Tabelle. &nbsp; d) <span class="op">Leite</span> aus dem Massenwirkungsgesetz <span class="op">her</span>, warum am Halbtitrationspunkt pH = pK<sub>S</sub> gilt.</p>
+      <table class="dt">
+        <tr><th>Säure</th><td>Ameisensäure</td><td>Milchsäure</td><td>Benzoesäure</td><td>Essigsäure</td><td>Propansäure</td></tr>
+        <tr><th>pK<sub>S</sub></th><td>3,75</td><td>3,86</td><td>4,20</td><td>4,75</td><td>4,87</td></tr>
+      </table>
+    </div>
+    <div class="res">
+      <label>b) V(ÄP) = <input type="text" inputmode="decimal" id="exercise_a6_v"> ml</label>
+      <label>b) c(Säure) = <input type="text" inputmode="decimal" id="exercise_a6_c"> mol/L</label>
+      <label>c) pK<sub>S</sub> = <input type="text" inputmode="decimal" id="exercise_a6_pks"></label>
+    </div>
+    <div class="opts" role="radiogroup" aria-label="Unbekannte Säure">
+      <span class="olbl">c) Die Säure ist:</span>
+      <label><input type="radio" name="exercise_a6_s" value="ess"> Essigsäure</label>
+      <label><input type="radio" name="exercise_a6_s" value="ben"> Benzoesäure</label>
+      <label><input type="radio" name="exercise_a6_s" value="mil"> Milchsäure</label>
+      <label><input type="radio" name="exercise_a6_s" value="ame"> Ameisensäure</label>
+    </div>
+    <div><button type="button" class="btn" data-check="a6">Ergebnisse prüfen</button></div>
+    <div class="fb" id="fb-a6" aria-live="polite"></div>
+    <div class="hint">Zu d): Schreibe das MWG für HA + H<sub>2</sub>O ⇌ H<sub>3</sub>O<sup>+</sup> + A<sup>−</sup> auf. Was gilt für c(HA) und c(A<sup>−</sup>), wenn genau die Hälfte der Säure neutralisiert ist?</div>
+  </section>
+  <a class="next" href="#s5">Weiter: 5 Rechenpapier ↓</a>
+
+  <!-- ===================== 5 ===================== -->
+  <h2 id="s5">5 Dein Rechenpapier</h2>
+  <section class="box live" id="protokollBox">
+    <span class="tag"></span>
+    <p><b>Rechenpapier:</b> Schreibe mit dem Apple Pencil oder dem Finger. Beginne jede Aufgabe mit ihrer Nummer. „📋 Aufgaben“ blendet die Aufgabentexte oben ein. Mit „Lineal“ zeichnest du gerade Linien und Achsen (verschieben mit dem Finger, am blauen ⟳ drehen). Mit „Foto“ kannst du z. B. eine Rechnung aus dem Heft einfügen. „Vollbild“ zeigt nur das Papier mit der Werkzeugleiste. Scrollen: mit zwei Fingern, am Rand neben dem Papier oder mit ▲ ▼. <b>Tippe zwischendurch und am Ende auf „💾 Speichern“.</b></p>
+    <div class="ptools" role="toolbar" aria-label="Werkzeuge für das Rechenpapier">
+      <button type="button" data-tool="pen" title="Stift">✎ Stift</button>
+      <button type="button" data-tool="erase" title="Radierer (löscht ganze Striche)">⌫ Radierer</button>
+      <button type="button" data-tool="move" title="Fotos bewegen, vergrößern, löschen">✥ Bewegen</button>
+      <span class="sep"></span>
+      <button type="button" class="sw" data-color="#1b1b1b" title="Schwarz"><span style="background:#1b1b1b"></span></button>
+      <button type="button" class="sw" data-color="#1f4fbf" title="Blau"><span style="background:#1f4fbf"></span></button>
+      <button type="button" class="sw" data-color="#c62828" title="Rot"><span style="background:#c62828"></span></button>
+      <button type="button" class="sw" data-color="#1b7f4b" title="Grün"><span style="background:#1b7f4b"></span></button>
+      <span class="sep"></span>
+      <button type="button" class="wd" data-width="1.5" title="fein"><span style="height:2px"></span></button>
+      <button type="button" class="wd" data-width="2.4" title="mittel"><span style="height:4px"></span></button>
+      <button type="button" class="wd" data-width="4" title="dick"><span style="height:7px"></span></button>
+      <span class="sep"></span>
+      <button type="button" id="pTasks" title="Aufgabentexte ein-/ausblenden">📋 Aufgaben</button>
+      <label class="pbtn" for="photoIn" title="Foto aufnehmen oder auswählen">📷 Foto</label>
+      <input type="file" id="photoIn" accept="image/*" data-nosave="1">
+      <button type="button" id="pUndo" title="Rückgängig">↶</button>
+      <button type="button" id="pRuler" title="Lineal ein-/ausblenden">📏 Lineal</button>
+      <button type="button" id="pPen" title="Wenn aktiv: Nur der Apple Pencil schreibt, mit dem Finger scrollst du.">✋ Nur Stift</button>
+      <button type="button" id="pSave" title="Rechenpapier speichern">💾 Speichern</button>
+      <button type="button" id="pFull" title="Rechenpapier im Vollbild (Werkzeuge bleiben sichtbar)">⛶ Vollbild</button>
+      <button type="button" id="pPrint" title="Nur das Rechenpapier drucken oder als PDF speichern">🖨 Rechenpapier drucken</button>
+      <div class="apanel" id="aPanel" aria-live="polite"></div>
+    </div>
+    <div class="pstatus" id="pStatus" aria-live="polite"></div>
+    <div class="pages" id="pages"></div>
+    <div class="pnav"><button type="button" id="pUp" title="Nach oben blättern">▲</button><button type="button" id="pDown" title="Nach unten blättern">▼</button></div>
+    <div class="pagebtns">
+      <button type="button" class="lbtn" id="pAdd">＋ Neue Seite</button>
+      <button type="button" class="lbtn" id="pDel">− Letzte Seite entfernen</button>
+    </div>
+  </section>
+
+  <section class="box task">
+    <span class="tag"></span><span class="afb">AFB I–III</span>
+    <p><span class="op">Überprüfe</span> deinen Rechenweg auf dem Papier und hake ab, was stimmt:</p>
+    <div class="opts">
+      <label><input type="checkbox" id="exercise_chk_nr"> Jede Aufgabe beginnt mit ihrer Nummer, der Rechenweg ist lesbar.</label>
+      <label><input type="checkbox" id="exercise_chk_rg"> Ich habe jeweils die Reaktionsgleichung und das Stoffmengenverhältnis angegeben.</label>
+      <label><input type="checkbox" id="exercise_chk_einh"> Ich habe Volumina in Liter umgerechnet und überall Einheiten mitgeschrieben.</label>
+      <label><input type="checkbox" id="exercise_chk_vol"> Am ÄP und danach habe ich mit dem Gesamtvolumen gerechnet.</label>
+      <label><input type="checkbox" id="exercise_chk_kurve"> Die Titrationskurve in Aufgabe 7 hat beschriftete Achsen mit Einheiten, ÄP und Halbtitrationspunkt sind eingezeichnet.</label>
+      <label><input type="checkbox" id="exercise_chk_herl"> Die Herleitung pH = pK<sub>S</sub> ist vollständig.</label>
+    </div>
+  </section>
+
+  <section class="box task">
+    <span class="tag"></span><span class="afb">Selbsteinschätzung</span>
+    <p><span class="op">Kreuze an</span>, was du jetzt sicher kannst:</p>
+    <div class="opts">
+      <label><input type="checkbox" id="exercise_fin_1"> Ich kann aus dem Verbrauch an Maßlösung die unbekannte Konzentration berechnen, auch bei mehrprotonigen Säuren und Verdünnungen.</label>
+      <label><input type="checkbox" id="exercise_fin_2"> Ich kann die pH-Werte am Startpunkt, Halbtitrationspunkt und Äquivalenzpunkt berechnen.</label>
+      <label><input type="checkbox" id="exercise_fin_3"> Ich kann begründen, welcher Indikator zu einer Titration passt.</label>
+      <label><input type="checkbox" id="exercise_fin_4"> Ich kann den pK<sub>S</sub>-Wert durch Halbtitration bestimmen und herleiten, warum pH = pK<sub>S</sub> gilt.</label>
+    </div>
+  </section>
+  <a class="next" href="#s1">Zurück zum Anfang ↑</a>
+</main>
+
+<div id="printPages" aria-hidden="true"></div>
+<button type="button" class="printbtn" id="printBtn" title="Als PDF speichern oder drucken (DIN A4)">PDF/Drucken (A4)</button>
+<script>
+(function(){
+  'use strict';
+  var P = 'ab-c13-titration:';
+  function sv(k,v){ try{ localStorage.setItem(P+k, JSON.stringify(v)); return true; }catch(e){ return false; } }
+  function ld(k,d){ try{ var r = localStorage.getItem(P+k); return r===null ? d : JSON.parse(r); }catch(e){ return d; } }
+  var $ = function(s,r){ return (r||document).querySelector(s); };
+  var $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+
+  /* ---- Automatisches Speichern aller Eingaben ---- */
+  $$('input,select,textarea').forEach(function(el){
+    if(el.getAttribute('data-nosave') || el.type==='file') return;
+    if(el.type==='radio'){
+      var saved = ld('r:'+el.name, null);
+      if(saved===el.value) el.checked = true;
+      el.addEventListener('change', function(){ sv('r:'+el.name, el.value); });
+    } else if(el.type==='checkbox'){
+      var c = ld(el.id, null); if(c!==null) el.checked = !!c;
+      el.addEventListener('change', function(){ sv(el.id, el.checked); });
+    } else if(el.id){
+      var v = ld(el.id, null);
+      if(v!==null) el.value = v;
+      el.addEventListener('input', function(){ sv(el.id, el.value); });
+      el.addEventListener('change', function(){ sv(el.id, el.value); });
+    }
+  });
+
+  /* ---- Zahlen prüfen ---- */
+  function num(id){ var el = $('#'+id); if(!el) return NaN; var s = el.value.replace(/\s/g,'').replace(',','.'); if(s==='') return NaN; return Number(s); }
+  function near(x,v,f){ if(isNaN(x)) return false; return f.abs!=null ? Math.abs(x-v)<=f.abs : Math.abs(x-v)<=Math.abs(v)*(f.rel||0.02); }
+  function radio(n){ var c = $('input[name='+n+']:checked'); return c ? c.value : ''; }
+
+  /* f: Zahlenfelder {id, v, rel|abs, err:[{v, msg}]}; r: Auswahl {name, ok, err:{wert:msg}} */
+  var tasks = {
+    vgl: {
+      r:[{name:'exercise_vgl', ok:'c', err:{a:'Am Startpunkt ist Salzsäure vollständig protolysiert, Essigsäure nur zu einem kleinen Teil. Vergleiche die Startwerte in der Simulation.', b:'Am ÄP der Essigsäure liegen Acetat-Ionen vor. Die sind eine Base. Wo liegt der ÄP bei Essigsäure?', d:'Schau dir die Sprunghöhe beider Kurven an: Bei Essigsäure beginnt der Sprung erst bei höherem pH.'}}],
+      okMsg:'✔ Richtig! Das Äquivalenzvolumen hängt nur von der Stoffmenge der Säure ab, nicht von ihrer Stärke. Auch die schwache Säure gibt beim Titrieren alle Protonen ab, weil die Hydroxid-Ionen das Gleichgewicht verschieben.',
+      hints:['Stelle in der Simulation nacheinander Salzsäure und Essigsäure ein und titriere jeweils bis 40 ml. Aktiviere die Hilfslinien.',
+             'Vergleiche, bei welchem Volumen der steile Sprung jeweils liegt. Wovon hängt die Stoffmenge an Säure in der Vorlage ab?',
+             'Lösung: Gleich ist das Volumen bis zum ÄP (20 ml), denn n(Säure) = c · V ist in beiden Fällen gleich.']
+    },
+    a1: {
+      f:[{id:'exercise_a1_c', v:0.073, rel:0.02, err:[{v:0.137, msg:'Du hast die Volumina vertauscht. 14,6 ml ist der Verbrauch an Natronlauge, 20,0 ml ist die Probe.'},{v:73, msg:'Hast du das Volumen in Liter umgerechnet? 14,6 ml = 0,0146 L.'}]},
+         {id:'exercise_a1_ph', v:1.14, abs:0.03, err:[{v:1.0, msg:'pH = 1,00 gilt für c = 0,1 mol/L. Setze die Konzentration aus a) ein.'}]}],
+      hints:['Rechenschema: n(NaOH) = c · V berechnen, dann n(HCl) = n(NaOH), dann c(HCl) = n / V(Probe).',
+             'Zwischenergebnis: n(NaOH) = 0,100 mol/L · 0,0146 L = 1,46 · 10⁻³ mol. Salzsäure ist eine starke Säure: pH = −lg c₀(HCl).',
+             'Lösung: c(HCl) = 1,46 · 10⁻³ mol / 0,0200 L = 0,0730 mol/L; pH = −lg 0,0730 = 1,14.']
+    },
+    a2: {
+      f:[{id:'exercise_a2_cv', v:0.084, rel:0.02, err:[{v:0.119, msg:'Du hast die Volumina vertauscht. Die Probe sind 20,0 ml, der Verbrauch 16,8 ml.'}]},
+         {id:'exercise_a2_ce', v:0.84, rel:0.02, err:[{v:0.084, msg:'Das ist die Konzentration der verdünnten Lösung. Der Essig wurde von 10 ml auf 100 ml verdünnt. Um welchen Faktor?'},{v:8.4, msg:'Der Verdünnungsfaktor ist 100 ml : 10 ml = 10, nicht 100.'}]},
+         {id:'exercise_a2_w', v:5.0, abs:0.15, err:[{v:50.4, msg:'50,4 g/L ist die Massenkonzentration β. Der Massenanteil bezieht sich auf die Masse der Lösung: 1 L Essig wiegt etwa 1000 g.'},{v:0.05, msg:'Gib den Massenanteil in Prozent an: 0,05 = 5 %.'},{v:0.504, msg:'Prüfe die Masse der Lösung: 1 L Essig mit ρ = 1,00 g/ml wiegt 1000 g.'}]}],
+      hints:['a) wie Aufgabe 2 rechnen. b) Der Essig wurde 1 : 10 verdünnt. c) Rechne die Stoffmenge pro Liter in die Masse pro Liter um: m = n · M.',
+             'Zwischenergebnisse: n(NaOH) = 1,68 · 10⁻³ mol; c(verdünnt) = n / 0,0200 L. In 1 L Speiseessig ist β = c · M (in g/L); 1 L Essig wiegt etwa 1000 g.',
+             'Lösung: c(verdünnt) = 0,0840 mol/L; c(Essig) = 0,840 mol/L; β = 0,840 mol/L · 60,05 g/mol = 50,4 g/L; w = 50,4 g / 1000 g = 5,04 % ≈ 5,0 %. Das passt zur Angabe auf dem Etikett.']
+    },
+    a3: {
+      f:[{id:'exercise_a3_p0', v:2.88, abs:0.03, err:[{v:1.0, msg:'Essigsäure ist eine schwache Säure. Nutze die Näherungsformel für schwache Säuren.'},{v:5.75, msg:'Prüfe das Vorzeichen: pH = ½ · (pKS − lg c₀). Da lg 0,1 = −1 ist, wird daraus ½ · (4,75 + 1).'}]},
+         {id:'exercise_a3_ph', v:4.75, abs:0.03, err:[]},
+         {id:'exercise_a3_pe', v:8.72, abs:0.04, err:[{v:7.0, msg:'Am ÄP liegt nicht Wasser, sondern Natriumacetat-Lösung vor. Acetat-Ionen sind eine schwache Base.'},{v:8.88, msg:'Du hast mit c = 0,100 mol/L gerechnet. Am ÄP ist das Volumen auf 50,0 ml angewachsen. Berechne c(CH₃COO⁻) neu.'},{v:5.28, msg:'Das ist der pOH-Wert. Rechne noch in den pH-Wert um: pH = 14 − pOH.'}]},
+         {id:'exercise_a3_p30', v:11.96, abs:0.04, err:[{v:13.0, msg:'Die überschüssigen Hydroxid-Ionen verteilen sich auf das Gesamtvolumen von 55,0 ml, nicht nur auf die 5 ml.'},{v:12.22, msg:'Das Gesamtvolumen ist 25,0 ml + 30,0 ml = 55,0 ml.'},{v:2.04, msg:'Das ist der pOH-Wert. pH = 14 − pOH.'}]}],
+      r:[{name:'exercise_a3_ind', ok:'pp', err:{bt:'Bromthymolblau schlägt um pH 7 um. Wo liegt hier der ÄP?', mo:'Methylorange schlägt schon bei pH 3–4 um, lange vor dem ÄP.', mr:'Methylrot schlägt bei pH 4,4–6,2 um. Der pH-Sprung liegt hier höher.'}}],
+      hints:['Start: schwache Säure. Halbtitration (12,5 ml): c(HA) = c(A⁻). ÄP (25,0 ml): nur noch Acetat-Ionen, also eine schwache Base mit pKB = 14 − 4,75. Nach dem ÄP: überschüssige OH⁻-Ionen.',
+             'Zwischenergebnisse: Am ÄP ist n(CH₃COO⁻) = 2,50 · 10⁻³ mol in 50,0 ml, also c = 0,0500 mol/L. Bei 30,0 ml sind 5,0 ml Natronlauge zu viel: n(OH⁻) = 5,0 · 10⁻⁴ mol in 55,0 ml.',
+             'Lösung: Start pH = ½ · (4,75 + 1) = 2,88; Halbtitration pH = 4,75; ÄP: pOH = ½ · (9,25 + 1,30) = 5,28, pH = 8,72; 30 ml: c(OH⁻) = 9,09 · 10⁻³ mol/L, pOH = 2,04, pH = 11,96. Phenolphthalein, weil sein Umschlagbereich (8,2–10,0) den ÄP enthält.']
+    },
+    a4: {
+      f:[{id:'exercise_a4_c', v:0.125, rel:0.02, err:[{v:0.25, msg:'Schwefelsäure ist zweiprotonig: Ein H₂SO₄-Molekül neutralisiert zwei OH⁻-Ionen. Also ist n(H₂SO₄) nur halb so groß wie n(NaOH).'},{v:0.0625, msg:'Das Stoffmengenverhältnis ist umgekehrt: n(H₂SO₄) = ½ · n(NaOH), nicht ¼.'}]}],
+      hints:['Reaktionsgleichung: H₂SO₄ + 2 NaOH → Na₂SO₄ + 2 H₂O. Lies daraus das Verhältnis n(H₂SO₄) : n(NaOH) ab.',
+             'Zwischenergebnis: n(NaOH) = 0,200 mol/L · 0,0125 L = 2,50 · 10⁻³ mol. Wie viel Schwefelsäure hat damit reagiert?',
+             'Lösung: n(H₂SO₄) = ½ · 2,50 · 10⁻³ mol = 1,25 · 10⁻³ mol; c(H₂SO₄) = 1,25 · 10⁻³ mol / 0,0100 L = 0,125 mol/L.']
+    },
+    a5: {
+      f:[{id:'exercise_a5_c', v:0.42, rel:0.02, err:[{v:0.238, msg:'Du hast die Volumina vertauscht. Die Probe sind 10,0 ml, der Verbrauch an Salzsäure 8,40 ml.'}]},
+         {id:'exercise_a5_pe', v:4.95, abs:0.04, err:[{v:7.0, msg:'Am ÄP liegen Ammonium-Ionen vor. NH₄⁺ ist eine schwache Säure, die Lösung reagiert also sauer.'},{v:4.81, msg:'Du hast mit c = 0,420 mol/L gerechnet. Am ÄP ist das Volumen auf 18,4 ml angewachsen. Berechne c(NH₄⁺) neu.'},{v:9.05, msg:'Am ÄP liegt die Säure NH₄⁺ vor, nicht die Base NH₃. Rechne mit pKS(NH₄⁺) = 9,25 und der Formel für schwache Säuren; der pH-Wert muss unter 7 liegen.'}]}],
+      r:[{name:'exercise_a5_ind', ok:'mr', err:{pp:'Phenolphthalein schlägt erst bei pH 8,2–10 um. Hier liegt der ÄP im sauren Bereich.', bt:'Bromthymolblau schlägt um pH 7 um. Der ÄP liegt hier deutlich darunter.'}}],
+      hints:['NH₃ + H₃O⁺ → NH₄⁺ + H₂O (1 : 1). Am ÄP liegt NH₄⁺ vor, eine schwache Säure mit pKS = 9,25.',
+             'Zwischenergebnisse: n(HCl) = 0,500 mol/L · 0,00840 L = 4,20 · 10⁻³ mol. Am ÄP: V(gesamt) = 18,4 ml, c(NH₄⁺) = 0,228 mol/L.',
+             'Lösung: c(NH₃) = 0,420 mol/L; pH(ÄP) = ½ · (9,25 − lg 0,228) = ½ · (9,25 + 0,64) = 4,95; Methylrot (4,4–6,2).']
+    },
+    a6: {
+      f:[{id:'exercise_a6_v', v:18.0, abs:0.3, err:[{v:9.0, msg:'9,0 ml ist der Halbtitrationspunkt. Den ÄP erkennst du am steilsten Anstieg der Kurve.'}]},
+         {id:'exercise_a6_c', v:0.09, rel:0.025, err:[{v:0.111, msg:'Du hast die Volumina vertauscht. Die Probe sind 20,0 ml, der Verbrauch bis zum ÄP 18,0 ml.'}]},
+         {id:'exercise_a6_pks', v:3.86, abs:0.05, err:[{v:8.27, msg:'8,27 ist der pH-Wert am ÄP. Der pKS-Wert ist der pH-Wert bei der Hälfte des Äquivalenzvolumens.'},{v:2.46, msg:'Das ist der pH-Wert am Startpunkt. Gesucht ist der pH-Wert beim halben Äquivalenzvolumen.'}]}],
+      r:[{name:'exercise_a6_s', ok:'mil', err:{ess:'Essigsäure hat pKS = 4,75. Vergleiche mit deinem Wert aus der Halbtitration.', ben:'Benzoesäure hat pKS = 4,20. Vergleiche mit deinem Wert aus der Halbtitration.', ame:'Ameisensäure (3,75) liegt nah, passt aber nicht genau. Lies den pH-Wert bei V(ÄP)/2 genau ab.'}}],
+      hints:['Der ÄP liegt in der Mitte des steilen pH-Sprungs. Halbtitrationspunkt: V = V(ÄP) / 2, dort gilt pH = pKS.',
+             'Der Sprung liegt zwischen 17,5 ml und 18,5 ml, also V(ÄP) ≈ 18,0 ml. Lies den pH-Wert bei 9,0 ml in der Tabelle ab.',
+             'Lösung: V(ÄP) = 18,0 ml; c(Säure) = 0,100 mol/L · 0,0180 L / 0,0200 L = 0,0900 mol/L; pKS = pH(9,0 ml) = 3,86, also Milchsäure. Herleitung: KS = c(H₃O⁺) · c(A⁻) / c(HA); mit c(A⁻) = c(HA) folgt KS = c(H₃O⁺) und damit pKS = pH.']
+    }
+  };
+
+  function hintDiv(t,cls){ var d = document.createElement('div'); d.className = 'hint'+(cls?' '+cls:''); d.textContent = t; return d; }
+  function evaluate(id){
+    var t = tasks[id], all = true, empty = false, msgs = [];
+    (t.f||[]).forEach(function(f){
+      var el = $('#'+f.id), x = num(f.id);
+      if(isNaN(x)){ empty = true; el.classList.remove('good','bad'); all = false; return; }
+      var g = near(x,f.v,f);
+      el.classList.toggle('good',g); el.classList.toggle('bad',!g);
+      if(!g){ all = false; (f.err||[]).forEach(function(e){ if(Math.abs(x-e.v) <= Math.max(0.015*Math.abs(e.v), 0.02)) msgs.push(e.msg); }); }
+    });
+    (t.r||[]).forEach(function(r){
+      var v = radio(r.name);
+      if(!v){ empty = true; all = false; return; }
+      if(v!==r.ok){ all = false; if(r.err && r.err[v]) msgs.push(r.err[v]); }
+    });
+    return {all:all, empty:empty, msgs:msgs};
+  }
+  function show(id, res){
+    var t = tasks[id], n = ld('n:'+id, 0), done = ld('ok:'+id, false), fb = $('#fb-'+id);
+    if(done){ (t.f||[]).forEach(function(f){ var el = $('#'+f.id); el.classList.add('good'); el.classList.remove('bad'); });
+      fb.className = 'fb ok'; fb.textContent = t.okMsg || '✔ Alles richtig! Vergleiche deinen Rechenweg noch einmal mit dem Rechenschema.'; return; }
+    fb.className = 'fb'; fb.textContent = '';
+    if(res && res.empty){ var e = document.createElement('div'); e.textContent = 'Fülle zuerst alle Felder aus bzw. wähle eine Antwort.'; fb.appendChild(e); }
+    if(res && res.msgs.length) res.msgs.forEach(function(m){ fb.appendChild(hintDiv(m,'warnhint')); });
+    if(n>0){
+      fb.appendChild(hintDiv('Hilfe ' + Math.min(n,t.hints.length) + ' von ' + t.hints.length + ': ' + t.hints[Math.min(n,t.hints.length)-1]));
+      if(res && !res.empty && (t.f||[]).length>1) fb.appendChild(hintDiv('Grün markierte Felder stimmen schon, rot markierte noch nicht.'));
+    }
+  }
+  $$('[data-check]').forEach(function(b){
+    var id = b.getAttribute('data-check');
+    b.addEventListener('click', function(){
+      var res = evaluate(id);
+      if(res.empty && !res.msgs.length){ show(id,res); return; }
+      if(res.all){ sv('ok:'+id, true); } else { sv('ok:'+id, false); sv('n:'+id, ld('n:'+id,0)+1); }
+      show(id,res);
+    });
+    /* Bei Änderung eines Feldes den Status "richtig" zurücknehmen */
+    var t = tasks[id];
+    (t.f||[]).forEach(function(f){ $('#'+f.id).addEventListener('input', function(){ this.classList.remove('good','bad'); if(ld('ok:'+id,false)){ sv('ok:'+id,false); show(id); } }); });
+    (t.r||[]).forEach(function(r){ $$('input[name='+r.name+']').forEach(function(x){ x.addEventListener('change', function(){ if(ld('ok:'+id,false)){ sv('ok:'+id,false); show(id); } }); }); });
+    show(id);
+  });
+
+  /* ---- Vollbild ---- */
+  $('#fsBtn').addEventListener('click', function(){
+    var d = document, el = d.documentElement;
+    var fsEl = d.fullscreenElement || d.webkitFullscreenElement;
+    try{
+      if(fsEl){ (d.exitFullscreen || d.webkitExitFullscreen).call(d); return; }
+      var req = el.requestFullscreen || el.webkitRequestFullscreen;
+      if(req){ var r = req.call(el); if(r && r.catch) r.catch(function(){ window.open(location.href,'_blank'); }); }
+      else window.open(location.href,'_blank');
+    }catch(e){ window.open(location.href,'_blank'); }
+  });
+
+  /* ================= Virtuelle Titration ================= */
+  (function(){
+    var Kw = 1e-14, V0 = 20, C0 = 0.1, CB = 0.1;
+    var ACIDS = {hcl:{name:'Salzsäure', pKa:null}, hac:{name:'Essigsäure', pKa:4.75}, hcooh:{name:'Ameisensäure', pKa:3.75}};
+    var IND = {
+      mo:{lo:3.1, hi:4.4, a:[200,40,40], b:[240,170,40]},
+      mr:{lo:4.4, hi:6.2, a:[205,30,50], b:[240,210,40]},
+      btb:{lo:6.0, hi:7.6, a:[235,210,50], b:[40,90,200]},
+      pp:{lo:8.2, hi:10.0, a:[238,244,250], b:[220,40,150]}
+    };
+    function pH(acid, Vb){
+      var A = ACIDS[acid], Na = CB*Vb/(V0+Vb), Ct = C0*V0/(V0+Vb), Ka = A.pKa==null ? 1e6 : Math.pow(10,-A.pKa);
+      var lo = -14.5, hi = 1, m = 0;
+      for(var i=0;i<70;i++){
+        m = (lo+hi)/2; var h = Math.pow(10,m);
+        var f = h + Na - Kw/h - Ct*Ka/(Ka+h);
+        if(f>0) hi = m; else lo = m;
+      }
+      return -m;
+    }
+    var svg = $('#tcurve'), NS = 'http://www.w3.org/2000/svg';
+    var X0 = 48, X1 = 455, Y0 = 270, Y1 = 14, VMAX = 40;
+    function sx(v){ return X0 + (X1-X0)*v/VMAX; }
+    function sy(p){ return Y0 - (Y0-Y1)*p/14; }
+    function el(n,a,parent){ var e = document.createElementNS(NS,n); for(var k in a) e.setAttribute(k,a[k]); (parent||svg).appendChild(e); return e; }
+    /* Achsen und Raster */
+    el('rect',{x:0,y:0,width:470,height:310,fill:'#fff'});
+    var band = el('rect',{x:X0,y:Y1,width:X1-X0,height:0,fill:'#f2c14e','fill-opacity':'0.28'});
+    for(var p=0;p<=14;p+=2){ el('line',{x1:X0,y1:sy(p),x2:X1,y2:sy(p),stroke:'#e3e9ef'}); var t = el('text',{x:X0-8,y:sy(p)+4,'text-anchor':'end','font-size':'11',fill:'#56677c'}); t.textContent = p; }
+    for(var v=0;v<=VMAX;v+=5){ el('line',{x1:sx(v),y1:Y1,x2:sx(v),y2:Y0,stroke:'#e3e9ef'}); var t2 = el('text',{x:sx(v),y:Y0+16,'text-anchor':'middle','font-size':'11',fill:'#56677c'}); t2.textContent = v; }
+    el('line',{x1:X0,y1:Y0,x2:X1,y2:Y0,stroke:'#13243b','stroke-width':'1.5'});
+    el('line',{x1:X0,y1:Y0,x2:X0,y2:Y1,stroke:'#13243b','stroke-width':'1.5'});
+    var tx = el('text',{x:(X0+X1)/2,y:302,'text-anchor':'middle','font-size':'12',fill:'#13243b','font-weight':'600'}); tx.textContent = 'V(Natronlauge) in ml';
+    var ty = el('text',{x:14,y:(Y0+Y1)/2,'text-anchor':'middle','font-size':'12',fill:'#13243b','font-weight':'600',transform:'rotate(-90 14 '+((Y0+Y1)/2)+')'}); ty.textContent = 'pH';
+    var helpG = el('g',{});
+    var ghost = el('polyline',{fill:'none',stroke:'#b9c6d3','stroke-width':'1.5','stroke-dasharray':'4 4'});
+    var line = el('polyline',{fill:'none',stroke:'#1f5fbf','stroke-width':'2.5','stroke-linejoin':'round'});
+    var dot = el('circle',{r:'5',fill:'#e4572e',stroke:'#fff','stroke-width':'1.5'});
+
+    var sel = $('#exercise_sim_saeure'), ind = $('#exercise_sim_ind'), slider = $('#exercise_sim_v'), help = $('#exercise_sim_hilfe');
+    var vmax = 0, timer = null;
+    function fmt(x,d){ return x.toFixed(d).replace('.',','); }
+    function mixc(a,b,f){ return 'rgb('+a.map(function(x,i){ return Math.round(x+(b[i]-x)*f); }).join(',')+')'; }
+    function drawHelp(){
+      while(helpG.firstChild) helpG.removeChild(helpG.firstChild);
+      if(!help.checked) return;
+      var a = sel.value, ve = 20, pe = pH(a,ve);
+      el('line',{x1:sx(ve),y1:Y0,x2:sx(ve),y2:sy(pe),stroke:'#e4572e','stroke-dasharray':'5 4'},helpG);
+      el('line',{x1:X0,y1:sy(pe),x2:sx(ve),y2:sy(pe),stroke:'#e4572e','stroke-dasharray':'5 4'},helpG);
+      var l1 = el('text',{x:sx(ve)+5,y:sy(pe)+14,'font-size':'11',fill:'#e4572e','font-weight':'700'},helpG); l1.textContent = 'ÄP (pH '+fmt(pe,2)+')';
+      if(ACIDS[a].pKa!=null){
+        var vh = 10, ph2 = pH(a,vh);
+        el('line',{x1:sx(vh),y1:Y0,x2:sx(vh),y2:sy(ph2),stroke:'#1b7f4b','stroke-dasharray':'5 4'},helpG);
+        el('line',{x1:X0,y1:sy(ph2),x2:sx(vh),y2:sy(ph2),stroke:'#1b7f4b','stroke-dasharray':'5 4'},helpG);
+        var l2 = el('text',{x:sx(vh)+5,y:sy(ph2)-6,'font-size':'11',fill:'#1b7f4b','font-weight':'700'},helpG); l2.textContent = 'Halbtitration (pH ≈ pKS = '+fmt(ACIDS[a].pKa,2)+')';
+      }
+    }
+    function update(){
+      var a = sel.value, V = +slider.value;
+      if(V>vmax) vmax = V;
+      var pts = [];
+      for(var x=0; x<=vmax+1e-9; x+=0.1) pts.push(sx(x).toFixed(1)+','+sy(pH(a,x)).toFixed(1));
+      line.setAttribute('points', pts.join(' '));
+      var g = [];
+      if(help.checked){ for(var y=0;y<=VMAX;y+=0.1) g.push(sx(y).toFixed(1)+','+sy(pH(a,y)).toFixed(1)); }
+      ghost.setAttribute('points', g.join(' '));
+      var p = pH(a,V);
+      dot.setAttribute('cx', sx(V)); dot.setAttribute('cy', sy(p));
+      $('#simVv').textContent = fmt(V,1)+' ml';
+      $('#simPh').textContent = fmt(p,2);
+      var I = IND[ind.value], liq = $('#flaskLiq');
+      if(I){ band.setAttribute('y', sy(I.hi)); band.setAttribute('height', sy(I.lo)-sy(I.hi)); var f = Math.max(0,Math.min(1,(p-I.lo)/(I.hi-I.lo))); liq.setAttribute('fill', mixc(I.a,I.b,f)); }
+      else { band.setAttribute('height',0); liq.setAttribute('fill','#eef4fa'); }
+      drawHelp();
+      var txt = ACIDS[a].name+': '+fmt(V,1)+' ml Natronlauge zugegeben, pH = '+fmt(p,2)+'. ';
+      if(V<0.05) txt += 'Startpunkt.';
+      else if(Math.abs(V-10)<0.15 && ACIDS[a].pKa!=null) txt += 'Halbtitrationspunkt: Die Hälfte der Säure ist neutralisiert.';
+      else if(Math.abs(V-20)<0.15) txt += 'Äquivalenzpunkt: n(OH⁻) = n(Säure) am Anfang.';
+      else if(V<20) txt += 'Noch '+fmt(20-V,1)+' ml bis zum Äquivalenzpunkt.';
+      else txt += 'Natronlauge im Überschuss: '+fmt(V-20,1)+' ml.';
+      if(I) txt += (p<I.lo ? ' Indikator: saure Farbe.' : (p>I.hi ? ' Indikator: basische Farbe.' : ' Indikator: im Umschlagbereich (Mischfarbe).'));
+      $('#simOut').textContent = txt;
+    }
+    function clearM(){ if(timer){ clearInterval(timer); timer = null; $('#simAuto').textContent = '▶ Automatisch titrieren'; } vmax = 0; slider.value = 0; sv('exercise_sim_v','0'); update(); }
+    slider.addEventListener('input', update);
+    ind.addEventListener('change', update);
+    help.addEventListener('change', update);
+    sel.addEventListener('change', clearM);
+    $('#simClear').addEventListener('click', clearM);
+    $('#simAuto').addEventListener('click', function(){
+      if(timer){ clearInterval(timer); timer = null; this.textContent = '▶ Automatisch titrieren'; return; }
+      var b = this; b.textContent = '⏸ Anhalten';
+      if(+slider.value>=VMAX){ vmax = 0; slider.value = 0; }
+      timer = setInterval(function(){
+        var V = +slider.value, step = (V>17 && V<23) ? 0.1 : 0.4;
+        V = Math.min(VMAX, Math.round((V+step)*10)/10); slider.value = V; sv('exercise_sim_v', String(V)); update();
+        if(V>=VMAX){ clearInterval(timer); timer = null; b.textContent = '▶ Automatisch titrieren'; }
+      }, 60);
+    });
+    vmax = +slider.value; update();
+  })();
+
+  /* ================= Rechenpapier (Handschrift) ================= */
+    /* ================= Protokoll-Papier ================= */
+  var PW = 794, PH = 1123, S = 2, MM = PW/210;
+  function calcS(){ var cw = pagesEl ? Math.min(pagesEl.clientWidth||PW, 1100) : PW; var dpr = window.devicePixelRatio||1; return Math.max(2, Math.min(3, Math.ceil(cw*dpr/PW*4)/4)); }
+  var doc = ld('prot', null);
+  if(!doc || !doc.pages || !doc.pages.length) doc = {pages:[{o:[]}]};
+  var tool = ld('tool','pen'), color = ld('color','#1b1b1b'), width = ld('width',2.4), penOnly = ld('penOnly',false);
+  var canv = [], sel = null, hist = [], imgs = {};
+  var pagesEl = $('#pages'), statusEl = $('#pStatus');
+
+  /* ---- Lineal (16 cm, Skala 0–15 cm) ---- */
+  var RL = 160*MM, RW = 14*MM, printing = false;
+  var ruler = ld('ruler', null);
+  if(!ruler || typeof ruler.x!=='number') ruler = {on:false, pi:0, x:PW/2, y:PH/2, a:0};
+  if(ruler.pi >= doc.pages.length) ruler.on = false;
+  function rLocal(pt){ var c = Math.cos(ruler.a), sn = Math.sin(ruler.a), dx = pt.x-ruler.x, dy = pt.y-ruler.y; return {u:dx*c+dy*sn, v:-dx*sn+dy*c}; }
+  function rHit(pi,pt){
+    if(!ruler.on || ruler.pi!==pi) return null;
+    var l = rLocal(pt);
+    if(Math.hypot(l.u-(RL/2-16), l.v) < 15) return 'rrot';
+    if(Math.abs(l.u)<=RL/2 && Math.abs(l.v)<=RW/2) return 'rmove';
+    return null;
+  }
+  function rSnap(pi,pt,lw){
+    if(!ruler.on || ruler.pi!==pi) return null;
+    var l = rLocal(pt), av = Math.abs(l.v);
+    if(Math.abs(l.u) > RL/2+6 || av < RW/2-2 || av > RW/2+16) return null;
+    var ve = (l.v<0?-1:1)*(RW/2+lw/2+0.8), c = Math.cos(ruler.a), sn = Math.sin(ruler.a);
+    return {ox:ruler.x-sn*ve, oy:ruler.y+c*ve, dx:c, dy:sn, t0:-RL/2, t1:RL/2};
+  }
+  function rProj(k,pt){ var t = (pt.x-k.ox)*k.dx+(pt.y-k.oy)*k.dy; t = Math.max(k.t0, Math.min(k.t1, t)); return {x:k.ox+t*k.dx, y:k.oy+t*k.dy, t:t}; }
+  function drawRuler(ctx){
+    ctx.save(); ctx.translate(ruler.x, ruler.y); ctx.rotate(ruler.a);
+    ctx.fillStyle = 'rgba(200,222,240,.78)'; ctx.strokeStyle = '#4d6a85'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.rect(-RL/2,-RW/2,RL,RW); ctx.fill(); ctx.stroke();
+    var x0 = -RL/2+5*MM; ctx.strokeStyle = '#13243b'; ctx.lineWidth = 0.7; ctx.beginPath();
+    for(var mm=0; mm<=150; mm++){
+      var x = x0+mm*MM, len = (mm%10===0 ? 4 : (mm%5===0 ? 2.8 : 1.7))*MM;
+      ctx.moveTo(x,-RW/2); ctx.lineTo(x,-RW/2+len); ctx.moveTo(x,RW/2); ctx.lineTo(x,RW/2-len);
+    }
+    ctx.stroke();
+    ctx.fillStyle = '#13243b'; ctx.font = '600 10px Segoe UI, system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    for(var cm=0; cm<=15; cm++) ctx.fillText(String(cm), x0+cm*10*MM, -RW/2+4.3*MM);
+    var deg = Math.round(((ruler.a*180/Math.PI)%180+180)%180);
+    ctx.font = '700 11px Segoe UI, system-ui, sans-serif'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#1f5fbf';
+    ctx.fillText(deg+'°', 0, 2.6*MM);
+    ctx.beginPath(); ctx.arc(RL/2-16, 0, 12, 0, 6.283); ctx.fillStyle = 'rgba(31,95,191,.9)'; ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 15px sans-serif'; ctx.fillText('⟳', RL/2-16, 1);
+    ctx.restore();
+  }
+
+  function status(t,err){ statusEl.textContent = t||''; statusEl.className = 'pstatus'+(err?' err':''); }
+  function imgKey(id){ return P+'img:'+id; }
+  function getImg(id,pi){
+    if(imgs[id]) return imgs[id];
+    var im = new Image(), data = null;
+    try{ data = localStorage.getItem(imgKey(id)); }catch(e){}
+    imgs[id] = im;
+    im.onload = function(){ renderAll(); };
+    if(data) im.src = data;
+    return im;
+  }
+  /* nicht mehr benutzte Fotos aus dem Speicher entfernen */
+  (function(){
+    try{
+      var used = {};
+      doc.pages.forEach(function(pg){ pg.o.forEach(function(o){ if(o.t==='i') used[o.id] = 1; }); });
+      var del = [];
+      for(var i=0;i<localStorage.length;i++){ var k = localStorage.key(i); if(k && k.indexOf(P+'img:')===0 && !used[k.slice((P+'img:').length)]) del.push(k); }
+      del.forEach(function(k){ localStorage.removeItem(k); });
+    }catch(e){}
+  })();
+
+  var saveT = null, dirty = false, busy = false;
+  function doSave(){
+    saveT = null;
+    if(!dirty) return;
+    if(busy){ save(); return; }
+    dirty = false;
+    var sb = $('#pSave'); sb.classList.remove('dirty'); sb.textContent = '💾 Speichern';
+    if(sv('prot', doc)){ status('✓ Gespeichert'); }
+    else status('⚠ Der Speicher des Browsers ist voll. Lösche ein Foto oder entferne eine leere Seite.', true);
+  }
+  function save(){
+    if(dirty) return;
+    dirty = true;
+    var b = $('#pSave'); b.classList.add('dirty'); b.textContent = '💾 Speichern •';
+  }
+  function saveNow(){ clearTimeout(saveT); busy = false; doSave(); }
+  window.addEventListener('pagehide', saveNow);
+  $('#pSave').addEventListener('click', function(){ dirty = true; saveNow(); });
+  document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='hidden') saveNow(); });
+  /* Rückgängig: bei Strichen nur ein Verweis statt Kopie des ganzen Protokolls */
+  function pushUndo(entry){ hist.push(entry || JSON.stringify(doc.pages)); if(hist.length>60) hist.shift(); }
+
+  var paperC = null, paperS = 0;
+  function drawPaperCached(ctx){
+    if(!paperC || paperS!==S){
+      paperC = document.createElement('canvas'); paperC.width = PW*S; paperC.height = PH*S; paperS = S;
+      var pc = paperC.getContext('2d'); pc.setTransform(S,0,0,S,0,0); drawPaper(pc);
+    }
+    ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(paperC,0,0); ctx.setTransform(S,0,0,S,0,0);
+  }
+  function drawPaper(ctx){
+    ctx.fillStyle = '#fff'; ctx.fillRect(0,0,PW,PH);
+    var g = 5*MM; ctx.strokeStyle = '#b9c0c8'; ctx.lineWidth = 0.7; ctx.beginPath();
+    for(var x=g; x<PW-0.5; x+=g){ ctx.moveTo(x,0); ctx.lineTo(x,PH); }
+    for(var y=g; y<PH-0.5; y+=g){ ctx.moveTo(0,y); ctx.lineTo(PW,y); }
+    ctx.stroke();
+    ctx.strokeStyle = '#d9534f'; ctx.lineWidth = 1.3; ctx.beginPath();
+    ctx.moveTo(20*MM,0); ctx.lineTo(20*MM,PH); ctx.moveTo(190*MM,0); ctx.lineTo(190*MM,PH); ctx.stroke();
+  }
+  function wOf(s,pr){ return s.v ? s.w*(0.45+pr*1.1) : s.w; }
+  var wCache = new WeakMap();
+  function drawStroke(ctx,s,from){
+    var p = s.p, n = p.length/3;
+    ctx.strokeStyle = s.c; ctx.fillStyle = s.c; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    if(n===1){ ctx.beginPath(); ctx.arc(p[0],p[1],wOf(s,p[2])/2,0,6.283); ctx.fill(); return; }
+    /* Breite entlang des Strichs glätten, damit sie nicht springt */
+    var W = wCache.get(s);
+    if(!W || W.length>n){ W = []; wCache.set(s,W); }
+    var w = W.length ? W[W.length-1] : wOf(s,p[2]);
+    for(var k=W.length;k<n;k++){ w = w*0.65 + wOf(s,p[k*3+2])*0.35; W.push(w); }
+    if(n===2){ ctx.beginPath(); ctx.lineWidth = (W[0]+W[1])/2; ctx.moveTo(p[0],p[1]); ctx.lineTo(p[3],p[4]); ctx.stroke(); return; }
+    /* Quadratische Kurven von Mittelpunkt zu Mittelpunkt (keine Ecken, keine Perlen) */
+    var i0 = Math.max(1, (from ? Math.floor(from/3) : 1) - 2);
+    for(var i=i0;i<n;i++){
+      var sx = (i===1) ? p[0] : (p[(i-1)*3]+p[i*3])/2, sy = (i===1) ? p[1] : (p[(i-1)*3+1]+p[i*3+1])/2;
+      ctx.beginPath(); ctx.moveTo(sx,sy);
+      if(i===n-1){ ctx.lineTo(p[i*3],p[i*3+1]); }
+      else { ctx.quadraticCurveTo(p[i*3],p[i*3+1],(p[i*3]+p[(i+1)*3])/2,(p[i*3+1]+p[(i+1)*3+1])/2); }
+      ctx.lineWidth = W[i]; ctx.stroke();
+    }
+  }
+  function render(pi){
+    var c = canv[pi]; if(!c) return;
+    var ctx = c.getContext('2d'); ctx.setTransform(S,0,0,S,0,0);
+    drawPaperCached(ctx);
+    var objs = doc.pages[pi].o;
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = 'high';
+    objs.forEach(function(o){ if(o.t==='i'){ var im = getImg(o.id,pi); if(im.complete && im.naturalWidth) ctx.drawImage(im,o.x,o.y,o.w,o.h); else { ctx.fillStyle='#eee'; ctx.fillRect(o.x,o.y,o.w,o.h); } } });
+    objs.forEach(function(o){ if(o.t==='s') drawStroke(ctx,o); });
+    if(ruler.on && ruler.pi===pi && !printing) drawRuler(ctx);
+    if(sel && sel.pi===pi && objs[sel.i] && objs[sel.i].t==='i'){
+      var o = objs[sel.i];
+      ctx.setLineDash([8,5]); ctx.strokeStyle = '#1f5fbf'; ctx.lineWidth = 2; ctx.strokeRect(o.x,o.y,o.w,o.h); ctx.setLineDash([]);
+      ctx.fillStyle = '#1f5fbf'; ctx.beginPath(); ctx.arc(o.x+o.w,o.y+o.h,15,0,6.283); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.font = 'bold 17px sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('↘',o.x+o.w,o.y+o.h+1);
+      ctx.fillStyle = '#c62828'; ctx.beginPath(); ctx.arc(o.x+o.w,o.y,15,0,6.283); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.fillText('×',o.x+o.w,o.y+1); ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
+    }
+  }
+  function renderAll(){ for(var i=0;i<canv.length;i++) render(i); }
+
+  function buildPages(){
+    S = calcS();
+    pagesEl.innerHTML = ''; canv = [];
+    doc.pages.forEach(function(pg,pi){
+      var d = document.createElement('div'); d.className = 'page';
+      var c = document.createElement('canvas'); c.width = PW*S; c.height = PH*S; c.setAttribute('aria-label','Rechenpapier Seite '+(pi+1));
+      var n = document.createElement('span'); n.className = 'pnum'; n.textContent = 'Seite '+(pi+1)+' / '+doc.pages.length;
+      d.appendChild(c); d.appendChild(n); pagesEl.appendChild(d); canv.push(c);
+      attach(c,pi);
+    });
+    if(ruler.pi >= doc.pages.length) ruler.on = false;
+    renderAll();
+    $('#pDel').disabled = doc.pages.length<2;
+  }
+
+  function pos(c,e){ var r = c.getBoundingClientRect(); return {x:(e.clientX-r.left)/r.width*PW, y:(e.clientY-r.top)/r.height*PH}; }
+  function r1(v){ return Math.round(v*10)/10; }
+  function prs(e){ return e.pointerType==='pen' ? Math.round((e.pressure||0.5)*100)/100 : 0.5; }
+  var lastPen = 0, touchN = 0;
+  function scrollDoc(dy){ var bx = $('#protokollBox'); if(bx.classList.contains('pfull')) bx.scrollTop += dy; else window.scrollBy(0, dy); }
+
+  function attach(c,pi){
+    var cur = null, act = null, lastY = 0, start = null, orig = null, snapL = null, actPid = null;
+    c.addEventListener('pointerdown', function(e){
+      if(e.pointerType==='pen'){
+        lastPen = Date.now();
+        if(!penOnly && !ld('penAuto',false)){ penOnly = true; sv('penOnly',true); sv('penAuto',true); syncTools(); status('Apple Pencil erkannt: Ab jetzt schreibt nur der Stift, mit dem Finger kannst du scrollen. (Umschalten mit „Nur Stift“)'); }
+      }
+      if(e.pointerType==='touch'){
+        touchN = e.isPrimary ? 1 : touchN+1;
+        if(touchN>=2){
+          /* zweiter Finger: immer scrollen, angefangenen Finger-Strich verwerfen */
+          if(act==='draw' && cur && !cur.v){ var oo = doc.pages[pi].o, ci = oo.indexOf(cur); if(ci>=0) oo.splice(ci,1); if(hist.length && hist[hist.length-1].add===cur) hist.pop(); cur = null; busy = false; render(pi); }
+          act = 'scroll'; actPid = e.pointerId; lastY = e.clientY; return;
+        }
+      }
+      var pt0 = pos(c,e), rh = rHit(pi,pt0);
+      if(e.pointerType==='touch' && penOnly && (Date.now()-lastPen<400 || (e.width>70 && e.height>70))){ act = 'ignore'; return; }
+      if(rh){
+        e.preventDefault(); try{ c.setPointerCapture(e.pointerId); }catch(er){}
+        act = rh; start = pt0; orig = {x:ruler.x, y:ruler.y}; return;
+      }
+      if(e.pointerType==='touch' && penOnly){
+        act = 'scroll'; actPid = e.pointerId; lastY = e.clientY; return;
+      }
+      if(e.button>0) return;
+      e.preventDefault(); actPid = e.pointerId;
+      try{ c.setPointerCapture(e.pointerId); }catch(err){}
+      var pt = pos(c,e), objs = doc.pages[pi].o;
+      if(tool==='pen'){
+        busy = true;
+        snapL = rSnap(pi,pt,width);
+        if(snapL) pt = rProj(snapL,pt);
+        cur = {t:'s', c:color, w:width, v:e.pointerType==='pen'?1:0, p:[r1(pt.x),r1(pt.y),prs(e)]};
+        objs.push(cur); act = 'draw'; pushUndo({pi:pi, add:cur});
+        var ctx = c.getContext('2d'); ctx.setTransform(S,0,0,S,0,0); drawStroke(ctx,cur);
+      } else if(tool==='erase'){
+        eraseRec = {pi:pi, rm:[]}; pushUndo(eraseRec); act = 'erase'; erase(pi,pt);
+      } else if(tool==='move'){
+        act = null;
+        if(sel && sel.pi===pi && objs[sel.i]){
+          var o = objs[sel.i];
+          if(Math.hypot(pt.x-(o.x+o.w),pt.y-o.y)<20){ pushUndo(); objs.splice(sel.i,1); sel = null; render(pi); save(); return; }
+          if(Math.hypot(pt.x-(o.x+o.w),pt.y-(o.y+o.h))<22){ pushUndo(); act = 'resize'; start = pt; orig = {x:o.x,y:o.y,w:o.w,h:o.h}; return; }
+        }
+        var hit = -1;
+        for(var i=objs.length-1;i>=0;i--){ var q = objs[i]; if(q.t==='i' && pt.x>=q.x && pt.x<=q.x+q.w && pt.y>=q.y && pt.y<=q.y+q.h){ hit = i; break; } }
+        var old = sel; sel = hit>=0 ? {pi:pi,i:hit} : null;
+        if(old && old.pi!==pi) render(old.pi);
+        if(hit>=0){ pushUndo(); act = 'drag'; start = pt; var h = objs[hit]; orig = {x:h.x,y:h.y,w:h.w,h:h.h}; }
+        render(pi);
+      }
+    });
+    c.addEventListener('pointermove', function(e){
+      if(!act || act==='ignore') return;
+      if(actPid!==null && e.pointerId!==actPid && act!=='rmove' && act!=='rrot') return;
+      if(act==='scroll'){ scrollDoc(lastY-e.clientY); lastY = e.clientY; return; }
+      e.preventDefault();
+      var evs = (e.getCoalescedEvents && e.getCoalescedEvents().length) ? e.getCoalescedEvents() : [e];
+      if(act==='draw'){
+        var ctx = c.getContext('2d'); ctx.setTransform(S,0,0,S,0,0);
+        var from = cur.p.length;
+        evs.forEach(function(ev){ var pt = pos(c,ev); if(snapL) pt = rProj(snapL,pt); var lx = cur.p[cur.p.length-3], ly = cur.p[cur.p.length-2];
+          if(!snapL){ pt = {x:lx+(pt.x-lx)*0.6, y:ly+(pt.y-ly)*0.6}; }
+          if(Math.abs(pt.x-lx)+Math.abs(pt.y-ly) < 0.5) return;
+          var lp = cur.p[cur.p.length-1];
+          cur.p.push(r1(pt.x),r1(pt.y),Math.round((lp*0.6+prs(ev)*0.4)*100)/100); });
+        drawStroke(ctx,cur,from);
+      } else if(act==='rmove'){
+        var pm = pos(c,e);
+        ruler.x = Math.max(0, Math.min(PW, orig.x+pm.x-start.x)); ruler.y = Math.max(0, Math.min(PH, orig.y+pm.y-start.y));
+        render(pi);
+      } else if(act==='rrot'){
+        var pr2 = pos(c,e), d = Math.atan2(pr2.y-ruler.y, pr2.x-ruler.x)*180/Math.PI, sn15 = Math.round(d/15)*15;
+        if(Math.abs(d-sn15) < 2.5) d = sn15;
+        ruler.a = d*Math.PI/180; render(pi);
+      } else if(act==='erase'){
+        evs.forEach(function(ev){ erase(pi,pos(c,ev)); });
+      } else if((act==='drag' || act==='resize') && sel){
+        var pt = pos(c,e), o = doc.pages[pi].o[sel.i];
+        if(act==='drag'){ o.x = orig.x+pt.x-start.x; o.y = orig.y+pt.y-start.y; }
+        else { var nw = Math.max(60, orig.w+pt.x-start.x); o.w = nw; o.h = orig.h*nw/orig.w; }
+        render(pi);
+      }
+    });
+    function end(){
+      if(act==='rmove' || act==='rrot'){ sv('ruler',ruler); render(pi); }
+      if(act==='draw' && snapL && cur && cur.p.length>3){
+        var lo = null, hi = null, ps = 0, n = 0;
+        for(var k=0;k<cur.p.length;k+=3){ var q = rProj(snapL,{x:cur.p[k],y:cur.p[k+1]}); ps += cur.p[k+2]; n++;
+          if(!lo || q.t<lo.t) lo = q; if(!hi || q.t>hi.t) hi = q; }
+        var pa = Math.round(ps/n*100)/100;
+        cur.p = [r1(lo.x),r1(lo.y),pa, r1(hi.x),r1(hi.y),pa];
+      }
+      if(act==='draw' && (snapL || (ruler.on && ruler.pi===pi))) render(pi);
+      snapL = null; busy = false;
+      if(act==='erase' && eraseRec && !eraseRec.rm.length && hist[hist.length-1]===eraseRec) hist.pop();
+      eraseRec = null;
+      if(act==='draw' || act==='erase' || act==='drag' || act==='resize'){ save(); }
+      act = null; cur = null;
+    }
+    function up(e){
+      if(e.pointerType==='touch') touchN = Math.max(0, touchN-1);
+      if(act==='scroll' && e.pointerId!==actPid) return;
+      end(); actPid = null;
+    }
+    c.addEventListener('pointerup', up);
+    c.addEventListener('pointercancel', up);
+    c.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+    c.addEventListener('touchstart', function(e){ e.preventDefault(); }, {passive:false});
+    c.addEventListener('touchmove', function(e){ e.preventDefault(); }, {passive:false});
+    c.addEventListener('selectstart', function(e){ e.preventDefault(); });
+  }
+  var eraseRec = null;
+  function erase(pi,pt){
+    var objs = doc.pages[pi].o, R = 9, changed = false;
+    for(var i=objs.length-1;i>=0;i--){
+      var o = objs[i]; if(o.t!=='s') continue;
+      for(var k=0;k<o.p.length;k+=3){ if(Math.abs(o.p[k]-pt.x)<R && Math.abs(o.p[k+1]-pt.y)<R){ objs.splice(i,1); if(eraseRec) eraseRec.rm.push({i:i, o:o}); changed = true; break; } }
+    }
+    if(changed) render(pi);
+  }
+
+  /* Werkzeugleiste */
+  function syncTools(){
+    $$('[data-tool]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-tool')===tool); });
+    $$('[data-color]').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-color')===color); });
+    $$('[data-width]').forEach(function(b){ b.classList.toggle('on', +b.getAttribute('data-width')===+width); });
+    $('#pPen').classList.toggle('on', penOnly);
+    $('#pRuler').classList.toggle('on', ruler.on);
+  }
+  function setTool(t){ tool = t; sv('tool',t); if(t!=='move' && sel){ var p = sel.pi; sel = null; render(p); } syncTools(); }
+  $$('[data-tool]').forEach(function(b){ b.addEventListener('click', function(){ setTool(b.getAttribute('data-tool')); }); });
+  $$('[data-color]').forEach(function(b){ b.addEventListener('click', function(){ color = b.getAttribute('data-color'); sv('color',color); setTool('pen'); }); });
+  $$('[data-width]').forEach(function(b){ b.addEventListener('click', function(){ width = +b.getAttribute('data-width'); sv('width',width); setTool('pen'); }); });
+  $('#pPen').addEventListener('click', function(){ penOnly = !penOnly; sv('penOnly',penOnly); sv('penAuto',true); syncTools();
+    status(penOnly ? 'Nur der Stift schreibt, mit dem Finger scrollst du.' : 'Stift und Finger schreiben. Zum Scrollen neben das Papier tippen.'); });
+  $('#pUndo').addEventListener('click', function(){
+    if(!hist.length){ status('Nichts zum Rückgängigmachen.'); return; }
+    var h = hist.pop(); sel = null;
+    if(typeof h==='string'){
+      var n = doc.pages.length; doc.pages = JSON.parse(h);
+      if(doc.pages.length!==n) buildPages(); else renderAll();
+    } else if(h.add){
+      var arr = doc.pages[h.pi] ? doc.pages[h.pi].o : [], ix = arr.indexOf(h.add);
+      if(ix>=0) arr.splice(ix,1); render(h.pi);
+    } else if(h.rm){
+      var ar2 = doc.pages[h.pi].o;
+      for(var r=h.rm.length-1;r>=0;r--) ar2.splice(h.rm[r].i,0,h.rm[r].o);
+      render(h.pi);
+    }
+    save();
+  });
+  $('#pRuler').addEventListener('click', function(){
+    if(ruler.on){ ruler.on = false; status('Lineal ausgeblendet.'); }
+    else {
+      var v = visiblePage();
+      ruler = {on:true, pi:v.pi, x:PW/2, y:Math.max(RW, Math.min(PH-RW, v.y)), a:0};
+      status('Lineal: mit dem Finger verschieben, am blauen ⟳ drehen (rastet alle 15° ein). Am Rand entlang zeichnen ergibt eine gerade Linie.');
+    }
+    sv('ruler',ruler); syncTools(); renderAll();
+  });
+  /* Vollbild für das Protokoll-Papier */
+  var pBox = $('#protokollBox');
+  function fsEl(){ return document.fullscreenElement || document.webkitFullscreenElement; }
+  function setPFull(on){
+    pBox.classList.toggle('pfull', on); document.body.classList.toggle('pfull-on', on);
+    $('#pFull').classList.toggle('on', on); $('#pFull').textContent = on ? '✕ Vollbild beenden' : '⛶ Vollbild';
+    setTimeout(function(){ window.dispatchEvent(new Event('resize')); }, 50);
+    if(on){ pBox.scrollTop = 0; }
+    else { pBox.scrollIntoView({block:'start'}); }
+  }
+  $('#pUp').addEventListener('click', function(){ pBox.scrollBy({top:-pBox.clientHeight*0.7, behavior:'smooth'}); });
+  $('#pDown').addEventListener('click', function(){ pBox.scrollBy({top:pBox.clientHeight*0.7, behavior:'smooth'}); });
+  $('#pFull').addEventListener('click', function(){
+    var on = !pBox.classList.contains('pfull');
+    setPFull(on);
+    try{
+      if(on && !fsEl()){
+        var el = document.documentElement, req = el.requestFullscreen || el.webkitRequestFullscreen;
+        if(req){ var r = req.call(el); if(r && r.catch) r.catch(function(){}); }
+      } else if(!on && fsEl()){
+        (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      }
+    }catch(e){}
+  });
+  function fsChange(){ if(!fsEl() && pBox.classList.contains('pfull')) setPFull(false); }
+  document.addEventListener('fullscreenchange', fsChange);
+  document.addEventListener('webkitfullscreenchange', fsChange);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && pBox.classList.contains('pfull')) setPFull(false); });
+
+  $('#pAdd').addEventListener('click', function(){
+    pushUndo(); doc.pages.push({o:[]}); buildPages(); save();
+    canv[canv.length-1].scrollIntoView({behavior:'smooth', block:'start'});
+  });
+  $('#pDel').addEventListener('click', function(){
+    if(doc.pages.length<2) return;
+    var last = doc.pages[doc.pages.length-1];
+    if(last.o.length && !window.confirm('Die letzte Seite ist nicht leer. Trotzdem entfernen? (Mit ↶ kannst du es rückgängig machen.)')) return;
+    pushUndo(); doc.pages.pop(); sel = null; buildPages(); save();
+  });
+
+  function visiblePage(){
+    var best = 0, bd = Infinity, mid = window.innerHeight/2;
+    canv.forEach(function(c,i){ var r = c.getBoundingClientRect(); var d = (mid<r.top) ? r.top-mid : (mid>r.bottom ? mid-r.bottom : 0); if(d<bd){ bd = d; best = i; } });
+    var r = canv[best].getBoundingClientRect();
+    var y = (Math.min(Math.max(mid,r.top),r.bottom)-r.top)/r.height*PH;
+    return {pi:best, y:y};
+  }
+  $('#photoIn').addEventListener('change', function(){
+    var f = this.files && this.files[0]; if(!f) return;
+    var input = this, url = URL.createObjectURL(f), im = new Image();
+    status('Foto wird eingefügt …');
+    im.onload = function(){
+      var sc = Math.min(1, 1100/Math.max(im.naturalWidth, im.naturalHeight));
+      var cw = Math.round(im.naturalWidth*sc), ch = Math.round(im.naturalHeight*sc);
+      var cc = document.createElement('canvas'); cc.width = cw; cc.height = ch;
+      cc.getContext('2d').drawImage(im,0,0,cw,ch);
+      URL.revokeObjectURL(url); input.value = '';
+      var data = cc.toDataURL('image/jpeg',0.72), id = 'f'+Date.now().toString(36);
+      try{ localStorage.setItem(imgKey(id), data); }
+      catch(e){ status('⚠ Kein Platz mehr für ein weiteres Foto. Lösche zuerst ein anderes Foto.', true); return; }
+      var v = visiblePage(), w = PW*0.5, h = w*ch/cw;
+      if(h>PH*0.45){ h = PH*0.45; w = h*cw/ch; }
+      var y = Math.max(10, Math.min(PH-h-10, v.y-h/2));
+      pushUndo();
+      doc.pages[v.pi].o.push({t:'i', id:id, x:r1((PW-w)/2), y:r1(y), w:r1(w), h:r1(h)});
+      if(sel) { var op = sel.pi; sel = null; render(op); }
+      sel = {pi:v.pi, i:doc.pages[v.pi].o.length-1};
+      tool = 'move'; syncTools(); render(v.pi); save();
+      status('Foto eingefügt. Verschiebe es mit dem Finger/Stift, ziehe an ↘ für die Größe. Danach „Stift“ wählen und beschriften.');
+    };
+    im.onerror = function(){ URL.revokeObjectURL(url); input.value = ''; status('⚠ Dieses Bild konnte nicht geladen werden.', true); };
+    im.src = url;
+  });
+
+  /* Druck: Seiten als Bilder für die Druckausgabe erzeugen */
+  var lastGen = 0;
+  function makePrintPages(){
+    if(sel){ var p = sel.pi; sel = null; render(p); }
+    lastGen = Date.now(); printing = true; renderAll();
+    var box = $('#printPages'); box.innerHTML = '';
+    canv.forEach(function(c,i){ var im = new Image(); im.className = 'printpage'; im.alt = 'Rechenpapier Seite '+(i+1); im.src = c.toDataURL('image/jpeg',0.9); box.appendChild(im); });
+    printing = false; renderAll();
+  }
+  function cleanupPrint(){ document.body.classList.remove('only-prot'); var s = $('#pgOnly'); if(s) s.parentNode.removeChild(s); }
+  window.addEventListener('afterprint', cleanupPrint);
+  window.addEventListener('beforeprint', function(){ if(Date.now()-lastGen>3000) makePrintPages(); });
+  $('#pPrint').addEventListener('click', function(){
+    if(pBox.classList.contains('pfull')) setPFull(false);
+    makePrintPages(); cleanupPrint();
+    var st = document.createElement('style'); st.id = 'pgOnly'; st.textContent = '@page{size:A4 portrait;margin:0}';
+    document.head.appendChild(st); document.body.classList.add('only-prot');
+    setTimeout(function(){ window.print(); }, 400);
+  });
+  $('#printBtn').addEventListener('click', function(){ cleanupPrint(); makePrintPages(); setTimeout(function(){ window.print(); }, 400); });
+
+  var rsT = null;
+  window.addEventListener('resize', function(){ clearTimeout(rsT); rsT = setTimeout(function(){
+    var ns = calcS(); if(ns===S) return; S = ns;
+    canv.forEach(function(c){ c.width = PW*S; c.height = PH*S; }); renderAll(); }, 250); });
+  syncTools(); buildPages();
+  window.addEventListener('pageshow', function(){ cleanupPrint(); });
+
+  /* ---- Aufgabentexte im Rechenpapier einblenden ---- */
+  (function(){
+    var panel = $('#aPanel'), btn = $('#pTasks');
+    $$('.task.calc').forEach(function(t){
+      var h = document.createElement('h4'); h.textContent = 'Aufgabe '+t.getAttribute('data-n'); panel.appendChild(h);
+      var c = t.querySelector('.atext').cloneNode(true); c.removeAttribute('class'); panel.appendChild(c);
+    });
+    function set(on){ panel.classList.toggle('on',on); btn.classList.toggle('on',on); sv('aPanel',on); }
+    btn.addEventListener('click', function(){ set(!panel.classList.contains('on')); });
+    set(!!ld('aPanel',false));
+  })();
+})();
+
+</script>
+</body>
+</html>
